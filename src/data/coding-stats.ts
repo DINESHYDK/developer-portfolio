@@ -1,0 +1,77 @@
+import type { CodingStatsData } from "@/types";
+
+export const CODING_STATS: CodingStatsData = {
+  platforms: [
+    {
+      id: "leetcode",
+      name: "LeetCode",
+      username: "dineshydk",
+      profileUrl: "https://leetcode.com/dineshydk",
+      accentColor: "#FFA116",
+      totalSolved: 23,
+      totalProblems: 3864,
+      rating: 1471,
+      globalRanking: 454779,
+      contestsAttended: 1,
+      breakdown: [
+        { label: "Easy", solved: 20, total: 930, color: "#00B8A3" },
+        { label: "Medium", solved: 3, total: 2021, color: "#FFC01E" },
+        { label: "Hard", solved: 0, total: 913, color: "#EF4743" },
+      ],
+    },
+    {
+      id: "codeforces",
+      name: "Codeforces",
+      username: "dineshydk",
+      profileUrl: "https://codeforces.com/profile/dineshydk",
+      accentColor: "#1890FF",
+      totalSolved: 15,
+      totalProblems: 9000,
+      rating: 800,
+      rank: "Newbie",
+      contestsAttended: 2,
+      breakdown: [
+        { label: "A", solved: 10, total: 3000, color: "#52C41A" },
+        { label: "B", solved: 4, total: 3000, color: "#FAAD14" },
+        { label: "C+", solved: 1, total: 3000, color: "#F5222D" },
+      ],
+    },
+    {
+      id: "codechef",
+      name: "CodeChef",
+      username: "dineshydk",
+      profileUrl: "https://www.codechef.com/users/dineshydk",
+      accentColor: "#5B4638",
+      totalSolved: 8,
+      totalProblems: 5000,
+      rating: 1200,
+      rank: "1★",
+      contestsAttended: 1,
+      breakdown: [
+        { label: "Beginner", solved: 5, total: 2000, color: "#52C41A" },
+        { label: "Easy", solved: 2, total: 1500, color: "#FAAD14" },
+        { label: "Medium+", solved: 1, total: 1500, color: "#F5222D" },
+      ],
+    },
+    {
+      id: "geeksforgeeks",
+      name: "GeeksforGeeks",
+      username: "dineshydk",
+      profileUrl: "https://www.geeksforgeeks.org/user/dineshydk",
+      accentColor: "#2F8D46",
+      totalSolved: 45,
+      totalProblems: 3000,
+      rating: 1350,
+      rank: "3★",
+      contestsAttended: 0,
+      breakdown: [
+        { label: "School", solved: 15, total: 500, color: "#52C41A" },
+        { label: "Basic", solved: 18, total: 800, color: "#73D13D" },
+        { label: "Easy", solved: 8, total: 900, color: "#FAAD14" },
+        { label: "Medium+", solved: 4, total: 800, color: "#F5222D" },
+      ],
+    },
+  ],
+  lastUpdated: "2026-03-10",
+};
+
