@@ -2,17 +2,25 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, Github, Puzzle } from "lucide-react";
 import { PROJECTS, PROJECT_CATEGORIES } from "@/data/projects";
+import ProjectModal from "@/components/ui/project-modal";
 import { cn } from "@/utils/cn";
 
 const SPRING_CARD = { type: "spring" as const, stiffness: 280, damping: 22 };
 
 const ProjectsSection = () => {
   const [activeCategory, setActiveCategory] = useState<string>("All");
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   const filteredProjects =
     activeCategory === "All"
       ? PROJECTS
       : PROJECTS.filter((p) => p.category === activeCategory);
+
+  // When clicking a card, find its index in the FULL projects array
+  const handleProjectClick = (projectId: string) => {
+    const index = PROJECTS.findIndex((p) => p.id === projectId);
+    setSelectedIndex(index);
+  };
 
   return (
     <section id="projects" className="py-20 px-6">
@@ -67,6 +75,7 @@ const ProjectsSection = () => {
                 transition={{ ...SPRING_CARD, delay: i * 0.07 }}
                 whileHover={{ scale: 1.02, y: -4 }}
                 whileTap={{ scale: 0.98 }}
+                onClick={() => handleProjectClick(project.id)}
                 className={cn(
                   "group rounded-3xl overflow-hidden",
                   "bg-bg-surface border border-border-subtle",
@@ -88,12 +97,12 @@ const ProjectsSection = () => {
                     {project.title}
                   </h3>
 
-                  <p className="text-text-body font-jakarta text-sm leading-relaxed mb-4">
+                  <p className="text-text-body font-jakarta text-sm leading-relaxed mb-4 line-clamp-2">
                     {project.description}
                   </p>
 
                   <div className="flex flex-wrap gap-2 mb-4">
-                    {project.tags.map((tag) => (
+                    {project.tags.slice(0, 3).map((tag) => (
                       <span
                         key={tag}
                         className="px-3 py-1 text-xs font-mono rounded-full bg-accent-primary/10 text-accent-primary border border-accent-primary/20"
@@ -101,14 +110,20 @@ const ProjectsSection = () => {
                         {tag}
                       </span>
                     ))}
+                    {project.tags.length > 3 && (
+                      <span className="px-3 py-1 text-xs font-mono rounded-full bg-white/5 text-text-body/60">
+                        +{project.tags.length - 3}
+                      </span>
+                    )}
                   </div>
 
                   <div className="flex items-center gap-4 pt-2 border-t border-border-subtle">
                     {project.repoUrl && (
-                      <a
-                        href={project.repoUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          window.open(project.repoUrl, "_blank");
+                        }}
                         className={cn(
                           "inline-flex items-center gap-2 text-sm text-text-body font-jakarta",
                           "transition-colors duration-300 hover:text-accent-primary",
@@ -118,13 +133,14 @@ const ProjectsSection = () => {
                       >
                         <Github size={16} />
                         Code
-                      </a>
+                      </button>
                     )}
                     {project.liveUrl && (
-                      <a
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          window.open(project.liveUrl, "_blank");
+                        }}
                         className={cn(
                           "inline-flex items-center gap-2 text-sm text-text-body font-jakarta",
                           "transition-colors duration-300 hover:text-accent-secondary",
@@ -134,7 +150,7 @@ const ProjectsSection = () => {
                       >
                         <ExternalLink size={16} />
                         Demo
-                      </a>
+                      </button>
                     )}
                   </div>
                 </div>
@@ -143,6 +159,13 @@ const ProjectsSection = () => {
           </motion.div>
         </AnimatePresence>
       </div>
+
+      {/* Project Modal */}
+      <ProjectModal
+        projects={PROJECTS}
+        selectedIndex={selectedIndex}
+        setSelectedIndex={setSelectedIndex}
+      />
     </section>
   );
 };

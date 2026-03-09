@@ -13,6 +13,7 @@ export interface Project {
   liveUrl?: string;
   repoUrl?: string;
   imageUrl?: string;
+  challenges?: string[];
 }
 
 export interface Skill {
@@ -51,6 +52,12 @@ export interface PlatformProblemBreakdown {
   color: string;
 }
 
+export interface IndexDistribution {
+  index: string;
+  count: number;
+  color: string;
+}
+
 export interface CodingPlatform {
   id: string;
   name: string;
@@ -58,12 +65,29 @@ export interface CodingPlatform {
   profileUrl: string;
   accentColor: string;
   totalSolved: number;
-  totalProblems: number;
+  totalProblems?: number;
   rating?: number;
   rank?: string;
   globalRanking?: number;
   contestsAttended?: number;
-  breakdown: PlatformProblemBreakdown[];
+
+  // LeetCode specific
+  breakdown?: PlatformProblemBreakdown[];
+
+  // Codeforces specific
+  maxRating?: number;
+  indexDistribution?: IndexDistribution[];
+
+  // CodeChef specific
+  division?: number;
+  stars?: number;
+  certificates?: string[];
+  maxStreak?: number;
+
+  // GeeksforGeeks specific
+  codingScore?: number;
+  potdStreak?: number;
+  instituteRank?: number;
 }
 
 export interface CodingStatsData {

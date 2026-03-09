@@ -12,6 +12,12 @@ export const PROJECTS: Project[] = [
     category: "AI Projects",
     liveUrl: "https://example.com/ai-chat",
     repoUrl: "https://github.com/dineshydk/ai-chat",
+    challenges: [
+      "Implementing real-time streaming responses without blocking the UI",
+      "Managing conversation context and memory efficiently",
+      "Handling API rate limits and error states gracefully",
+      "Optimizing token usage for cost-effectiveness",
+    ],
   },
   {
     id: "project-2",
@@ -22,6 +28,12 @@ export const PROJECTS: Project[] = [
     category: "Web Apps",
     liveUrl: "https://example.com/dashboard",
     repoUrl: "https://github.com/dineshydk/dashboard",
+    challenges: [
+      "Creating responsive data tables for large datasets",
+      "Implementing real-time chart updates with WebSocket",
+      "Managing complex state across multiple dashboard widgets",
+      "Ensuring accessibility for screen readers",
+    ],
   },
   {
     id: "project-3",
@@ -31,6 +43,12 @@ export const PROJECTS: Project[] = [
     tags: ["Node.js", "Express", "MongoDB", "JWT"],
     category: "Tools",
     repoUrl: "https://github.com/dineshydk/task-api",
+    challenges: [
+      "Designing a scalable database schema for nested task hierarchies",
+      "Implementing secure JWT refresh token rotation",
+      "Handling concurrent updates to prevent data conflicts",
+      "Writing comprehensive API documentation with Swagger",
+    ],
   },
   {
     id: "project-4",
@@ -41,6 +59,12 @@ export const PROJECTS: Project[] = [
     category: "AI Projects",
     liveUrl: "https://example.com/quizmaster",
     repoUrl: "https://github.com/dineshydk/quizmaster",
+    challenges: [
+      "Parsing and extracting meaningful questions from various document formats",
+      "Balancing AI creativity with educational accuracy",
+      "Building a spaced repetition algorithm for optimal learning",
+      "Gamifying the experience without compromising educational value",
+    ],
   },
   {
     id: "project-5",
@@ -51,6 +75,12 @@ export const PROJECTS: Project[] = [
     category: "Web Apps",
     liveUrl: "https://example.com/weather",
     repoUrl: "https://github.com/dineshydk/weather-app",
+    challenges: [
+      "Handling geolocation permissions across different browsers",
+      "Creating smooth weather-based background animations",
+      "Implementing offline functionality with service workers",
+      "Caching API responses to reduce unnecessary requests",
+    ],
   },
   {
     id: "project-6",
@@ -61,5 +91,11 @@ export const PROJECTS: Project[] = [
     category: "Web Apps",
     liveUrl: "https://example.com/portfolio-v1",
     repoUrl: "https://github.com/dineshydk/portfolio-v1",
+    challenges: [
+      "Achieving smooth animations without a framework",
+      "Writing vanilla JS for complex interactions",
+      "Ensuring cross-browser compatibility",
+      "Optimizing images and assets for fast loading",
+    ],
   },
 ];
