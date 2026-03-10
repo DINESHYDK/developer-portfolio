@@ -231,14 +231,14 @@ const ProjectModal = ({
                         <h3 className="text-sm font-jakarta font-semibold text-text-heading mb-3">
                           Challenges While Building
                         </h3>
-                        <ul className="space-y-2">
+                        <ul className="space-y-3">
                           {currentProject.challenges.map((challenge, i) => (
                             <li
                               key={i}
-                              className="flex items-start gap-2 text-text-body font-jakarta text-sm"
+                              className="flex items-start gap-3 text-text-body font-jakarta text-sm leading-relaxed"
                             >
-                              <span className="text-accent-primary mt-1">•</span>
-                              <span>{challenge}</span>
+                              <span className="text-accent-primary flex-shrink-0 mt-0.5">•</span>
+                              <span className="flex-1">{challenge}</span>
                             </li>
                           ))}
                         </ul>
