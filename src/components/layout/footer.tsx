@@ -1,79 +1,148 @@
-import { Github, Linkedin, Mail } from "lucide-react";
-import { SITE_METADATA } from "@/config/site-metadata";
+import { motion } from "framer-motion";
+import { Github, Linkedin, Mail, Twitter, ArrowUp } from "lucide-react";
+import { SITE_METADATA, FOOTER_LINKS } from "@/config/site-metadata";
 import { cn } from "@/utils/cn";
+
+const SOCIAL_ICONS: Record<string, React.ReactNode> = {
+  GitHub:   <Github   size={18} />,
+  LinkedIn: <Linkedin size={18} />,
+  Email:    <Mail     size={18} />,
+  Twitter:  <Twitter  size={18} />,
+};
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
-    <footer
-      className={cn(
-        "border-t border-border-subtle",
-        "bg-bg-surface py-12"
-      )}
-    >
+    <footer className="border-t border-white/5 bg-bg-primary pt-16 overflow-hidden">
       <div className="mx-auto max-w-5xl px-6">
-        <div className="flex flex-col items-center gap-6">
-          {/* Social Links */}
-          <div className="flex items-center gap-6">
-            <a
-              href={SITE_METADATA.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={cn(
-                "text-text-body transition-all duration-300",
-                "hover:text-accent-primary hover:scale-110",
-                "focus:outline-none focus:ring-2 focus:ring-accent-primary rounded-sm"
-              )}
-              aria-label="GitHub Profile"
-            >
-              <Github size={20} />
-            </a>
-            <a
-              href={SITE_METADATA.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={cn(
-                "text-text-body transition-all duration-300",
-                "hover:text-accent-primary hover:scale-110",
-                "focus:outline-none focus:ring-2 focus:ring-accent-primary rounded-sm"
-              )}
-              aria-label="LinkedIn Profile"
-            >
-              <Linkedin size={20} />
-            </a>
-            <a
-              href={`mailto:${SITE_METADATA.email}`}
-              className={cn(
-                "text-text-body transition-all duration-300",
-                "hover:text-accent-primary hover:scale-110",
-                "focus:outline-none focus:ring-2 focus:ring-accent-primary rounded-sm"
-              )}
-              aria-label="Send Email"
-            >
-              <Mail size={20} />
-            </a>
+
+        {/* ── Upper: Nav + Socials + CTA ── */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
+
+          {/* Brand blurb — full width on mobile, 1 col on desktop */}
+          <div className="space-y-4">
+            <p className="font-poppins text-lg font-bold text-text-heading">
+              Dinesh <span className="text-accent-primary">YDK</span>
+            </p>
+            <p className="text-text-body/60 font-jakarta text-sm leading-relaxed max-w-xs">
+              Building clean, scalable, and beautiful web experiences — one commit at a time.
+            </p>
+            <p className="text-text-body/40 font-jakarta text-xs">
+              &copy; {currentYear} {SITE_METADATA.name}. All rights reserved.
+            </p>
           </div>
 
-          {/* Copyright */}
-          <p className="text-text-body text-sm font-jakarta">
-            &copy; {currentYear}{" "}
-            <span className="text-accent-primary">{SITE_METADATA.name}</span>.
-            All rights reserved.
-          </p>
+          {/* Nav + Connect: side-by-side on mobile (2 cols), each in their own col on desktop */}
+          <div className="grid grid-cols-2 md:contents gap-8">
 
-          {/* Built With */}
-          <p className="text-text-body/60 text-xs font-jakarta">
-            Built with{" "}
-            <span className="text-accent-secondary">React</span>,{" "}
-            <span className="text-accent-secondary">TypeScript</span> &{" "}
-            <span className="text-accent-secondary">Tailwind CSS</span>
-          </p>
+            {/* Quick Nav */}
+            <div className="space-y-4">
+              <p className="font-jakarta text-xs font-semibold uppercase tracking-widest text-text-body/40">
+                Navigation
+              </p>
+              <ul className="space-y-2">
+                {FOOTER_LINKS.navigation.map((link) => (
+                  <li key={link.name}>
+                    <a
+                      href={link.href}
+                      className={cn(
+                        "text-text-body/60 font-jakarta text-sm",
+                        "transition-colors duration-300",
+                        "hover:text-accent-primary"
+                      )}
+                    >
+                      {link.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Socials */}
+            <div className="space-y-4">
+              <p className="font-jakarta text-xs font-semibold uppercase tracking-widest text-text-body/40">
+                Connect
+              </p>
+              <ul className="space-y-2">
+                {FOOTER_LINKS.socials.map((social) => (
+                  <li key={social.name}>
+                    <a
+                      href={social.href}
+                      target={social.href.startsWith("mailto") ? undefined : "_blank"}
+                      rel="noopener noreferrer"
+                      aria-label={social.ariaLabel}
+                      className={cn(
+                        "inline-flex items-center gap-2",
+                        "text-text-body/60 font-jakarta text-sm",
+                        "transition-colors duration-300",
+                        "hover:text-accent-primary"
+                      )}
+                    >
+                      {SOCIAL_ICONS[social.name]}
+                      {social.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
+
+        {/* Back to top — centered */}
+        <div className="flex justify-center mb-12">
+          <motion.button
+            onClick={scrollToTop}
+            whileHover={{ y: -2, scale: 1.05 }}
+            whileTap={{ scale: 0.96 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className={cn(
+              "inline-flex items-center gap-2 px-5 py-2.5 rounded-full",
+              "border border-border-subtle text-text-body/60 font-jakarta text-xs",
+              "transition-colors duration-300",
+              "hover:border-accent-primary/40 hover:text-accent-primary",
+              "focus:outline-none focus:ring-2 focus:ring-accent-primary"
+            )}
+            aria-label="Back to top"
+          >
+            <ArrowUp size={14} />
+            Back to top
+          </motion.button>
+        </div>
+
+        {/* Divider */}
+        <div className="w-full h-px bg-white/5 mb-0" />
+      </div>
+
+      {/* ── Massive Brand Anchor: "YDK" ── */}
+      <div
+        className={cn(
+          "w-full text-center leading-none",
+          "select-none pointer-events-none",
+          "-mb-4"
+        )}
+      >
+        <span
+          className={cn(
+            "inline-block w-[95%] md:w-auto",
+            "font-poppins font-black tracking-tighter",
+            "text-transparent bg-clip-text",
+            "bg-gradient-to-b from-white/15 via-white/8 to-bg-primary"
+          )}
+          style={{
+            fontSize: "clamp(7rem, 30vw, 26rem)",
+            lineHeight: 0.82,
+          }}
+        >
+          YDK
+        </span>
       </div>
     </footer>
   );
 };
 
 export default Footer;
-

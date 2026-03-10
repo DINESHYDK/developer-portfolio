@@ -1,7 +1,5 @@
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
-import { ExternalLink } from "lucide-react";
 import type { CodingPlatform } from "@/types";
-import { cn } from "@/utils/cn";
 
 interface LeetCodeViewProps {
   platform: CodingPlatform;
@@ -9,7 +7,7 @@ interface LeetCodeViewProps {
 
 const LeetCodeView = ({ platform }: LeetCodeViewProps) => {
   // Prepare data for recharts
-  const chartData = platform.breakdown.map((item) => ({
+  const chartData = (platform.breakdown ?? []).map((item) => ({
     name: item.label,
     value: item.solved,
     color: item.color,
@@ -81,7 +79,7 @@ const LeetCodeView = ({ platform }: LeetCodeViewProps) => {
 
       {/* Right: Breakdown */}
       <div className="space-y-3">
-        {platform.breakdown.map((item) => (
+        {(platform.breakdown ?? []).map((item) => (
           <div
             key={item.label}
             className="p-4 rounded-3xl bg-bg-primary border border-border-subtle"

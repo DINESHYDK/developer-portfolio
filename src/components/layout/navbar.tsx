@@ -1,5 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Home, User, Wrench, FolderOpen, Mail, BarChart3 } from "lucide-react";
+import { LimelightNav } from "@/components/ui/limelight-nav";
+import type { LimelightNavItem } from "@/components/ui/limelight-nav";
 import { cn } from "@/utils/cn";
 
 interface NavItem {
@@ -9,16 +12,39 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { label: "Home", href: "#hero", icon: <Home size={20} /> },
-  { label: "About", href: "#about", icon: <User size={20} /> },
-  { label: "Skills", href: "#skills", icon: <Wrench size={20} /> },
+  { label: "Home",     href: "#hero",     icon: <Home     size={20} /> },
+  { label: "About",    href: "#about",    icon: <User     size={20} /> },
+  { label: "Skills",   href: "#skills",   icon: <Wrench   size={20} /> },
   { label: "Projects", href: "#projects", icon: <FolderOpen size={20} /> },
-  { label: "Stats", href: "#coding", icon: <BarChart3 size={20} /> },
-  { label: "Contact", href: "#contact", icon: <Mail size={20} /> },
+  { label: "Stats",    href: "#coding",   icon: <BarChart3 size={20} /> },
+  { label: "Contact",  href: "#contact",  icon: <Mail     size={20} /> },
 ];
+
+// Same items shaped for LimelightNav (icons only, no labels shown)
+const LIMELIGHT_ITEMS: LimelightNavItem[] = NAV_ITEMS.map((item) => ({
+  id:    item.href,
+  icon:  item.icon as React.ReactElement,
+  label: item.label,
+  href:  item.href,
+}));
 
 const Navbar = () => {
   const [activeLink, setActiveLink] = useState("#hero");
+  const [footerVisible, setFooterVisible] = useState(false);
+
+  // Hide mobile navbar when footer enters the viewport
+  useEffect(() => {
+    const footer = document.querySelector("footer");
+    if (!footer) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setFooterVisible(entry.isIntersecting),
+      { threshold: 0.05 } // triggers as soon as 5% of footer is visible
+    );
+
+    observer.observe(footer);
+    return () => observer.disconnect();
+  }, []);
 
   const handleClick = (href: string) => {
     setActiveLink(href);
@@ -61,53 +87,29 @@ const Navbar = () => {
         </ul>
       </nav>
 
-      {/* Mobile: Bottom Dynamic Island navbar */}
-      <nav
-        className={cn(
-          "md:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-50",
-          "bg-bg-surface/90 backdrop-blur-xl",
-          "border border-border-subtle",
-          "rounded-[28px] px-3 py-2",
-          "shadow-2xl shadow-black/60",
-          "w-[calc(100%-32px)] max-w-md"
+      {/* Mobile: Limelight bottom nav — icon-only, no labels */}
+      <AnimatePresence>
+        {!footerVisible && (
+          <motion.div
+            initial={{ y: 0, opacity: 1 }}
+            exit={{ y: 100, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="md:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-50"
+          >
+            <LimelightNav
+              items={LIMELIGHT_ITEMS}
+              defaultActiveIndex={0}
+              onTabChange={(index) => setActiveLink(NAV_ITEMS[index].href)}
+              className={cn(
+                "bg-bg-surface/90 backdrop-blur-xl",
+                "border border-border-subtle",
+                "shadow-2xl shadow-black/60",
+                "max-w-[92vw] justify-around"
+              )}
+            />
+          </motion.div>
         )}
-      >
-        <ul className="flex items-center justify-around">
-          {NAV_ITEMS.map((item) => (
-            <li key={item.href}>
-              <a
-                href={item.href}
-                onClick={() => handleClick(item.href)}
-                className={cn(
-                  "relative flex flex-col items-center gap-0.5 px-3 py-2 rounded-2xl",
-                  "transition-all duration-300",
-                  "focus:outline-none",
-                  activeLink === item.href
-                    ? "text-accent-primary"
-                    : "text-text-body/60 hover:text-text-body"
-                )}
-                aria-label={item.label}
-              >
-                {/* Active indicator dot */}
-                {activeLink === item.href && (
-                  <span className="absolute -top-1 w-1 h-1 rounded-full bg-accent-primary" />
-                )}
-                <span
-                  className={cn(
-                    "transition-transform duration-300",
-                    activeLink === item.href ? "scale-110" : "scale-100"
-                  )}
-                >
-                  {item.icon}
-                </span>
-                <span className="text-[10px] font-jakarta font-medium">
-                  {item.label}
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      </AnimatePresence>
     </>
   );
 };

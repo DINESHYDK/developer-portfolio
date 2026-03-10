@@ -58,6 +58,18 @@ export interface IndexDistribution {
   color: string;
 }
 
+export interface RatingDistribution {
+  rating: string;
+  count: number;
+  color: string;
+}
+
+export interface TagDistribution {
+  tag: string;
+  count: number;
+  color: string;
+}
+
 export interface CodingPlatform {
   id: string;
   name: string;
@@ -77,17 +89,23 @@ export interface CodingPlatform {
   // Codeforces specific
   maxRating?: number;
   indexDistribution?: IndexDistribution[];
+  ratingDistribution?: RatingDistribution[];
+  tagDistribution?: TagDistribution[];
 
   // CodeChef specific
   division?: number;
   stars?: number;
   certificates?: string[];
   maxStreak?: number;
+  currentStreak?: number;
+  highestRating?: number;
+  globalRank?: number;
+  countryRank?: number;
 
-  // GeeksforGeeks specific
-  codingScore?: number;
-  potdStreak?: number;
-  instituteRank?: number;
+  // TUF (Striver A2Z / SDE Sheet) specific
+  tufSolved?: number;
+  tufTotal?: number;
+  tufBreakdown?: PlatformProblemBreakdown[];
 }
 
 export interface CodingStatsData {

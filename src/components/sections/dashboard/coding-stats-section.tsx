@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Trophy, Target, BarChart3, Flame } from "lucide-react";
-import { CODING_STATS } from "@/data/coding-stats";
+import { Trophy, Target, BarChart3, Flame, RefreshCw, Wifi, WifiOff } from "lucide-react";
+import { useCodingStats } from "@/hooks/use-coding-stats";
 import PlatformSelector from "./platform-selector";
 import LeetCodeView from "./platforms/leetcode-view";
 import CodeChefView from "./platforms/codechef-view";
 import CodeforcesView from "./platforms/codeforces-view";
-import GeeksforGeeksView from "./platforms/geeksforgeeks-view";
+import TufView from "./platforms/tuf-view";
 import { cn } from "@/utils/cn";
 
 /* ===========================
@@ -17,7 +17,7 @@ const PLATFORM_COMPONENTS: Record<string, React.ComponentType<{ platform: any }>
   leetcode: LeetCodeView,
   codechef: CodeChefView,
   codeforces: CodeforcesView,
-  geeksforgeeks: GeeksforGeeksView,
+  tuf: TufView,
   // Add new platforms here — zero changes needed in the JSX below
 };
 
@@ -70,22 +70,24 @@ const HoverCard = ({ children, content }: HoverCardProps) => {
    Main Section
    =========================== */
 const CodingStatsSection = () => {
+  const { data: codingStats, isLoading, isLive, refresh } = useCodingStats();
+
   const [activePlatform, setActivePlatform] = useState<string>(
-    CODING_STATS.platforms[0]?.id ?? "leetcode"
+    codingStats.platforms[0]?.id ?? "leetcode"
   );
 
   // Aggregate stats
-  const totalSolved = CODING_STATS.platforms.reduce(
+  const totalSolved = codingStats.platforms.reduce(
     (sum, p) => sum + p.totalSolved,
     0
   );
-  const totalContests = CODING_STATS.platforms.reduce(
+  const totalContests = codingStats.platforms.reduce(
     (sum, p) => sum + (p.contestsAttended ?? 0),
     0
   );
 
   // Get current platform data
-  const currentPlatform = CODING_STATS.platforms.find(
+  const currentPlatform = codingStats.platforms.find(
     (p) => p.id === activePlatform
   );
 
@@ -108,7 +110,7 @@ const CodingStatsSection = () => {
     {
       icon: <BarChart3 size={20} />,
       label: "Platforms",
-      value: CODING_STATS.platforms.length,
+      value: codingStats.platforms.length,
       hasHoverCard: false,
     },
     {
@@ -131,6 +133,36 @@ const CodingStatsSection = () => {
           <p className="text-text-body font-jakarta mt-4 max-w-lg mx-auto">
             My competitive programming journey across platforms.
           </p>
+
+          {/* Live status + refresh button */}
+          <div className="flex items-center justify-center gap-3 mt-4">
+            <div className="flex items-center gap-1.5 text-xs font-jakarta">
+              {isLive ? (
+                <>
+                  <Wifi size={12} className="text-green-400" />
+                  <span className="text-green-400">Live</span>
+                </>
+              ) : (
+                <>
+                  <WifiOff size={12} className="text-text-body/40" />
+                  <span className="text-text-body/40">Cached</span>
+                </>
+              )}
+            </div>
+            <button
+              onClick={refresh}
+              disabled={isLoading}
+              className={cn(
+                "p-1.5 rounded-full transition-all duration-300",
+                "text-text-body/40 hover:text-accent-primary hover:bg-accent-primary/10",
+                "focus:outline-none focus:ring-2 focus:ring-accent-primary/30",
+                isLoading && "animate-spin"
+              )}
+              aria-label="Refresh stats"
+            >
+              <RefreshCw size={14} />
+            </button>
+          </div>
         </div>
 
         {/* Aggregate Overview Cards */}
@@ -174,7 +206,7 @@ const CodingStatsSection = () => {
                       <p className="text-xs font-jakarta font-semibold text-text-heading mb-3">
                         Breakdown by Platform
                       </p>
-                      {CODING_STATS.platforms.map((platform) => (
+                      {codingStats.platforms.map((platform) => (
                         <div
                           key={platform.id}
                           className="flex items-center justify-between text-xs"
@@ -208,7 +240,7 @@ const CodingStatsSection = () => {
         {/* Apple-Style Platform Selector */}
         <div className="mb-8">
           <PlatformSelector
-            platforms={CODING_STATS.platforms.map((p) => ({
+            platforms={codingStats.platforms.map((p) => ({
               id: p.id,
               name: p.name,
               accentColor: p.accentColor,
@@ -264,7 +296,7 @@ const CodingStatsSection = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
-          Last updated: {CODING_STATS.lastUpdated}
+          Last updated: {codingStats.lastUpdated}
         </motion.p>
       </div>
     </section>

@@ -8,7 +8,7 @@ import type { ContactFormData } from "@/types";
  * TODO: Replace with actual API call to Express backend.
  */
 export const sendContactMessage = async (
-  data: ContactFormData
+  _data: ContactFormData
 ): Promise<{ success: boolean; message: string }> => {
   // Simulate network delay
   await new Promise((resolve) => setTimeout(resolve, 1500));
