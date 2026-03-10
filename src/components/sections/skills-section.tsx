@@ -1,5 +1,12 @@
 import { SKILLS } from "@/data/skills";
-import { cn } from "@/utils/cn";
+import OrbitCard from "@/components/ui/orbit-card";
+
+// Color mapping for each category
+const CATEGORY_COLORS = {
+  Frontend: "#8ECAE6", // Cyan (accent-primary)
+  Backend: "#A7F3D0", // Green (accent-secondary)
+  "Tools & DevOps": "#FFA116", // Orange
+} as const;
 
 const SkillsSection = () => {
   return (
@@ -12,42 +19,19 @@ const SkillsSection = () => {
           </h2>
           <div className="w-16 h-1 bg-accent-primary mx-auto rounded-full" />
           <p className="text-text-body font-jakarta mt-4 max-w-lg mx-auto">
-            Technologies and tools I use to bring ideas to life.
+            Interactive orbital visualization of my tech stack. Hover to interact.
           </p>
         </div>
 
-        {/* Skill Categories */}
-        <div className="grid md:grid-cols-3 gap-8">
+        {/* Orbital Skill Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {SKILLS.map((category) => (
-            <div
+            <OrbitCard
               key={category.category}
-              className={cn(
-                "p-8 rounded-3xl",
-                "bg-bg-primary border border-border-subtle",
-                "transition-all duration-300",
-                "hover:border-accent-primary/30 hover:shadow-lg hover:shadow-black/20"
-              )}
-            >
-              <h3 className="font-poppins text-xl font-semibold text-accent-primary mb-6">
-                {category.category}
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {category.skills.map((skill) => (
-                  <span
-                    key={skill.name}
-                    className={cn(
-                      "px-4 py-2 rounded-full text-sm font-jakarta font-medium",
-                      "bg-bg-surface text-text-body",
-                      "border border-border-subtle",
-                      "transition-all duration-300",
-                      "hover:border-accent-primary/50 hover:text-accent-primary"
-                    )}
-                  >
-                    {skill.name}
-                  </span>
-                ))}
-              </div>
-            </div>
+              title={category.category}
+              skills={category.skills.map((s) => s.name)}
+              accentColor={CATEGORY_COLORS[category.category as keyof typeof CATEGORY_COLORS]}
+            />
           ))}
         </div>
       </div>
