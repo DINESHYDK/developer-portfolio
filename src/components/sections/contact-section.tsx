@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import {
   Send, Loader2, Mail, Terminal,
   Sun, X, Minus, Maximize2, Minimize2,
-  AlertTriangle, Zap,
+  AlertTriangle, Zap, Lock, CheckCircle2,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { ContactFormData } from "@/types";
@@ -330,6 +330,7 @@ type Tab = "contact" | "terminal";
 
 const ContactSection = () => {
   const [activeTab, setActiveTab] = useState<Tab>("contact");
+  const [slideDir, setSlideDir] = useState<1 | -1>(1);
   const [formData, setFormData] = useState<ContactFormData>(INITIAL_FORM_STATE);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -359,18 +360,36 @@ const ContactSection = () => {
 
   const inputClasses = cn(
     "w-full px-4 py-4 rounded-2xl",
-    "bg-bg-primary border border-border-default",
-    "text-text-heading font-jakarta placeholder-text-body/50",
-    "transition-all duration-300",
-    "focus:outline-none focus:ring-2 focus:ring-accent-primary focus:border-transparent",
-    "hover:border-accent-primary/30"
+    "bg-bg-primary border border-[rgba(255,255,255,0.12)]",
+    "text-text-heading font-jakarta placeholder-text-body/40",
+    "transition-colors duration-200 outline-none",
+    // focus: border colour shifts cyan + subtle 2px shadow ring (no layout shift)
+    "focus:border-accent-primary/60 focus:[box-shadow:0_0_0_2px_rgba(142,202,230,0.18)]",
+    "hover:border-[rgba(255,255,255,0.25)]"
   );
+
+  const switchTab = (tab: Tab) => {
+    setSlideDir(tab === "terminal" ? 1 : -1);
+    setActiveTab(tab);
+  };
+
+  const slideVariants = {
+    enter: (dir: number) => ({ opacity: 0, x: dir * 50 }),
+    center: { opacity: 1, x: 0 },
+    exit: (dir: number) => ({ opacity: 0, x: dir * -50 }),
+  };
 
   return (
     <section id="contact" className="py-20 px-6 bg-bg-surface">
       <div className="mx-auto max-w-5xl">
         {/* Section Title */}
-        <div className="text-center mb-8">
+        <motion.div
+          className="text-center mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ type: "spring", stiffness: 200, damping: 24 }}
+        >
           <h2 className="font-poppins text-3xl md:text-4xl font-bold text-text-heading mb-4">
             Get In <span className="text-accent-primary">Touch</span>
           </h2>
@@ -379,36 +398,44 @@ const ContactSection = () => {
             Have a question or want to work together? Drop me a message — or
             explore the terminal.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Tab Switcher */}
+        {/* ── Tab Switcher — layoutId sliding pill ── */}
         <div className="flex justify-center mb-10">
-          <div className="inline-flex rounded-full bg-bg-primary border border-border-subtle p-1">
-            <button
-              onClick={() => setActiveTab("contact")}
+          <div className="relative inline-flex items-center rounded-full bg-bg-primary border border-border-subtle p-1">
+            {/* Sliding background pill — changes colour based on active tab */}
+            <motion.div
+              layoutId="tab-pill"
               className={cn(
-                "inline-flex items-center gap-2 px-6 py-2.5 rounded-full",
-                "text-sm font-jakarta font-medium",
-                "transition-all duration-300",
-                "focus:outline-none focus:ring-2 focus:ring-accent-primary",
+                "absolute top-1 bottom-1 rounded-full",
                 activeTab === "contact"
-                  ? "bg-accent-primary text-bg-primary shadow-[0_0_16px_rgba(142,202,230,0.25)]"
-                  : "text-text-body hover:text-text-heading"
+                  ? "bg-accent-primary shadow-[0_0_18px_rgba(142,202,230,0.3)]"
+                  : "bg-accent-secondary shadow-[0_0_18px_rgba(167,243,208,0.3)]"
+              )}
+              // Measure the correct pill width by matching whichever button is active
+              style={activeTab === "contact" ? { left: 4, right: "50%" } : { left: "50%", right: 4 }}
+              transition={{ type: "spring", stiffness: 380, damping: 34 }}
+            />
+
+            <button
+              onClick={() => switchTab("contact")}
+              className={cn(
+                "relative z-10 inline-flex items-center gap-2 px-6 py-2.5 rounded-full",
+                "text-sm font-jakarta font-medium select-none",
+                "transition-colors duration-300 focus:outline-none",
+                activeTab === "contact" ? "text-bg-primary" : "text-text-body hover:text-text-heading"
               )}
             >
               <Mail size={16} />
               Contact
             </button>
             <button
-              onClick={() => setActiveTab("terminal")}
+              onClick={() => switchTab("terminal")}
               className={cn(
-                "inline-flex items-center gap-2 px-6 py-2.5 rounded-full",
-                "text-sm font-jakarta font-medium",
-                "transition-all duration-300",
-                "focus:outline-none focus:ring-2 focus:ring-accent-secondary",
-                activeTab === "terminal"
-                  ? "bg-accent-secondary text-bg-primary shadow-[0_0_16px_rgba(167,243,208,0.25)]"
-                  : "text-text-body hover:text-text-heading"
+                "relative z-10 inline-flex items-center gap-2 px-6 py-2.5 rounded-full",
+                "text-sm font-jakarta font-medium select-none",
+                "transition-colors duration-300 focus:outline-none",
+                activeTab === "terminal" ? "text-bg-primary" : "text-text-body hover:text-text-heading"
               )}
             >
               <Terminal size={16} />
@@ -418,73 +445,59 @@ const ContactSection = () => {
         </div>
 
         {/* Tab Content */}
-        <div className="max-w-2xl mx-auto">
-          <AnimatePresence mode="wait">
+        <div className="max-w-2xl mx-auto overflow-hidden">
+          <AnimatePresence mode="wait" custom={slideDir}>
             {activeTab === "contact" ? (
               <motion.div
                 key="contact"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
+                custom={slideDir}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ type: "spring", stiffness: 280, damping: 28 }}
               >
-                {/* Contact Form */}
-                <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Contact Form — clean, no extra motion */}
+                <form onSubmit={handleSubmit} className="space-y-5">
                   <div>
-                    <label
-                      htmlFor="name"
-                      className="block text-text-heading font-jakarta text-sm font-medium mb-2"
-                    >
+                    <label htmlFor="name" className="block text-text-heading font-jakarta text-sm font-medium mb-2">
                       Name
                     </label>
                     <input
-                      id="name"
-                      name="name"
-                      type="text"
-                      required
-                      value={formData.name}
-                      onChange={handleChange}
-                      placeholder="Your name"
-                      className={inputClasses}
+                      id="name" name="name" type="text" required
+                      value={formData.name} onChange={handleChange}
+                      placeholder="Your name" className={inputClasses}
                     />
                   </div>
 
                   <div>
-                    <label
-                      htmlFor="email"
-                      className="block text-text-heading font-jakarta text-sm font-medium mb-2"
-                    >
+                    <label htmlFor="email" className="block text-text-heading font-jakarta text-sm font-medium mb-2">
                       Email
                     </label>
                     <input
-                      id="email"
-                      name="email"
-                      type="email"
-                      required
-                      value={formData.email}
-                      onChange={handleChange}
-                      placeholder="your@email.com"
-                      className={inputClasses}
+                      id="email" name="email" type="email" required
+                      value={formData.email} onChange={handleChange}
+                      placeholder="your@email.com" className={inputClasses}
                     />
                   </div>
 
                   <div>
-                    <label
-                      htmlFor="message"
-                      className="block text-text-heading font-jakarta text-sm font-medium mb-2"
-                    >
+                    <label htmlFor="message" className="block text-text-heading font-jakarta text-sm font-medium mb-2">
                       Message
                     </label>
                     <textarea
-                      id="message"
-                      name="message"
-                      required
-                      rows={6}
-                      value={formData.message}
-                      onChange={handleChange}
+                      id="message" name="message" required rows={6}
+                      value={formData.message} onChange={handleChange}
                       placeholder="Tell me about your project..."
                       className={cn(inputClasses, "resize-none")}
                     />
+                  </div>
+
+                  <div className="flex items-center gap-2 px-1">
+                    <Lock size={13} className="text-text-body/50 shrink-0" />
+                    <p className="text-text-body/50 font-jakarta text-xs">
+                      Your information is secure and will only be used to contact you back.
+                    </p>
                   </div>
 
                   <button
@@ -493,44 +506,48 @@ const ContactSection = () => {
                     className={cn(
                       "w-full inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl",
                       "bg-accent-primary text-bg-primary font-jakarta font-semibold",
-                      "transition-all duration-300",
-                      "hover:bg-accent-primary/90 hover:shadow-[0_0_20px_rgba(142,202,230,0.3)]",
+                      "transition-all duration-200",
+                      "hover:brightness-105 hover:shadow-[0_0_20px_rgba(142,202,230,0.28)]",
                       "focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-offset-2 focus:ring-offset-bg-surface",
                       "disabled:opacity-50 disabled:cursor-not-allowed"
                     )}
                   >
                     {isLoading ? (
-                      <>
-                        <Loader2 size={18} className="animate-spin" />
-                        Sending...
-                      </>
+                      <><Loader2 size={18} className="animate-spin" /> Sending...</>
                     ) : (
-                      <>
-                        <Send size={18} />
-                        Send Message
-                      </>
+                      <><Send size={18} /> Send Message</>
                     )}
                   </button>
 
-                  {isSuccess && (
-                    <div className="text-center p-4 rounded-2xl bg-accent-secondary/10 border border-accent-secondary/30">
-                      <p className="text-accent-secondary font-jakarta font-medium">
-                        ✓ Message sent successfully! I&apos;ll get back to you soon.
-                      </p>
-                    </div>
-                  )}
+                  <AnimatePresence>
+                    {isSuccess && (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.95, y: 6 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95, y: -6 }}
+                        transition={{ type: "spring", stiffness: 320, damping: 24 }}
+                        className="flex items-center justify-center gap-2 p-4 rounded-2xl bg-accent-secondary/10 border border-accent-secondary/30"
+                      >
+                        <CheckCircle2 size={18} className="text-accent-secondary shrink-0" />
+                        <p className="text-accent-secondary font-jakarta font-medium text-sm">
+                          Message sent! I&apos;ll get back to you soon.
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </form>
               </motion.div>
             ) : (
               <motion.div
                 key="terminal"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
+                custom={slideDir}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ type: "spring", stiffness: 280, damping: 28 }}
               >
-                {/* Dev Terminal */}
-                <DevTerminal onClose={() => setActiveTab("contact")} />
+                <DevTerminal onClose={() => switchTab("contact")} />
               </motion.div>
             )}
           </AnimatePresence>
