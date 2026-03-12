@@ -1,4 +1,4 @@
-import React, { useState, useRef, useLayoutEffect, cloneElement } from "react";
+import React, { useState, useRef, useLayoutEffect, useEffect, cloneElement } from "react";
 
 export type LimelightNavItem = {
   id: string | number;
@@ -11,6 +11,7 @@ export type LimelightNavItem = {
 type LimelightNavProps = {
   items: LimelightNavItem[];
   defaultActiveIndex?: number;
+  activeIndex?: number;
   onTabChange?: (index: number) => void;
   className?: string;
   limelightClassName?: string;
@@ -21,6 +22,7 @@ type LimelightNavProps = {
 export const LimelightNav = ({
   items,
   defaultActiveIndex = 0,
+  activeIndex: controlledActiveIndex,
   onTabChange,
   className = "",
   limelightClassName = "",
@@ -31,6 +33,13 @@ export const LimelightNav = ({
   const [isReady, setIsReady] = useState(false);
   const navItemRefs = useRef<(HTMLAnchorElement | null)[]>([]);
   const limelightRef = useRef<HTMLDivElement | null>(null);
+
+  // Sync internal state when parent controls active tab (scroll-spy).
+  useEffect(() => {
+    if (typeof controlledActiveIndex === "number") {
+      setActiveIndex(controlledActiveIndex);
+    }
+  }, [controlledActiveIndex]);
 
   // Recalculate limelight position whenever activeIndex or items change
   useLayoutEffect(() => {
@@ -62,7 +71,7 @@ export const LimelightNav = ({
 
   return (
     <nav
-      className={`relative inline-flex items-center h-14 rounded-[28px] px-1 ${className}`}
+      className={`relative flex items-center h-14 rounded-[28px] px-1 ${className}`}
     >
       {items.map((item, index) => (
         <a

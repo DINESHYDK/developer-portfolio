@@ -62,9 +62,14 @@ const PlatformSelector = ({
         </div>
       </div>
 
-      {/* Desktop: Apple-Style Segmented Control (≥ md breakpoint) */}
+      {/* Desktop: Apple-Style Segmented Control (>= md breakpoint) */}
       <div className="hidden md:flex justify-center">
-        <div className="inline-flex items-center gap-1 p-1.5 rounded-full bg-bg-surface border border-border-subtle">
+        <div
+          className="inline-flex items-center gap-1 p-1.5 rounded-full bg-bg-surface border border-border-subtle border-t-2"
+          style={{
+            borderTopColor: activePlatformData?.accentColor ?? undefined,
+          }}
+        >
           {platforms.map((platform) => (
             <button
               key={platform.id}

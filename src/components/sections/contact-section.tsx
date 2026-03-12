@@ -360,12 +360,11 @@ const ContactSection = () => {
 
   const inputClasses = cn(
     "w-full px-4 py-4 rounded-2xl",
-    "bg-bg-primary border border-[rgba(255,255,255,0.12)]",
+    "bg-bg-primary border-2 border-[rgba(255,255,255,0.14)]",
     "text-text-heading font-jakarta placeholder-text-body/40",
     "transition-colors duration-200 outline-none",
-    // focus: border colour shifts cyan + subtle 2px shadow ring (no layout shift)
-    "focus:border-accent-primary/60 focus:[box-shadow:0_0_0_2px_rgba(142,202,230,0.18)]",
-    "hover:border-[rgba(255,255,255,0.25)]"
+    "focus:border-accent-primary/75",
+    "hover:border-[rgba(255,255,255,0.3)]"
   );
 
   const switchTab = (tab: Tab) => {
@@ -508,7 +507,7 @@ const ContactSection = () => {
                       "bg-accent-primary text-bg-primary font-jakarta font-semibold",
                       "transition-all duration-200",
                       "hover:brightness-105 hover:shadow-[0_0_20px_rgba(142,202,230,0.28)]",
-                      "focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-offset-2 focus:ring-offset-bg-surface",
+                      "focus:outline-none",
                       "disabled:opacity-50 disabled:cursor-not-allowed"
                     )}
                   >
