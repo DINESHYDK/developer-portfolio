@@ -6,6 +6,7 @@ export const PROJECTS: Project[] = [
   {
     id: "project-1",
     title: "AI Chat Assistant",
+    domain: "AI",
     description:
       "Intelligent conversational AI with context awareness, built with React and OpenAI API. Features real-time streaming responses and conversation history.",
     tags: ["React", "TypeScript", "OpenAI API", "Node.js", "Tailwind CSS"],
@@ -22,6 +23,7 @@ export const PROJECTS: Project[] = [
   {
     id: "project-2",
     title: "E-Commerce Dashboard",
+    domain: "WEB",
     description:
       "A full-featured admin dashboard built with React, TypeScript, and Tailwind CSS. Includes real-time analytics, order management, and dark mode.",
     tags: ["React", "TypeScript", "Tailwind CSS", "Chart.js"],
@@ -38,6 +40,7 @@ export const PROJECTS: Project[] = [
   {
     id: "project-3",
     title: "Task Manager API",
+    domain: "TOOL",
     description:
       "RESTful API built with Node.js and Express, featuring JWT authentication, CRUD operations, and MongoDB integration.",
     tags: ["Node.js", "Express", "MongoDB", "JWT"],
@@ -53,6 +56,7 @@ export const PROJECTS: Project[] = [
   {
     id: "project-4",
     title: "QuizMaster — Study Platform",
+    domain: "AI",
     description:
       "Transform your study experience. Create AI-powered quizzes from your study materials. Boost retention, track progress, and make learning engaging.",
     tags: ["React", "TypeScript", "AI", "MongoDB", "Tailwind CSS"],
@@ -69,6 +73,7 @@ export const PROJECTS: Project[] = [
   {
     id: "project-5",
     title: "Weather App",
+    domain: "WEB",
     description:
       "A responsive weather application with location-based forecasts, animated backgrounds, and PWA support.",
     tags: ["React", "OpenWeather API", "PWA", "CSS Animations"],
@@ -85,6 +90,7 @@ export const PROJECTS: Project[] = [
   {
     id: "project-6",
     title: "Portfolio v1",
+    domain: "WEB",
     description:
       "My first portfolio website showcasing projects and skills, built with vanilla HTML, CSS, and JavaScript.",
     tags: ["HTML", "CSS", "JavaScript", "Responsive Design"],

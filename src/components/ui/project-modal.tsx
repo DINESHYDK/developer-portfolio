@@ -132,10 +132,10 @@ const ProjectModal = ({
             </button>
 
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 300, damping: 28 }}
+              initial={{ opacity: 0, scale: 0.96, y: 24 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 16 }}
+              transition={{ type: "spring", stiffness: 260, damping: 28 }}
               className="relative w-full max-w-4xl max-h-[90vh] overflow-hidden pointer-events-auto"
             >
               {/* Close Button */}
