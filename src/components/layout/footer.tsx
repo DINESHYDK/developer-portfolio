@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
-import { Github, Linkedin, Mail, Twitter, ArrowUp } from "lucide-react";
+import { Github, Linkedin, Mail, Twitter, ArrowUp, Code2, Trophy } from "lucide-react";
 import { SITE_METADATA, FOOTER_LINKS } from "@/config/site-metadata";
+import { CODING_STATS } from "@/data/coding-stats";
+import { Magnetic } from "@/components/ui/magnetic";
 import { cn } from "@/utils/cn";
 
 const SOCIAL_ICONS: Record<string, React.ReactNode> = {
@@ -8,6 +10,13 @@ const SOCIAL_ICONS: Record<string, React.ReactNode> = {
   LinkedIn: <Linkedin size={18} />,
   Email:    <Mail     size={18} />,
   Twitter:  <Twitter  size={18} />,
+};
+
+const PLATFORM_ICONS: Record<string, React.ReactNode> = {
+  leetcode:   <Code2  size={16} />,
+  codeforces: <Trophy size={16} />,
+  codechef:   <Code2  size={16} />,
+  tuf:        <Code2  size={16} />,
 };
 
 const Footer = () => {
@@ -140,6 +149,77 @@ const Footer = () => {
         >
           YDK
         </span>
+      </div>
+
+      {/* ── Premium Sub-Footer Bar ── */}
+      <div className="border-t border-white/5">
+        <div className="mx-auto max-w-5xl px-6 py-6">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+
+            {/* Left: Copyright with animated heart */}
+            <p className="text-text-body/40 font-jakarta text-xs text-center md:text-left">
+              Made with{" "}
+              <motion.span
+                className="inline-block text-accent-primary"
+                animate={{ scale: [1, 1.2, 1] }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              >
+                ♥
+              </motion.span>{" "}
+              by Dinesh
+            </p>
+
+            {/* Right: Magnetic social + platform icons */}
+            <div className="flex items-center gap-4">
+              {/* Social Icons */}
+              {FOOTER_LINKS.socials.map((social) => (
+                <Magnetic key={social.name}>
+                  <a
+                    href={social.href}
+                    target={social.href.startsWith("mailto") ? undefined : "_blank"}
+                    rel="noopener noreferrer"
+                    aria-label={social.ariaLabel}
+                    className={cn(
+                      "flex items-center justify-center w-9 h-9 rounded-full",
+                      "border border-white/10 text-text-body/40",
+                      "transition-all duration-300",
+                      "hover:border-accent-primary hover:text-accent-primary hover:bg-accent-primary/5"
+                    )}
+                  >
+                    {SOCIAL_ICONS[social.name]}
+                  </a>
+                </Magnetic>
+              ))}
+
+              {/* Divider */}
+              <div className="w-px h-6 bg-white/10" />
+
+              {/* Platform Icons */}
+              {CODING_STATS.platforms.map((platform) => (
+                <Magnetic key={platform.id}>
+                  <a
+                    href={platform.profileUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={platform.name}
+                    className={cn(
+                      "flex items-center justify-center w-9 h-9 rounded-full",
+                      "border border-white/10 text-text-body/40",
+                      "transition-all duration-300",
+                      "hover:border-accent-primary hover:text-accent-primary hover:bg-accent-primary/5"
+                    )}
+                  >
+                    {PLATFORM_ICONS[platform.id]}
+                  </a>
+                </Magnetic>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </footer>
   );

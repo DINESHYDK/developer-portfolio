@@ -33,12 +33,12 @@ export const useCodingStats = (): UseCodingStatsReturn => {
   const [isLive, setIsLive] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const loadStats = useCallback(async () => {
+  const loadStats = useCallback(async (force = false) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const liveData = await fetchAllCodingStats();
+      const liveData = await fetchAllCodingStats(force);
 
       if (liveData.platforms.length > 0) {
         setData(liveData);
@@ -47,7 +47,6 @@ export const useCodingStats = (): UseCodingStatsReturn => {
     } catch (err) {
       console.warn("[useCodingStats] Failed to fetch live stats:", err);
       setError("Could not fetch live stats. Showing cached data.");
-      // data stays as mock — no crash
     } finally {
       setIsLoading(false);
     }
@@ -60,7 +59,7 @@ export const useCodingStats = (): UseCodingStatsReturn => {
 
   const refresh = useCallback(() => {
     clearStatsCache();
-    loadStats();
+    loadStats(true);
   }, [loadStats]);
 
   return { data, isLoading, isLive, error, refresh };

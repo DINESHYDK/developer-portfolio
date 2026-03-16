@@ -319,12 +319,47 @@ const getMockPlatform = (id: string): CodingPlatform | null =>
    Public API
    ============================================================ */
 
+/* ============================================================
+   Persistent storage (localStorage) to ensure instantaneous
+   display and bypass loading states on subsequent visits.
+   ============================================================ */
+const STORAGE_KEY = "ydk_coding_stats_cache";
+
+const getPersistentStats = (): CodingStatsData | null => {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) return null;
+    return JSON.parse(saved) as CodingStatsData;
+  } catch (err) {
+    console.error("[CodingStats] Failed to load persistent stats:", err);
+    return null;
+  }
+};
+
+const savePersistentStats = (data: CodingStatsData) => {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch (err) {
+    console.error("[CodingStats] Failed to save persistent stats:", err);
+  }
+};
+
 /**
  * Fetch stats for all registered platforms.
  * Each platform fetch is independent — a failure in one
  * doesn't block others. Failed platforms fall back to mock data.
  */
-export const fetchAllCodingStats = async (): Promise<CodingStatsData> => {
+export const fetchAllCodingStats = async (
+  forceRefresh = false
+): Promise<CodingStatsData> => {
+  const cached = getPersistentStats();
+  const today = new Date().toISOString().split("T")[0];
+
+  // If we have cached data from today and not forcing refresh, return it immediately
+  if (!forceRefresh && cached && cached.lastUpdated === today) {
+    return cached;
+  }
+
   const platformConfigs = CODING_STATS.platforms;
 
   const results = await Promise.allSettled(
@@ -351,10 +386,13 @@ export const fetchAllCodingStats = async (): Promise<CodingStatsData> => {
     )
     .map((r) => r.value);
 
-  return {
+  const updatedStats: CodingStatsData = {
     platforms,
-    lastUpdated: new Date().toISOString().split("T")[0],
+    lastUpdated: today,
   };
+
+  savePersistentStats(updatedStats);
+  return updatedStats;
 };
 
 /**
@@ -387,6 +425,9 @@ export const getSupportedPlatforms = (): string[] =>
   Object.keys(PLATFORM_FETCHERS);
 
 /**
- * Clear the in-memory cache (useful for manual refresh).
+ * Clear the in-memory and persistent cache (useful for manual refresh).
  */
-export const clearStatsCache = () => cache.clear();
+export const clearStatsCache = () => {
+  cache.clear();
+  localStorage.removeItem(STORAGE_KEY);
+};

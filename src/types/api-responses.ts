@@ -104,7 +104,9 @@ export interface CodeforcesRawRatingResponse {
 }
 
 /* ===========================
-   CodeChef (hades.strawhats.tech/api/codechef/user)
+   CodeChef (local Vercel serverless fn: /api/codechef/[username])
+   Scrapes codechef.com server-side — no CORS issues.
+   Source: ydk-portfolio-v2/api/codechef/[username].ts
    =========================== */
 
 export interface CodeChefRawResponse {

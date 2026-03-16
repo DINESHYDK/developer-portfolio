@@ -24,8 +24,8 @@ export const CP_API_ENDPOINTS = {
     userRating: (u: string) => `https://codeforces.com/api/user.rating?handle=${u}`,
   },
   codechef: {
-    // Hades API — scrapes CodeChef profile directly
-    user: (u: string) => `https://hades.strawhats.tech/api/codechef/user/${u}`,
+    // Local Vercel serverless function — scrapes CodeChef profile server-side (no CORS)
+    user: (u: string) => `/api/codechef/${u}`,
   },
   // TUF is static — no API endpoint
   tuf: null,

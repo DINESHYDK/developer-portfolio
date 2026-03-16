@@ -7,6 +7,11 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import type { ContactFormData } from "@/types";
 import { cn } from "@/utils/cn";
+import {
+  VALID_COMMAND_NAMES,
+  BOOT_SEQUENCE,
+  resolveCommand,
+} from "@/data/terminal-commands";
 
 const INITIAL_FORM_STATE: ContactFormData = {
   name: "",
@@ -18,24 +23,22 @@ const INITIAL_FORM_STATE: ContactFormData = {
    Terminal Sub-Component
    =========================== */
 
-const VALID_COMMANDS = new Set([
-  "help", "whoami", "skills", "projects", "contact",
-  "clear", "theme light", "date", "echo $status", "ls",
-]);
-
 type HistoryLine = {
   type: "input" | "output" | "error";
   text: string;
 };
 
-const BOOT_LINES: HistoryLine[] = [
-  { type: "input", text: "whoami" },
-  { type: "output", text: "dinesh-ydk — Full-Stack Developer" },
-  { type: "input", text: "cat skills.txt" },
-  { type: "output", text: "React • TypeScript • Node.js • Express • MongoDB • Tailwind CSS" },
-  { type: "input", text: "echo $STATUS" },
-  { type: "output", text: "Open to opportunities — STATUS=ACTIVE" },
-];
+/** Convert BOOT_SEQUENCE to flat HistoryLine[] */
+const buildBootLines = (): HistoryLine[] => {
+  const lines: HistoryLine[] = [];
+  for (const step of BOOT_SEQUENCE) {
+    lines.push({ type: "input", text: step.command });
+    for (const out of step.outputLines) {
+      lines.push({ type: "output", text: out });
+    }
+  }
+  return lines;
+};
 
 type DevTerminalProps = {
   onClose: () => void;
@@ -43,7 +46,7 @@ type DevTerminalProps = {
 
 const DevTerminal = ({ onClose }: DevTerminalProps) => {
   const [inputValue, setInputValue] = useState("");
-  const [history, setHistory] = useState<HistoryLine[]>(BOOT_LINES);
+  const [history, setHistory] = useState<HistoryLine[]>(buildBootLines);
   const [isMaximized, setIsMaximized] = useState(false);
   const [showEasterEgg, setShowEasterEgg] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -62,74 +65,68 @@ const DevTerminal = ({ onClose }: DevTerminalProps) => {
 
   const liveInputColor = () => {
     if (!inputValue.trim()) return "text-white/70";
-    return VALID_COMMANDS.has(inputValue.trim().toLowerCase())
+    return VALID_COMMAND_NAMES.has(inputValue.trim().toLowerCase())
       ? "text-[#A7F3D0]"   // valid → pastel green
       : "text-[#FDBA74]";  // invalid → pastel orange
   };
 
   const handleCommand = (e: React.FormEvent) => {
     e.preventDefault();
-    e.stopPropagation(); // ← prevents the page from scrolling
+    e.stopPropagation();
     if (!inputValue.trim()) return;
 
     const raw = inputValue.trim();
-    const command = raw.toLowerCase();
+    const result = resolveCommand(raw);
 
-    if (command === "clear") {
+    // Handle side effects
+    if (result.sideEffect === "clear") {
       setHistory([]);
       setInputValue("");
       return;
     }
 
-    if (command === "theme light") {
+    if (result.sideEffect === "easter-egg") {
       setHistory((prev) => [
         ...prev,
         { type: "input", text: raw },
-        { type: "error", text: "identity-crisis: real developers don't use light theme." },
+        { type: "error", text: result.lines[0]?.type === "text" ? result.lines[0].text : "" },
       ]);
       setInputValue("");
       setShowEasterEgg(true);
       return;
     }
 
-    let output = "";
-    let isError = false;
+    // Build history lines from result
+    const newLines: HistoryLine[] = [{ type: "input", text: raw }];
 
-    switch (command) {
-      case "help":
-        output = "commands: help  whoami  skills  projects  contact  date  ls  clear  theme light";
-        break;
-      case "whoami":
-        output = "dinesh-ydk — Full-Stack Developer & Competitive Programmer";
-        break;
-      case "skills":
-        output = "React • TypeScript • Node.js • Express • MongoDB • Tailwind CSS • Framer Motion";
-        break;
-      case "projects":
-        output = "→ Scroll up to the Projects section  |  github.com/dineshydk";
-        break;
-      case "contact":
-        output = "dinesh@example.com  |  Switch to Contact tab for the form";
-        break;
-      case "date":
-        output = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) + " IST";
-        break;
-      case "echo $status":
-        output = "STATUS=OPEN_TO_OPPORTUNITIES";
-        break;
-      case "ls":
-        output = "projects/  skills/  about.md  contact.txt  README.md";
-        break;
-      default:
-        output = `zsh: command not found: ${raw}`;
-        isError = true;
+    for (const line of result.lines) {
+      if (line.type === "download") {
+        // Trigger download as side effect
+        const a = document.createElement("a");
+        a.href = line.href;
+        a.download = "";
+        a.target = "_blank";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        if (line.text) newLines.push({ type: "output", text: line.text });
+      } else if (line.type === "scroll") {
+        // Smooth scroll to target
+        if (line.target) {
+          const el = document.querySelector(line.target);
+          if (el) el.scrollIntoView({ behavior: "smooth" });
+        }
+        if (line.text) newLines.push({ type: "output", text: line.text });
+      } else if (line.type === "link") {
+        newLines.push({ type: result.isError ? "error" : "output", text: line.text });
+      } else {
+        if (line.text) {
+          newLines.push({ type: result.isError ? "error" : "output", text: line.text });
+        }
+      }
     }
 
-    setHistory((prev) => [
-      ...prev,
-      { type: "input", text: raw },
-      { type: isError ? "error" : "output", text: output },
-    ]);
+    setHistory((prev) => [...prev, ...newLines]);
     setInputValue("");
   };
 

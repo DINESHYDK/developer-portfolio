@@ -1,0 +1,71 @@
+/* ===========================
+   Custom Cursor
+   =========================== */
+
+/* Hide default cursor globally — only on non-touch devices */
+@media (pointer: fine) {
+  html, body, * {
+    cursor: none !important;
+  }
+}
+
+/* ── Inner Dot ── */
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-accent-primary);
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: width 0.15s ease, height 0.15s ease, opacity 0.15s ease;
+  will-change: transform;
+}
+
+/* ── Outer Ring ── */
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: white;
+  mix-blend-mode: difference;
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
+  will-change: transform;
+}
+
+/* ── Hover State ── */
+.cursor-dot.is-hovering {
+  width: 4px;
+  height: 4px;
+}
+
+.cursor-ring.is-hovering {
+  width: 64px;
+  height: 64px;
+}
+
+/* ── Click State ── */
+.cursor-dot.is-clicking {
+  transform: translate(-50%, -50%) scale(0.6);
+}
+
+.cursor-ring.is-clicking {
+  transform: translate(-50%, -50%) scale(0.6);
+}
+
+/* ── Hidden on touch devices ── */
+@media (pointer: coarse) {
+  .cursor-dot,
+  .cursor-ring {
+    display: none !important;
+  }
+}

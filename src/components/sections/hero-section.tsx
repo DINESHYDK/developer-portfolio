@@ -1,6 +1,7 @@
 import { ArrowDown, FileText } from "lucide-react";
 import { SITE_METADATA } from "@/config/site-metadata";
 import { cn } from "@/utils/cn";
+import IdCard from "@/components/id-card/IdCard";
 
 const HeroSection = () => {
   return (
@@ -14,55 +15,67 @@ const HeroSection = () => {
         <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-accent-secondary/5 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative z-10 text-center max-w-3xl mx-auto">
-        {/* Greeting */}
-        <p className="text-accent-primary font-mono text-sm mb-4 tracking-wider">
-          Hi, my name is
-        </p>
+      {/* Two-column layout: Card (left) + Text (right) */}
+      <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col-reverse md:flex-row items-center justify-center gap-12 md:gap-16">
 
-        {/* Name */}
-        <h1 className="font-poppins text-5xl md:text-7xl font-bold text-text-heading mb-4">
-          {SITE_METADATA.name}
-        </h1>
+        {/* ── Left: ID Card ── */}
+        <div className="flex justify-center">
+          <IdCard />
+        </div>
 
-        {/* Role */}
-        <h2 className="font-poppins text-2xl md:text-4xl font-semibold text-text-body mb-6">
-          {SITE_METADATA.role}
-        </h2>
+        {/* ── Right: Text content ── */}
+        <div className="text-center md:text-left max-w-xl">
+          {/* Greeting */}
+          <p className="text-accent-primary font-mono text-sm mb-4 tracking-wider">
+            Hi, my name is
+          </p>
 
-        {/* Description */}
-        <p className="text-text-body font-jakarta text-lg md:text-xl max-w-2xl mx-auto mb-8 leading-relaxed">
-          {SITE_METADATA.description}
-        </p>
+          {/* Name */}
+          <h1 className="font-poppins text-5xl md:text-6xl font-bold text-text-heading mb-4">
+            {SITE_METADATA.name}
+          </h1>
 
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <a
-            href="#projects"
-            className={cn(
-              "inline-flex items-center gap-2 px-8 py-4 rounded-2xl",
-              "bg-accent-primary text-bg-primary font-jakarta font-semibold",
-              "transition-all duration-300",
-              "hover:bg-accent-primary/90 hover:shadow-[0_0_20px_rgba(142,202,230,0.3)]",
-              "focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-offset-2 focus:ring-offset-bg-primary"
-            )}
-          >
-            View My Work
-            <ArrowDown size={18} />
-          </a>
-          <a
-            href="#contact"
-            className={cn(
-              "inline-flex items-center gap-2 px-8 py-4 rounded-2xl",
-              "border border-accent-primary text-accent-primary font-jakarta font-semibold",
-              "transition-all duration-300",
-              "hover:bg-accent-primary/10",
-              "focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-offset-2 focus:ring-offset-bg-primary"
-            )}
-          >
-            <FileText size={18} />
-            Resume
-          </a>
+          {/* Role */}
+          <h2 className="font-poppins text-2xl md:text-3xl font-semibold text-text-body mb-6">
+            {SITE_METADATA.role}
+          </h2>
+
+          {/* Description */}
+          <p className="text-text-body font-jakarta text-lg md:text-xl mb-8 leading-relaxed">
+            {SITE_METADATA.description}
+          </p>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row items-center md:items-start justify-center md:justify-start gap-4">
+            <a
+              href="#projects"
+              className={cn(
+                "inline-flex items-center gap-2 px-8 py-4 rounded-2xl",
+                "bg-accent-primary text-bg-primary font-jakarta font-semibold",
+                "transition-all duration-300",
+                "hover:bg-accent-primary/90 hover:shadow-[0_0_20px_rgba(142,202,230,0.3)]",
+                "focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-offset-2 focus:ring-offset-bg-primary"
+              )}
+            >
+              View My Work
+              <ArrowDown size={18} />
+            </a>
+            <a
+              href={"/resume.pdf"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={cn(
+                "inline-flex items-center gap-2 px-8 py-4 rounded-2xl",
+                "border border-accent-primary text-accent-primary font-jakarta font-semibold",
+                "transition-all duration-300",
+                "hover:bg-accent-primary/10",
+                "focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-offset-2 focus:ring-offset-bg-primary"
+              )}
+            >
+              <FileText size={18} />
+              Resume
+            </a>
+          </div>
         </div>
       </div>
 
@@ -75,4 +88,3 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
-
