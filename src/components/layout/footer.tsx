@@ -171,8 +171,8 @@ const YdkSpotlight = () => {
             position: "relative",
             zIndex: 0,
             fontFamily: "var(--font-bebas)",
-            fontSize: "clamp(9rem, 60vmin, 46rem)", // 👈 changed
-            lineHeight: 1.05,
+            fontSize: "clamp(9rem, 60vmin, 46rem)",
+            lineHeight: 0.85,
             padding: "0.5rem 0 0",
             color: "#8ECAE6",
             letterSpacing: "clamp(0.02em, 1.2vw, 0.12em)",
@@ -342,7 +342,7 @@ const Footer = () => {
 
       {/* ── Sub-footer ── */}
       <div className="border-t border-white/5">
-        <div className="mx-auto max-w-5xl px-6 py-5 flex justify-center">
+        <div className="mx-auto max-w-5xl px-6 py-3 flex justify-center">
           <p className="text-text-body/40 font-jakarta text-xs text-center">
             Made with{" "}
             <motion.span

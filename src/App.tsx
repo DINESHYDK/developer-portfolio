@@ -44,8 +44,8 @@ function App() {
         </main>
       )}
       <Footer />
-      {/* Spacer for mobile bottom navbar */}
-      <div className="h-24 md:h-0" />
+      {/* Spacer for mobile bottom navbar — only needed above the footer */}
+      <div className="h-16 md:h-0" />
     </div>
   );
 }
