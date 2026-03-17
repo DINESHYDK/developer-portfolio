@@ -4,6 +4,7 @@ import type { PanInfo } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Github, ExternalLink } from "lucide-react";
 import type { Project } from "@/types";
 import { cn } from "@/utils/cn";
+import { haptic } from "@/utils/haptic";
 
 interface ProjectModalProps {
   projects: Project[];
@@ -58,17 +59,20 @@ const ProjectModal = ({
   }, [isOpen, selectedIndex, projects.length]);
 
   // Mobile: Swipe gesture handler
-  const handleDragEnd = (_event: any, info: PanInfo) => {
+  // haptic("tap") fires here — swipe is a touch-only action so this is naturally mobile-only
+  const handleDragEnd = (_event: unknown, info: PanInfo) => {
     const SWIPE_THRESHOLD = 50;
     const velocity = info.velocity.x;
     const offset = info.offset.x;
 
-    // Swipe left (next project)
+    // Swipe left → next project
     if (offset < -SWIPE_THRESHOLD || velocity < -500) {
+      haptic("tap");
       goToNext();
     }
-    // Swipe right (previous project)
+    // Swipe right → previous project
     else if (offset > SWIPE_THRESHOLD || velocity > 500) {
+      haptic("tap");
       goToPrevious();
     }
   };

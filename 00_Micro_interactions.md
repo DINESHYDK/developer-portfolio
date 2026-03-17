@@ -55,7 +55,7 @@ SECTION TASKS
     Files: src/components/sections/skills-section.tsx + CSS
     NOTE: Read file before implementing.
 
-⬜ S-5. Projects Section — hover effects + mobile haptic
+✅ S-5. Projects Section — hover effects + mobile haptic
     Desktop (hover: hover only):
     - Card: scale:1.02, border → accent-primary/40, soft glow
     - Title: underline draw on hover

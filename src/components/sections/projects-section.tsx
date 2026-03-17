@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink, Github, Puzzle, ArrowUpRight } from "lucide-react";
+import { ExternalLink, Github, Puzzle, ArrowUpRight, ArrowRight } from "lucide-react";
 import { PROJECTS, PROJECT_CATEGORIES } from "@/data/projects";
 import type { Project } from "@/types";
 import ProjectModal from "@/components/ui/project-modal";
 import { cn } from "@/utils/cn";
+import { haptic } from "@/utils/haptic";
 
 const SPRING_CARD = { type: "spring" as const, stiffness: 280, damping: 22 };
 
@@ -54,10 +55,15 @@ const FlowingMenuItem = ({
             {String(index + 1).padStart(2, "0")}
           </span>
           <h3 className={cn(
-            "flex-1 font-poppins font-bold text-2xl lg:text-3xl tracking-tight transition-colors duration-300",
+            "flex-1 font-poppins font-bold text-2xl lg:text-3xl tracking-tight transition-colors duration-300 relative",
             isHovered ? "text-white" : "text-white/75"
           )}>
             {project.title}
+            <motion.span
+              className="absolute bottom-0 left-0 h-[2px] w-full bg-accent-secondary rounded-full origin-left"
+              animate={{ scaleX: isHovered ? 1 : 0 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+            />
           </h3>
           <span className={cn(
             "shrink-0 px-3 py-1 rounded-full text-xs font-mono font-semibold border tracking-widest uppercase",
@@ -90,10 +96,15 @@ const FlowingMenuItem = ({
             {project.domain ?? "WEB"}
           </span>
           <h3 className={cn(
-            "flex-1 text-right font-poppins font-bold text-2xl lg:text-3xl tracking-tight transition-colors duration-300",
+            "flex-1 text-right font-poppins font-bold text-2xl lg:text-3xl tracking-tight transition-colors duration-300 relative",
             isHovered ? "text-white" : "text-white/75"
           )}>
             {project.title}
+            <motion.span
+              className="absolute bottom-0 right-0 h-[2px] w-full bg-accent-secondary rounded-full origin-right"
+              animate={{ scaleX: isHovered ? 1 : 0 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+            />
           </h3>
           <span className="font-mono text-xs text-accent-secondary w-6 shrink-0 text-right">
             {String(index + 1).padStart(2, "0")}
@@ -178,16 +189,23 @@ const FlowingMenuItem = ({
                       <ExternalLink size={15} /> Live Demo
                     </a>
                   )}
-                  <button
+                  <motion.button
                     onClick={(e) => { e.stopPropagation(); onOpenModal(); }}
+                    whileHover="hovered"
                     className={cn(
-                      "inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-2xl",
+                      "group/btn inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-2xl",
                       "border border-white/10 text-white/50 font-jakarta text-sm",
-                      "transition-all duration-200 hover:border-white/25 hover:text-white/80"
+                      "transition-colors duration-200 hover:border-white/25 hover:text-white/80"
                     )}
                   >
-                    Full details →
-                  </button>
+                    Full details
+                    <motion.span
+                      variants={{ hovered: { x: 4 }, initial: { x: 0 } }}
+                      transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                    >
+                      <ArrowRight size={14} />
+                    </motion.span>
+                  </motion.button>
                 </div>
               </div>
             </div>
@@ -257,7 +275,7 @@ const ProjectsSection = () => {
             {PROJECT_CATEGORIES.map((cat) => (
               <button
                 key={cat}
-                onClick={() => setActiveCategory(cat)}
+                onClick={() => { haptic("tick"); setActiveCategory(cat); }}
                 className={cn(
                   "px-6 py-2.5 rounded-full text-sm font-jakarta font-medium",
                   "transition-all duration-300",
@@ -291,7 +309,7 @@ const ProjectsSection = () => {
                 transition={{ ...SPRING_CARD, delay: i * 0.07 }}
                 whileHover={{ scale: 1.02, y: -4 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => handleProjectClick(project.id)}
+                onClick={() => { haptic("tap"); handleProjectClick(project.id); }}
                 className="group rounded-3xl overflow-hidden bg-bg-surface border border-border-subtle cursor-pointer"
                 style={{ willChange: "transform" }}
               >
