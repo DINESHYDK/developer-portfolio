@@ -150,10 +150,11 @@ const YdkSpotlight = () => {
       aria-hidden="true"
       style={{
         position: "relative",
-        overflow: "hidden",
         width: "100%",
         textAlign: "center",
         lineHeight: 0,
+        maskImage: "linear-gradient(to bottom, transparent 0%, black 12%)",
+        WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 12%)",
       }}
     >
       {/*
