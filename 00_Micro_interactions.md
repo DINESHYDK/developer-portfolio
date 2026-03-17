@@ -87,14 +87,14 @@ SECTION TASKS
     Files: src/components/sections/dashboard/coding-stats-section.tsx
     NOTE: Read file before implementing.
 
-⬜ S-7. Contact Section — input focus + submit feedback
+✅ S-7. Contact Section — input focus + submit feedback
     - Input focus: accent bottom border draws L→R (scaleX transition)
     - Submit: whileTap scale:0.97 + haptic("confirm") on mobile
     - Success state: animated checkmark (Framer Motion scale+opacity, UI-only)
     Files: src/components/sections/contact-section.tsx
     NOTE: Read file before implementing.
 
-⬜ S-8. Footer Social Links — bounce + haptic
+✅ S-8. Footer Social Links — bounce + haptic
     - Icon: whileHover y:-3, scale:1.15 (spring)
     - whileTap scale:0.9 + haptic("tick") on mobile
     Files: src/components/layout/footer.tsx

@@ -7,6 +7,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import type { ContactFormData } from "@/types";
 import { cn } from "@/utils/cn";
+import { haptic } from "@/utils/haptic";
 import {
   VALID_COMMAND_NAMES,
   BOOT_SEQUENCE,
@@ -331,6 +332,7 @@ const ContactSection = () => {
   const [formData, setFormData] = useState<ContactFormData>(INITIAL_FORM_STATE);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -341,6 +343,7 @@ const ContactSection = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    haptic("confirm");
     setIsLoading(true);
 
     try {
@@ -360,8 +363,17 @@ const ContactSection = () => {
     "bg-bg-primary border-2 border-[rgba(255,255,255,0.14)]",
     "text-text-heading font-jakarta placeholder-text-body/40",
     "transition-colors duration-200 outline-none",
-    "focus:border-accent-primary/75",
     "hover:border-[rgba(255,255,255,0.3)]"
+  );
+
+  /* Animated bottom-bar for focused fields */
+  const FocusBar = ({ field }: { field: string }) => (
+    <motion.div
+      className="absolute bottom-0 left-2 right-2 h-[2px] bg-accent-primary rounded-full origin-left"
+      animate={{ scaleX: focusedField === field ? 1 : 0 }}
+      initial={{ scaleX: 0 }}
+      transition={{ type: "spring", stiffness: 320, damping: 28 }}
+    />
   );
 
   const switchTab = (tab: Tab) => {
@@ -459,34 +471,49 @@ const ContactSection = () => {
                     <label htmlFor="name" className="block text-text-heading font-jakarta text-sm font-medium mb-2">
                       Name
                     </label>
-                    <input
-                      id="name" name="name" type="text" required
-                      value={formData.name} onChange={handleChange}
-                      placeholder="Your name" className={inputClasses}
-                    />
+                    <div className="relative">
+                      <input
+                        id="name" name="name" type="text" required
+                        value={formData.name} onChange={handleChange}
+                        onFocus={() => setFocusedField("name")}
+                        onBlur={() => setFocusedField(null)}
+                        placeholder="Your name" className={inputClasses}
+                      />
+                      <FocusBar field="name" />
+                    </div>
                   </div>
 
                   <div>
                     <label htmlFor="email" className="block text-text-heading font-jakarta text-sm font-medium mb-2">
                       Email
                     </label>
-                    <input
-                      id="email" name="email" type="email" required
-                      value={formData.email} onChange={handleChange}
-                      placeholder="your@email.com" className={inputClasses}
-                    />
+                    <div className="relative">
+                      <input
+                        id="email" name="email" type="email" required
+                        value={formData.email} onChange={handleChange}
+                        onFocus={() => setFocusedField("email")}
+                        onBlur={() => setFocusedField(null)}
+                        placeholder="your@email.com" className={inputClasses}
+                      />
+                      <FocusBar field="email" />
+                    </div>
                   </div>
 
                   <div>
                     <label htmlFor="message" className="block text-text-heading font-jakarta text-sm font-medium mb-2">
                       Message
                     </label>
-                    <textarea
-                      id="message" name="message" required rows={6}
-                      value={formData.message} onChange={handleChange}
-                      placeholder="Tell me about your project..."
-                      className={cn(inputClasses, "resize-none")}
-                    />
+                    <div className="relative">
+                      <textarea
+                        id="message" name="message" required rows={6}
+                        value={formData.message} onChange={handleChange}
+                        onFocus={() => setFocusedField("message")}
+                        onBlur={() => setFocusedField(null)}
+                        placeholder="Tell me about your project..."
+                        className={cn(inputClasses, "resize-none")}
+                      />
+                      <FocusBar field="message" />
+                    </div>
                   </div>
 
                   <div className="flex items-center gap-2 px-1">
@@ -496,13 +523,15 @@ const ContactSection = () => {
                     </p>
                   </div>
 
-                  <button
+                  <motion.button
                     type="submit"
                     disabled={isLoading}
+                    whileTap={!isLoading ? { scale: 0.97 } : undefined}
+                    transition={{ type: "spring", stiffness: 400, damping: 20 }}
                     className={cn(
                       "w-full inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl",
                       "bg-accent-primary text-bg-primary font-jakarta font-semibold",
-                      "transition-all duration-200",
+                      "transition-colors duration-200",
                       "hover:brightness-105 hover:shadow-[0_0_20px_rgba(142,202,230,0.28)]",
                       "focus:outline-none",
                       "disabled:opacity-50 disabled:cursor-not-allowed"
@@ -513,7 +542,7 @@ const ContactSection = () => {
                     ) : (
                       <><Send size={18} /> Send Message</>
                     )}
-                  </button>
+                  </motion.button>
 
                   <AnimatePresence>
                     {isSuccess && (

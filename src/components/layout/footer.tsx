@@ -3,6 +3,9 @@ import { motion } from "framer-motion";
 import { Github, Linkedin, Mail, Twitter, ArrowUp } from "lucide-react";
 import { SITE_METADATA, FOOTER_LINKS } from "@/config/site-metadata";
 import { cn } from "@/utils/cn";
+import { haptic } from "@/utils/haptic";
+
+const SOCIAL_SPRING = { type: "spring" as const, stiffness: 380, damping: 22 };
 
 const SOCIAL_ICONS: Record<string, React.ReactNode> = {
   GitHub:   <Github   size={18} />,
@@ -231,11 +234,15 @@ const Footer = () => {
             <ul className="space-y-2">
               {FOOTER_LINKS.socials.map((social) => (
                 <li key={social.name}>
-                  <a
+                  <motion.a
                     href={social.href}
                     target={social.href.startsWith("mailto") ? undefined : "_blank"}
                     rel="noopener noreferrer"
                     aria-label={social.ariaLabel}
+                    onClick={() => haptic("tick")}
+                    whileHover={{ y: -3, scale: 1.15 }}
+                    whileTap={{ scale: 0.9 }}
+                    transition={SOCIAL_SPRING}
                     className={cn(
                       "inline-flex items-center gap-2",
                       "text-text-body/60 font-jakarta text-sm",
@@ -244,7 +251,7 @@ const Footer = () => {
                   >
                     {SOCIAL_ICONS[social.name]}
                     {social.name}
-                  </a>
+                  </motion.a>
                 </li>
               ))}
             </ul>
@@ -281,11 +288,15 @@ const Footer = () => {
             <ul className="space-y-2">
               {FOOTER_LINKS.socials.map((social) => (
                 <li key={social.name}>
-                  <a
+                  <motion.a
                     href={social.href}
                     target={social.href.startsWith("mailto") ? undefined : "_blank"}
                     rel="noopener noreferrer"
                     aria-label={social.ariaLabel}
+                    onClick={() => haptic("tick")}
+                    whileHover={{ y: -3, scale: 1.15 }}
+                    whileTap={{ scale: 0.9 }}
+                    transition={SOCIAL_SPRING}
                     className={cn(
                       "inline-flex items-center gap-2",
                       "text-text-body/60 font-jakarta text-sm",
@@ -294,7 +305,7 @@ const Footer = () => {
                   >
                     {SOCIAL_ICONS[social.name]}
                     {social.name}
-                  </a>
+                  </motion.a>
                 </li>
               ))}
             </ul>
