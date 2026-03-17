@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { SKILLS } from "@/data/skills";
 import OrbitCard from "@/components/ui/orbit-card";
 
@@ -10,7 +11,14 @@ const CATEGORY_COLORS = {
 
 const SkillsSection = () => {
   return (
-    <section id="skills" className="py-20 px-6 bg-bg-surface">
+    <motion.section
+      id="skills"
+      className="py-20 px-6 bg-bg-surface"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.08 }}
+      transition={{ type: "spring", stiffness: 180, damping: 28 }}
+    >
       <div className="mx-auto max-w-5xl">
         {/* Section Title */}
         <div className="text-center mb-16">
@@ -35,7 +43,7 @@ const SkillsSection = () => {
           ))}
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

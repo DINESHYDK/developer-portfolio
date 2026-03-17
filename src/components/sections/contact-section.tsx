@@ -442,16 +442,17 @@ const ContactSection = () => {
   };
 
   return (
-    <section id="contact" className="py-20 px-6 bg-bg-surface">
+    <motion.section
+      id="contact"
+      className="py-20 px-6 bg-bg-surface"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.08 }}
+      transition={{ type: "spring", stiffness: 180, damping: 28 }}
+    >
       <div className="mx-auto max-w-5xl">
         {/* Section Title */}
-        <motion.div
-          className="text-center mb-8"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ type: "spring", stiffness: 200, damping: 24 }}
-        >
+        <div className="text-center mb-8">
           <h2 className="font-poppins text-3xl md:text-4xl font-bold text-text-heading mb-4">
             Get In <span className="text-accent-primary">Touch</span>
           </h2>
@@ -460,7 +461,7 @@ const ContactSection = () => {
             Have a question or want to work together? Drop me a message — or
             explore the terminal.
           </p>
-        </motion.div>
+        </div>
 
         {/* ── Tab Switcher — layoutId sliding pill ── */}
         <div className="flex justify-center mb-10">
@@ -632,7 +633,7 @@ const ContactSection = () => {
           </AnimatePresence>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

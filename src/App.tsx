@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 import HeroSection from "@/components/sections/hero-section";
@@ -16,26 +17,32 @@ const hasSeenSplash = sessionStorage.getItem("ydk_splash_seen") === "true";
 
 function App() {
   const [showSplash, setShowSplash] = useState(!hasSeenSplash);
+  const [splashDone, setSplashDone] = useState(hasSeenSplash);
 
   const handleSplashDone = () => {
     sessionStorage.setItem("ydk_splash_seen", "true");
     setShowSplash(false);
+    setSplashDone(true);
   };
 
   return (
     <div className="min-h-screen bg-bg-primary text-text-body">
       <ScrollProgressBar />
       <SmoothCursor />
-      {showSplash && <SplashScreen onDone={handleSplashDone} />}
+      <AnimatePresence>
+        {showSplash && <SplashScreen onDone={handleSplashDone} />}
+      </AnimatePresence>
       <Navbar />
-      <main>
-        <HeroSection />
-        <AboutSection />
-        <SkillsSection />
-        <ProjectsSection />
-        <CodingStatsSection />
-        <ContactSection />
-      </main>
+      {splashDone && (
+        <main>
+          <HeroSection />
+          <AboutSection />
+          <SkillsSection />
+          <ProjectsSection />
+          <CodingStatsSection />
+          <ContactSection />
+        </main>
+      )}
       <Footer />
       {/* Spacer for mobile bottom navbar */}
       <div className="h-24 md:h-0" />

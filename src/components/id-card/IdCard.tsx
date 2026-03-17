@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Trophy, Target, FolderOpen, GraduationCap } from "lucide-react";
 import { profileData } from "@/data/profile-data";
 import "./id-card.css";
 import profilePhoto from "@/public/images/profile.jpg";
@@ -30,12 +31,6 @@ const IdCard = () => {
             FRONT FACE
         ════════════════════ */}
         <div className="id-card-face id-card-front">
-          {/* Header */}
-          <div className="card-header">
-            <span className="card-header-label">Dev · ID</span>
-            <div className="card-header-chip" aria-hidden="true" />
-          </div>
-
           {/* Photo / Fallback Avatar */}
           <div className="card-photo-area">
             {!photoError ? (
@@ -99,7 +94,7 @@ const IdCard = () => {
           {/* Stats */}
           <div className="back-stats">
             <div className="back-stat-row">
-              <span className="back-stat-icon" aria-hidden="true">🏆</span>
+              <span className="back-stat-icon" aria-hidden="true"><Trophy size={14} /></span>
               <div>
                 <span className="back-stat-label">CP Rating</span>
                 <span className="back-stat-value">
@@ -110,7 +105,7 @@ const IdCard = () => {
             </div>
 
             <div className="back-stat-row">
-              <span className="back-stat-icon" aria-hidden="true">🎯</span>
+              <span className="back-stat-icon" aria-hidden="true"><Target size={14} /></span>
               <div>
                 <span className="back-stat-label">Problems Solved</span>
                 <span className="back-stat-value">
@@ -120,7 +115,7 @@ const IdCard = () => {
             </div>
 
             <div className="back-stat-row">
-              <span className="back-stat-icon" aria-hidden="true">📁</span>
+              <span className="back-stat-icon" aria-hidden="true"><FolderOpen size={14} /></span>
               <div>
                 <span className="back-stat-label">Projects Shipped</span>
                 <span className="back-stat-value">{profileData.stats.projects}</span>
@@ -128,7 +123,7 @@ const IdCard = () => {
             </div>
 
             <div className="back-stat-row">
-              <span className="back-stat-icon" aria-hidden="true">🎓</span>
+              <span className="back-stat-icon" aria-hidden="true"><GraduationCap size={14} /></span>
               <div>
                 <span className="back-stat-label">College</span>
                 <span className="back-stat-college">{profileData.college}</span>

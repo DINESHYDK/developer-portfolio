@@ -61,57 +61,34 @@
   }
 }
 
-/* ── Front: header bar ── */
-.card-header {
-  padding: 14px 20px 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid rgba(142, 202, 230, 0.1);
-  flex-shrink: 0;
-}
-
-.card-header-label {
-  font-family: var(--font-mono, 'Fira Code', monospace);
-  font-size: 9px;
-  font-weight: 500;
-  letter-spacing: 0.15em;
-  color: var(--color-accent-primary);
-  text-transform: uppercase;
-}
-
-.card-header-chip {
-  width: 28px;
-  height: 20px;
-  border-radius: 4px;
-  background: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-secondary));
-  opacity: 0.6;
-}
-
-/* ── Front: photo area ── */
+/* ── Front: photo area — fills entire card ── */
 .card-photo-area {
-  flex: 1;
-  position: relative;
+  position: absolute;
+  inset: 0;
   overflow: hidden;
 }
 
-/* Profile photo — fills the area */
+/* Profile photo — fills the area with a slight zoom toward face */
 .card-photo {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center top;
+  object-position: center 10%;
   display: block;
+  transform: scale(1.06);
+  transform-origin: center top;
 }
 
-/* Gradient overlay — fades photo into card bottom */
+/* Gradient overlay — transparent top, soft dark fade at bottom */
 .card-photo-overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(
     to bottom,
-    transparent 40%,
-    var(--color-bg-primary) 100%
+    rgba(8, 8, 14, 0.15) 0%,
+    transparent 30%,
+    rgba(8, 8, 14, 0.55) 68%,
+    rgba(8, 8, 14, 0.85) 100%
   );
   z-index: 1;
   pointer-events: none;
@@ -141,13 +118,15 @@
   background: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-secondary));
 }
 
-/* ── Front: name block ── */
+/* ── Front: name block — absolute overlay above bottom bar ── */
 .card-name-block {
-  padding: 0 20px 10px;
+  position: absolute;
+  bottom: 68px;
+  left: 0;
+  right: 0;
   text-align: center;
-  position: relative;
   z-index: 3;
-  margin-top: -40px; /* overlaps the faded photo bottom */
+  padding: 0 16px;
 }
 
 .card-name {
@@ -166,15 +145,20 @@
   letter-spacing: 0.05em;
 }
 
-/* ── Front: bottom bar ── */
+/* ── Front: bottom bar — glass overlay ── */
 .card-bottom-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
   padding: 10px 14px;
-  background: rgba(142, 202, 230, 0.05);
-  border-top: 1px solid rgba(142, 202, 230, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(8, 8, 14, 0.30);
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-shrink: 0;
+  z-index: 4;
 }
 
 .card-bottom-avatar {
@@ -319,10 +303,12 @@
 }
 
 .back-stat-icon {
-  font-size: 14px;
   flex-shrink: 0;
-  margin-top: 2px;
-  line-height: 1;
+  margin-top: 3px;
+  display: flex;
+  align-items: flex-start;
+  color: var(--color-accent-primary);
+  opacity: 0.75;
 }
 
 .back-stat-label {

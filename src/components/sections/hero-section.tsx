@@ -151,15 +151,6 @@ const HeroSection = () => {
         </div>
       </div>
 
-      {/* Scroll indicator — fades in last, keeps the CSS bounce */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, ease: "easeOut", delay: 0.90 }}
-      >
-        <ArrowDown size={20} className="text-text-body/50" />
-      </motion.div>
     </section>
   );
 };

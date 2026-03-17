@@ -261,7 +261,14 @@ const ProjectsSection = () => {
   };
 
   return (
-    <section id="projects" className="py-20 px-6">
+    <motion.section
+      id="projects"
+      className="py-20 px-6"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.08 }}
+      transition={{ type: "spring", stiffness: 180, damping: 28 }}
+    >
       <div className="mx-auto max-w-5xl">
         {/* Section Title */}
         <div className="text-center mb-12">
@@ -394,7 +401,7 @@ const ProjectsSection = () => {
         selectedIndex={selectedIndex}
         setSelectedIndex={setSelectedIndex}
       />
-    </section>
+    </motion.section>
   );
 };
 
