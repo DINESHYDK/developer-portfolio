@@ -4,10 +4,17 @@
 
 .id-card-wrapper {
   perspective: 1200px;
-  width: 322px;          /* +15% from 280px */
-  height: 460px;         /* proportional */
+  width: 360px;          /* was 322px — +12% */
+  height: 515px;         /* was 460px — +12% */
   flex-shrink: 0;
   position: relative;
+}
+
+@media (max-width: 768px) {
+  .id-card-wrapper {
+    width: 300px;
+    height: 430px;
+  }
 }
 
 /* ── Inner container (flips) ── */

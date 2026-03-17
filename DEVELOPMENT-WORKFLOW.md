@@ -22,8 +22,8 @@ src/
     id-card/        Flip card (front + back), id-card.css
     layout/         Navbar, Footer (YdkSpotlight)
     sections/       HeroSection, AboutSection, SkillsSection, …
-    smooth-cursor/  SmoothCursor — outline triangle, instant follow
-    splash-screen/  SplashScreen — shown once per session (sessionStorage)
+    smooth-cursor/  SmoothCursor — two-layer: instant triangle + lerp ring (0.12)
+    splash-screen/  SplashScreen — SVG signature draw animation (CSS stroke-dashoffset)
   config/           site-metadata.ts, footer-links.ts
   data/             profile-data.ts, terminal-commands.ts
   utils/            cn.ts (clsx helper)
@@ -45,9 +45,11 @@ src/
 ## Key Design Decisions
 
 ### Custom Cursor
-`SmoothCursor` uses CSS custom properties (`--cx`, `--cy`) updated via direct DOM
-(`style.setProperty`) — no `useState`, zero re-renders on mousemove.
-Hidden on `pointer: coarse` (touch) devices. Cursor: none applied globally via
+`SmoothCursor` is a two-layer cursor: instant triangle + lerp-trailing ring (factor 0.12).
+Both layers use `requestAnimationFrame` loop with direct DOM writes — no `useState`, zero re-renders.
+Ring expands on hover over `a/button/input/textarea/[data-cursor-hover]`, shrinks on click.
+CSS states (`.ring-hover`, `.ring-click`, `.triangle-click`) defined in `index.css`.
+Hidden on `pointer: coarse` (touch) devices. `cursor: none` applied globally via
 `@media (pointer: fine)` in `index.css`.
 
 ### About Section — Sticky + Sequential Reveal
@@ -74,7 +76,7 @@ Hidden on `pointer: coarse` (touch) devices. Cursor: none applied globally via
 
 ### ID Card
 - 3D flip: `perspective`, `transform-style: preserve-3d`, `backface-visibility: hidden`
-- Card size: 322×460px
+- Card size: 360×515px (desktop), 300×430px (≤768px), 280×400px (≤400px)
 - Front: teal (`--color-accent-primary`) accent
 - Back: green (`--color-accent-secondary`) border + glow
 
@@ -96,3 +98,6 @@ Hidden on `pointer: coarse` (touch) devices. Cursor: none applied globally via
 | 2026-03-17 | About         | SVG swap: pendingId queue replaces drop-on-busy lock         |
 | 2026-03-17 | About         | IO threshold 0.55→0.35, rootMargin -30%→-20%                 |
 | 2026-03-17 | About         | Mobile card entrance: IO-triggered (threshold 0.15), min-height 80vh |
+| 2026-03-18 | Splash        | Replaced progress-bar ID card with SVG signature draw animation      |
+| 2026-03-18 | ID Card       | Desktop size: 322×460 → 360×515px (+12%); mobile 300×430px           |
+| 2026-03-18 | Cursor        | Added lerp-trailing ring (0.12) + hover expand + click shrink states |

@@ -9,7 +9,6 @@ const SmoothCursor = () => {
   const cursorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Skip on touch devices
     if (window.matchMedia("(pointer: coarse)").matches) return;
 
     const el = cursorRef.current;
@@ -42,29 +41,27 @@ const SmoothCursor = () => {
         position: "fixed",
         top: 0,
         left: 0,
-        width: 24,
-        height: 24,
+        width: 20,
+        height: 20,
         pointerEvents: "none",
         zIndex: 99999,
         transform: "translate(-40px, -40px)",
         willChange: "transform",
         opacity: 0,
         transition: "opacity 0.15s ease",
-        // No translate transition — instant follow is intentional for this cursor style
       }}
     >
       <svg
-        width="24"
-        height="24"
+        width="20"
+        height="20"
         viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
           d="M4 2L20 12L12 14L8 22L4 2Z"
-          fill="#8ECAE6"
-          fillOpacity="0.15"
-          stroke="#8ECAE6"
+          fill="none"
+          stroke="var(--color-accent-primary)"
           strokeWidth="1.5"
           strokeLinejoin="round"
           strokeLinecap="round"

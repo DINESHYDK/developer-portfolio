@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Trophy, Target, FolderOpen, GraduationCap } from "lucide-react";
 import { profileData } from "@/data/profile-data";
 import "./id-card.css";
-import profilePhoto from "@/public/images/profile.jpg";
+import profilePhoto from "@/public/images/profile.png";
 
 const BARCODE_BARS = [2,1,3,1,2,2,1,3,1,1,2,3,1,2,1,3,2,1,2,1,3,1,2,2,1,3,2,1];
 
