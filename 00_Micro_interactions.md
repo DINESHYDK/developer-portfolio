@@ -39,7 +39,7 @@ SECTION TASKS
     - NO shimmer (decided against)
     Files: src/components/sections/hero-section.tsx
 
-⬜ S-3. About Section — heading underline + card entrance
+✅ S-3. About Section — heading underline + card entrance
     - Heading underline: scaleX 0→1 on scroll into view (transformOrigin: left)
     - Card entrance: add scale 0.97→1 alongside existing opacity/y
     Files: src/components/sections/about-section.tsx

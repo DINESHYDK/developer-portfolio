@@ -262,13 +262,19 @@ const AboutSubSection = ({
       <motion.div
         ref={cardRef}
         className="about-section-sticky"
-        animate={cardVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
+        animate={cardVisible ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 32, scale: 0.97 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
         <div className="about-section-card">
           <h3 className="font-poppins font-bold text-3xl md:text-4xl text-white mb-8 leading-tight">
-            <span className="border-b-4 border-accent-primary pb-2 inline-block">
+            <span className="relative inline-block pb-2">
               {block.heading}
+              <motion.span
+                className="absolute bottom-0 left-0 h-1 w-full bg-accent-primary rounded-full origin-left"
+                animate={{ scaleX: cardVisible ? 1 : 0 }}
+                initial={{ scaleX: 0 }}
+                transition={{ type: "spring", stiffness: 220, damping: 28, delay: 0.25 }}
+              />
             </span>
           </h3>
 

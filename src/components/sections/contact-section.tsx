@@ -322,6 +322,69 @@ const DevTerminal = ({ onClose }: DevTerminalProps) => {
 };
 
 /* ===========================
+   Focus Ring — border-draw animation
+   Clockwise from top-left, completes in ~550ms
+   =========================== */
+const FocusRing = ({ focused }: { focused: boolean }) => {
+  const svgRef  = useRef<SVGSVGElement>(null);
+  const [path, setPath] = useState("");
+
+  const measure = useRef(() => {
+    const el = svgRef.current;
+    if (!el) return;
+    const w = el.clientWidth;
+    const h = el.clientHeight;
+    if (!w || !h) return;
+    const r = 14;   // matches rounded-2xl (≈16px) minus stroke inset
+    const s = 1.5;  // half-stroke inset
+    // Clockwise path starting at top-left straight edge
+    setPath(
+      `M ${s + r} ${s}` +
+      ` H ${w - s - r}` +
+      ` Q ${w - s} ${s} ${w - s} ${s + r}` +
+      ` V ${h - s - r}` +
+      ` Q ${w - s} ${h - s} ${w - s - r} ${h - s}` +
+      ` H ${s + r}` +
+      ` Q ${s} ${h - s} ${s} ${h - s - r}` +
+      ` V ${s + r}` +
+      ` Q ${s} ${s} ${s + r} ${s} Z`
+    );
+  });
+
+  useEffect(() => {
+    const fn = measure.current;
+    fn();
+    const ro = new ResizeObserver(fn);
+    if (svgRef.current) ro.observe(svgRef.current);
+    return () => ro.disconnect();
+  }, []);
+
+  return (
+    <svg
+      ref={svgRef}
+      aria-hidden="true"
+      className="absolute inset-0 w-full h-full pointer-events-none"
+    >
+      {path && (
+        <motion.path
+          d={path}
+          fill="none"
+          stroke="#8ECAE6"
+          strokeWidth="2"
+          strokeLinecap="round"
+          initial={{ pathLength: 0, opacity: 0 }}
+          animate={{
+            pathLength: focused ? 1 : 0,
+            opacity:    focused ? 1 : 0,
+          }}
+          transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1] }}
+        />
+      )}
+    </svg>
+  );
+};
+
+/* ===========================
    Main Contact Section
    =========================== */
 type Tab = "contact" | "terminal";
@@ -366,15 +429,6 @@ const ContactSection = () => {
     "hover:border-[rgba(255,255,255,0.3)]"
   );
 
-  /* Animated bottom-bar for focused fields */
-  const FocusBar = ({ field }: { field: string }) => (
-    <motion.div
-      className="absolute bottom-0 left-2 right-2 h-[2px] bg-accent-primary rounded-full origin-left"
-      animate={{ scaleX: focusedField === field ? 1 : 0 }}
-      initial={{ scaleX: 0 }}
-      transition={{ type: "spring", stiffness: 320, damping: 28 }}
-    />
-  );
 
   const switchTab = (tab: Tab) => {
     setSlideDir(tab === "terminal" ? 1 : -1);
@@ -479,7 +533,7 @@ const ContactSection = () => {
                         onBlur={() => setFocusedField(null)}
                         placeholder="Your name" className={inputClasses}
                       />
-                      <FocusBar field="name" />
+                      <FocusRing focused={focusedField === "name"} />
                     </div>
                   </div>
 
@@ -495,7 +549,7 @@ const ContactSection = () => {
                         onBlur={() => setFocusedField(null)}
                         placeholder="your@email.com" className={inputClasses}
                       />
-                      <FocusBar field="email" />
+                      <FocusRing focused={focusedField === "email"} />
                     </div>
                   </div>
 
@@ -512,7 +566,7 @@ const ContactSection = () => {
                         placeholder="Tell me about your project..."
                         className={cn(inputClasses, "resize-none")}
                       />
-                      <FocusBar field="message" />
+                      <FocusRing focused={focusedField === "message"} />
                     </div>
                   </div>
 
