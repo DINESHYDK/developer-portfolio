@@ -2,11 +2,52 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="YDK - Full-Stack Developer Portfolio" />
 
-    <!-- Google Fonts: Poppins, Plus Jakarta Sans, Fira Code -->
+    <!-- ═══════════════════════════════
+         Primary SEO
+    ═══════════════════════════════ -->
+    <title>Dinesh YDK | Full-Stack Developer</title>
+    <meta name="description" content="Portfolio of Y. Dinesh Krishna — Full-Stack Developer specialising in React, TypeScript and the MERN stack. Building clean, scalable, and beautiful web experiences." />
+    <meta name="author" content="Y. Dinesh Krishna" />
+    <meta name="keywords" content="Dinesh YDK, full-stack developer, React, TypeScript, MERN, portfolio, web developer, frontend, Node.js" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://portfolio.dineshydk.tech/" />
+
+    <!-- ═══════════════════════════════
+         Open Graph (LinkedIn, Discord, WhatsApp previews)
+    ═══════════════════════════════ -->
+    <meta property="og:type"        content="website" />
+    <meta property="og:url"         content="https://portfolio.dineshydk.tech/" />
+    <meta property="og:title"       content="Dinesh YDK | Full-Stack Developer" />
+    <meta property="og:description" content="Portfolio of Y. Dinesh Krishna — Full-Stack Developer specialising in React, TypeScript and the MERN stack." />
+    <meta property="og:image"       content="https://portfolio.dineshydk.tech/og-image.png" />
+    <meta property="og:image:width"  content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale"      content="en_US" />
+    <meta property="og:site_name"   content="Dinesh YDK Portfolio" />
+
+    <!-- ═══════════════════════════════
+         Twitter / X Card
+    ═══════════════════════════════ -->
+    <meta name="twitter:card"        content="summary_large_image" />
+    <meta name="twitter:site"        content="@dineshydk" />
+    <meta name="twitter:creator"     content="@dineshydk" />
+    <meta name="twitter:title"       content="Dinesh YDK | Full-Stack Developer" />
+    <meta name="twitter:description" content="Portfolio of Y. Dinesh Krishna — Full-Stack Developer specialising in React, TypeScript and the MERN stack." />
+    <meta name="twitter:image"       content="https://portfolio.dineshydk.tech/og-image.png" />
+
+    <!-- ═══════════════════════════════
+         Favicon
+         TODO: Replace /favicon.svg with your actual favicon file in public/
+    ═══════════════════════════════ -->
+    <link rel="icon"             type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon"             type="image/png"     href="/favicon.png" sizes="32x32" />
+    <link rel="apple-touch-icon"                      href="/apple-touch-icon.png" sizes="180x180" />
+
+    <!-- ═══════════════════════════════
+         Google Fonts — preconnect first, then stylesheet
+    ═══════════════════════════════ -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -14,7 +55,27 @@
       rel="stylesheet"
     />
 
-    <title>YDK | Developer Portfolio</title>
+    <!-- ═══════════════════════════════
+         JSON-LD Structured Data
+    ═══════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Y. Dinesh Krishna",
+      "alternateName": "Dinesh YDK",
+      "url": "https://portfolio.dineshydk.tech/",
+      "image": "https://portfolio.dineshydk.tech/og-image.png",
+      "jobTitle": "Full-Stack Developer",
+      "description": "Full-Stack Developer specialising in React, TypeScript and the MERN stack.",
+      "sameAs": [
+        "https://github.com/dineshydk",
+        "https://linkedin.com/in/dineshydk",
+        "https://twitter.com/dineshydk"
+      ],
+      "knowsAbout": ["React", "TypeScript", "Node.js", "MongoDB", "Express", "Full-Stack Development"]
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>

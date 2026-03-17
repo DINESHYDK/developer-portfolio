@@ -216,7 +216,7 @@ const AboutSubSection = ({
   // but the card itself never moves (it's sticky inside the outer div)
   const { scrollYProgress } = useScroll({
     target: outerRef,
-    offset: ["start 60%", "end 40%"],
+    offset: ["start start", "end end"],
   });
 
   const smoothed = useSpring(scrollYProgress, { stiffness: 80, damping: 22, restDelta: 0.001 });
@@ -351,8 +351,8 @@ const AboutSection = () => {
       }
     }
 
-    // Unlock next section at 80% — slightly earlier on mobile's faster scroll travel
-    if (progress >= 0.80) {
+    // Unlock next section only when current is fully scrolled through
+    if (progress >= 0.99) {
       setUnlockedCount((prev) => Math.max(prev, index + 2));
     }
   }, []);
