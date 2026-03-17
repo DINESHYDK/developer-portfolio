@@ -16,7 +16,7 @@ const HeroSection = () => {
       </div>
 
       {/* Two-column layout: Card (left) + Text (right) */}
-      <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col-reverse md:flex-row items-center justify-center gap-12 md:gap-16">
+      <div className="relative z-10 w-full max-w-6xl mx-auto flex flex-col-reverse md:flex-row items-center justify-center gap-16 md:gap-24 py-8">
 
         {/* ── Left: ID Card ── */}
         <div className="flex justify-center">
@@ -24,29 +24,29 @@ const HeroSection = () => {
         </div>
 
         {/* ── Right: Text content ── */}
-        <div className="text-center md:text-left max-w-xl">
+        <div className="text-center md:text-left max-w-xl flex flex-col gap-4">
           {/* Greeting */}
-          <p className="text-accent-primary font-mono text-sm mb-4 tracking-wider">
+          <p className="text-accent-primary font-mono text-sm tracking-wider">
             Hi, my name is
           </p>
 
           {/* Name */}
-          <h1 className="font-poppins text-5xl md:text-6xl font-bold text-text-heading mb-4">
+          <h1 className="font-poppins text-5xl md:text-6xl font-bold text-text-heading leading-tight">
             {SITE_METADATA.name}
           </h1>
 
           {/* Role */}
-          <h2 className="font-poppins text-2xl md:text-3xl font-semibold text-text-body mb-6">
+          <h2 className="font-poppins text-2xl md:text-3xl font-semibold text-text-body">
             {SITE_METADATA.role}
           </h2>
 
           {/* Description */}
-          <p className="text-text-body font-jakarta text-lg md:text-xl mb-8 leading-relaxed">
+          <p className="text-text-body font-jakarta text-lg md:text-xl leading-relaxed">
             {SITE_METADATA.description}
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center md:items-start justify-center md:justify-start gap-4">
+          <div className="flex flex-col sm:flex-row items-center md:items-start justify-center md:justify-start gap-4 mt-2">
             <a
               href="#projects"
               className={cn(

@@ -1,13 +1,17 @@
 import { useRef, useEffect, useState, useCallback } from "react";
-import { motion, useScroll, useTransform, useSpring, MotionValue } from "framer-motion";
+import { motion, useScroll, useSpring, useTransform, MotionValue } from "framer-motion";
 import { SITE_METADATA } from "@/config/site-metadata";
+
+import svgAbout1 from "@/assets/svg-about-1.svg?url";
+import svgAbout2 from "@/assets/svg-about-2.svg?url";
+import svgAbout3 from "@/assets/svg-about-3.svg?url";
+import svgAbout4 from "@/assets/svg-about-4.svg?url";
 
 /* ─────────────────────────────────────────────
    Data
 ───────────────────────────────────────────── */
 interface AboutBlock {
   id: string;
-  label: string;
   heading: string;
   paragraphs: string[];
 }
@@ -15,7 +19,6 @@ interface AboutBlock {
 const ABOUT_SECTIONS: AboutBlock[] = [
   {
     id: "intro",
-    label: "Introduction",
     heading: "Who am I?",
     paragraphs: [
       `I'm ${SITE_METADATA.name} — a full-stack developer who obsesses over the intersection of clean engineering and stunning visual design. I don't just build web apps, I build experiences that people remember.`,
@@ -24,7 +27,6 @@ const ABOUT_SECTIONS: AboutBlock[] = [
   },
   {
     id: "journey",
-    label: "Coding Journey",
     heading: "How it started.",
     paragraphs: [
       `It started with a curiosity — how does a website actually work? That question led me down a rabbit hole of HTML, CSS, JavaScript and eventually into the world of frameworks, compilers, and distributed systems.`,
@@ -34,7 +36,6 @@ const ABOUT_SECTIONS: AboutBlock[] = [
   },
   {
     id: "projects",
-    label: "What I Build",
     heading: "Projects that matter.",
     paragraphs: [
       `From AI-powered study platforms to real-time dashboards, I gravitate toward projects that mix technical depth with genuine usefulness. I am drawn to problems where UX and performance have to co-exist under pressure.`,
@@ -43,7 +44,6 @@ const ABOUT_SECTIONS: AboutBlock[] = [
   },
   {
     id: "now",
-    label: "Right Now",
     heading: "Presently working on.",
     paragraphs: [
       `Building this portfolio — the one you are reading right now — as a living, breathing testament to what I can do. Scroll animations, real-time API integrations, a macOS-style terminal, orbital skills visualisation. Nothing is off limits.`,
@@ -53,235 +53,209 @@ const ABOUT_SECTIONS: AboutBlock[] = [
   },
 ];
 
+const SECTION_SVG_MAP: Record<string, string> = {
+  intro:    svgAbout1,
+  journey:  svgAbout2,
+  projects: svgAbout3,
+  now:      svgAbout4,
+};
+
 /* ─────────────────────────────────────────────
    Word-by-word scrub
 ───────────────────────────────────────────── */
 const AnimatedWord = ({
-                        word,
-                        progress,
-                        from,
-                        to,
-                      }: {
+  word, progress, from, to,
+}: {
   word: string;
   progress: MotionValue<number>;
   from: number;
   to: number;
 }) => {
-  const opacity = useTransform(progress, [from, to], [0.3, 1]);
-  const color = useTransform(progress, [from, to], ["rgb(100,116,139)", "rgb(255,255,255)"]);
-
+  const opacity = useTransform(progress, [from, to], [0.25, 1]);
+  const color   = useTransform(progress, [from, to], ["rgb(100,116,139)", "rgb(255,255,255)"]);
   return (
-      <motion.span style={{ opacity, color }} className="inline-block mr-[0.3em]">
-        {word}
-      </motion.span>
+    <motion.span style={{ opacity, color }} className="inline-block mr-[0.3em]">
+      {word}
+    </motion.span>
   );
 };
 
 const ScrubbedParagraph = ({
-                             text,
-                             progress,
-                             globalStart,
-                             globalEnd,
-                           }: {
+  text, progress, globalStart, globalEnd,
+}: {
   text: string;
   progress: MotionValue<number>;
   globalStart: number;
   globalEnd: number;
 }) => {
   const words = text.split(" ");
-
   return (
-      <p className="font-jakarta text-lg md:text-xl leading-[1.85] mb-6">
-        {words.map((word, wi) => {
-          const t = wi / words.length;
-          const from = globalStart + t * (globalEnd - globalStart);
-          const to = from + (globalEnd - globalStart) / words.length;
-          return (
-              <AnimatedWord
-                  key={wi}
-                  word={word}
-                  progress={progress}
-                  from={from}
-                  to={Math.min(to + 0.005, 1)}
-              />
-          );
-        })}
-      </p>
+    <p className="font-jakarta text-lg md:text-xl leading-[1.85] mb-6">
+      {words.map((word, wi) => {
+        const t    = wi / words.length;
+        const from = globalStart + t * (globalEnd - globalStart);
+        const to   = Math.min(from + (globalEnd - globalStart) / words.length + 0.005, 1);
+        return <AnimatedWord key={wi} word={word} progress={progress} from={from} to={to} />;
+      })}
+    </p>
   );
 };
 
 /* ─────────────────────────────────────────────
-   Section Card — Mathematical Overlap
+   SVG Swap — conic-gradient animated border
+   borderRef owned by parent, updated via direct DOM
 ───────────────────────────────────────────── */
-const SectionCard = ({
-                       block,
-                       onProgress,
-                       onActive,
-                       index
-                     }: {
-  block: AboutBlock;
-  onProgress: (id: string, v: number) => void;
-  onActive: (id: string) => void;
-  index: number;
+const AboutSvgSwap = ({
+  activeId,
+  borderRef,
+}: {
+  activeId: string;
+  borderRef: React.RefObject<HTMLDivElement | null>;
 }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // HEIGHT FIX: 180vh gives plenty of scroll time for the text to finish.
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    // TIMING FIX:
-    // Start scrubbing EXACTLY when the container sticks (at 20% down the screen).
-    // End scrubbing EXACTLY when the next container appears at the bottom of the screen (100%).
-    offset: ["start 20%", "end 100%"],
-  });
-
-  const smoothedProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 22, restDelta: 0.001 });
+  const [displayed, setDisplayed] = useState(activeId);
+  const isAnimating = useRef(false);
 
   useEffect(() => {
-    return scrollYProgress.on("change", (v) => {
-      onProgress(block.id, v);
-      if (v > 0.05 && v < 0.95) onActive(block.id);
-    });
-  }, [block.id, scrollYProgress, onProgress, onActive]);
+    if (activeId === displayed) return;
+    if (isAnimating.current) return; // block if mid-swap — latest activeId wins on next trigger
+
+    isAnimating.current = true;
+
+    const swap = setTimeout(() => {
+      setDisplayed(activeId);
+      // Release lock after the fade completes (300ms swap + 400ms settle)
+      setTimeout(() => { isAnimating.current = false; }, 400);
+    }, 300);
+
+    return () => clearTimeout(swap);
+  }, [activeId, displayed]);
+
+  return (
+    /* Outer dim ring — always visible as background track */
+    <div
+      style={{
+        width: "100%",
+        borderRadius: "18px",
+        padding: "2px",
+        background: "rgba(255,255,255,0.05)",
+        // Reduced from "0 0 32px 6px" — ambient only, not a spotlight
+        boxShadow: "0 0 12px 1px rgba(142, 202, 230, 0.08)",
+      }}
+    >
+      {/* Conic-gradient fill ring — updated via JS ref (zero re-renders) */}
+      <div
+        ref={borderRef}
+        style={{
+          borderRadius: "16px",
+          padding: "2px",
+          background: "conic-gradient(from -90deg, var(--color-accent-primary) 0deg, rgba(255,255,255,0.04) 0deg)",
+        }}
+      >
+        {/* Image well */}
+        <div style={{ borderRadius: "14px", overflow: "hidden", background: "#0A0A0F" }}>
+          <img
+            src={SECTION_SVG_MAP[displayed]}
+            alt={displayed}
+            style={{
+              width: "100%",
+              height: "auto",
+              display: "block",
+              opacity: 1,
+              transition: "opacity 0.28s ease",
+            }}
+            draggable={false}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ─────────────────────────────────────────────
+   Sub-section — sticky-scroll pattern
+   ─ Outer div: tall (180vh) scroll container, position: relative
+   ─ Inner sticky div: position: sticky; top: 100px — card stays FIXED
+     while the user scrolls through the outer container
+   ─ useScroll targets the outer container so scrollYProgress drives
+     the word-scrub while the card doesn't move
+   ─ Only rendered when unlocked → no phantom space while locked
+───────────────────────────────────────────── */
+const AboutSubSection = ({
+  block,
+  index,
+  sectionRef,
+  onScrollProgress,
+}: {
+  block: AboutBlock;
+  index: number;
+  sectionRef: (el: HTMLDivElement | null) => void;
+  onScrollProgress: (index: number, progress: number) => void;
+}) => {
+  const outerRef = useRef<HTMLDivElement>(null);
+
+  // Target the OUTER tall container — progress drives word scrub,
+  // but the card itself never moves (it's sticky inside the outer div)
+  const { scrollYProgress } = useScroll({
+    target: outerRef,
+    offset: ["start 60%", "end 40%"],
+  });
+
+  const smoothed = useSpring(scrollYProgress, { stiffness: 80, damping: 22, restDelta: 0.001 });
+
+  useEffect(() => {
+    return scrollYProgress.on("change", (v) => onScrollProgress(index, v));
+  }, [scrollYProgress, onScrollProgress, index]);
 
   const totalWords = block.paragraphs.reduce((s, p) => s + p.split(" ").length, 0);
   let wordOffset = 0;
 
   return (
-      <div ref={containerRef} className="relative h-[180vh] w-full" id={`about-${block.id}`}>
-
-        {/* EYE LEVEL FIX: Changed to top-[15vh] on mobile and top-[20vh] on desktop */}
-        <div
-            className="sticky top-[15vh] md:top-[20vh] w-full h-auto min-h-[70vh] rounded-t-[2rem] md:rounded-[2rem] border-t border-white/10 bg-[#0A0A0F] shadow-[0_-30px_40px_-15px_rgba(0,0,0,0.8)] flex flex-col justify-start px-6 md:px-12 pt-12 md:pt-16 pb-20"
-            style={{ zIndex: index * 10 }}
-        >
-          <motion.h3
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4 }}
-              className="font-poppins font-bold text-3xl md:text-4xl text-white mb-10 leading-tight"
-          >
-            {/* Blue Underline Design */}
+    /*
+      Outer: tall scroll container — gives the page scroll room
+      while the sticky card below stays visually static
+    */
+    <div
+      ref={(el) => {
+        (outerRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
+        sectionRef(el);
+      }}
+      className="about-section-outer"
+      data-section={block.id}
+    >
+      {/* Inner sticky: card is pinned here while outer container scrolls past */}
+      <motion.div
+        className="about-section-sticky"
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+      >
+        <div className="about-section-card">
+          <h3 className="font-poppins font-bold text-3xl md:text-4xl text-white mb-8 leading-tight">
             <span className="border-b-4 border-accent-primary pb-2 inline-block">
-            {block.heading}
-          </span>
-          </motion.h3>
+              {block.heading}
+            </span>
+          </h3>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1">
             {block.paragraphs.map((para, pi) => {
               const wordsInPara = para.split(" ").length;
               const globalStart = wordOffset / totalWords;
-              wordOffset += wordsInPara;
-              const globalEnd = wordOffset / totalWords;
-
+              wordOffset       += wordsInPara;
+              const globalEnd   = wordOffset / totalWords;
               return (
-                  <ScrubbedParagraph
-                      key={pi}
-                      text={para}
-                      progress={smoothedProgress}
-                      globalStart={globalStart}
-                      globalEnd={globalEnd}
-                  />
+                <ScrubbedParagraph
+                  key={pi}
+                  text={para}
+                  progress={smoothed}
+                  globalStart={globalStart}
+                  globalEnd={globalEnd}
+                />
               );
             })}
           </div>
         </div>
-      </div>
-  );
-};
-
-/* ─────────────────────────────────────────────
-   Sticky Nav
-───────────────────────────────────────────── */
-const StickyNav = ({
-                     sections,
-                     activeId,
-                     progressMap,
-                     onClickSection,
-                   }: {
-  sections: AboutBlock[];
-  activeId: string;
-  progressMap: Record<string, number>;
-  onClickSection: (id: string) => void;
-}) => {
-  const activeIdx = sections.findIndex((s) => s.id === activeId);
-
-  return (
-      <nav className="flex flex-col items-center w-full">
-        {sections.map((s, i) => {
-          const isActive = i === activeIdx;
-          const isDone = i < activeIdx;
-          const isUpcoming = i > activeIdx;
-          const fill = isActive ? (progressMap[s.id] ?? 0) : isDone ? 1 : 0;
-
-          return (
-              <div key={s.id} className="flex flex-col items-center w-full">
-                <motion.button
-                    onClick={() => onClickSection(s.id)}
-                    layout
-                    animate={{
-                      height: isActive ? 44 : 32,
-                      opacity: isUpcoming ? 0.6 : 1,
-                    }}
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    className="relative w-full overflow-hidden rounded-xl focus:outline-none cursor-pointer"
-                >
-                  <motion.div
-                      layout
-                      className="absolute inset-0 rounded-xl"
-                      animate={{
-                        borderColor: isActive
-                            ? "rgba(167,243,208,0.5)"
-                            : isDone
-                                ? "rgba(167,243,208,0.2)"
-                                : "rgba(142,202,230,0.15)",
-                        backgroundColor: isActive
-                            ? "rgba(167,243,208,0.06)"
-                            : isDone
-                                ? "rgba(167,243,208,0.02)"
-                                : "transparent",
-                      }}
-                      transition={{ duration: 0.3 }}
-                      style={{ border: "1px solid" }}
-                  />
-
-                  <motion.div
-                      className="absolute inset-y-0 left-0 rounded-xl bg-[#A7F3D0]/20"
-                      animate={{ width: `${fill * 100}%` }}
-                      transition={{ type: "spring", stiffness: 80, damping: 20 }}
-                  />
-
-                  <motion.span
-                      layout
-                      animate={{
-                        color: isActive
-                            ? "rgb(167,243,208)"
-                            : isDone
-                                ? "rgba(167,243,208,0.6)"
-                                : "rgba(142,202,230,0.8)",
-                        fontSize: isActive ? "13px" : "11px",
-                      }}
-                      transition={{ duration: 0.25 }}
-                      className="relative z-10 flex items-center justify-center w-full h-full font-jakarta font-semibold whitespace-nowrap"
-                  >
-                    {s.label}
-                  </motion.span>
-                </motion.button>
-
-                {i < sections.length - 1 && (
-                    <div className="relative w-px bg-white/5 overflow-hidden my-1" style={{ height: 28 }}>
-                      <motion.div
-                          className="absolute inset-x-0 top-0 bg-[#A7F3D0] rounded-full w-full"
-                          animate={{ height: isDone ? "100%" : isActive ? `${Math.min(fill * 1.5, 1) * 100}%` : "0%" }}
-                          transition={{ type: "spring", stiffness: 80, damping: 20 }}
-                      />
-                    </div>
-                )}
-              </div>
-          );
-        })}
-      </nav>
+      </motion.div>
+    </div>
   );
 };
 
@@ -289,66 +263,99 @@ const StickyNav = ({
    Main Export
 ───────────────────────────────────────────── */
 const AboutSection = () => {
-  const [activeId, setActiveId] = useState(ABOUT_SECTIONS[0].id);
-  const [progressMap, setProgressMap] = useState<Record<string, number>>({});
+  const [activeId, setActiveId]           = useState(ABOUT_SECTIONS[0].id);
+  const [unlockedCount, setUnlockedCount] = useState(1);
 
-  const handleProgress = useCallback((id: string, v: number) => {
-    setProgressMap((prev) => ({ ...prev, [id]: v }));
-  }, []);
+  const sectionRefs  = useRef<(HTMLDivElement | null)[]>([]);
+  const borderRef    = useRef<HTMLDivElement | null>(null);
+  const activeIdxRef = useRef(0);
 
-  const handleActive = useCallback((id: string) => {
-    setActiveId(id);
-  }, []);
+  // Re-setup IntersectionObserver every time a new section unlocks
+  // (only rendered sections are in the DOM)
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const id = (entry.target as HTMLElement).dataset.section;
+            if (id) {
+              const idx = ABOUT_SECTIONS.findIndex((s) => s.id === id);
+              activeIdxRef.current = idx;
+              setActiveId(id);
+              // Reset border fill for incoming section
+              const el = borderRef.current;
+              if (el) {
+                el.style.background =
+                  "conic-gradient(from -90deg, var(--color-accent-primary) 0deg, rgba(255,255,255,0.04) 0deg)";
+              }
+            }
+          }
+        });
+      },
+      { threshold: 0.55, rootMargin: "0px 0px -30% 0px" }
+    );
 
-  const scrollToBlock = (id: string) => {
-    const el = document.getElementById(`about-${id}`);
-    if (el) {
-      // Adjusted scroll calculation to match the top-[20vh] pinning math
-      const y = el.getBoundingClientRect().top + window.scrollY - (window.innerHeight * 0.2);
-      window.scrollTo({ top: y, behavior: "smooth" });
+    sectionRefs.current.forEach((el) => { if (el) observer.observe(el); });
+    return () => observer.disconnect();
+  }, [unlockedCount]); // re-run when new sections are added to DOM
+
+  // Per-section scroll progress → border fill + unlock next
+  const handleScrollProgress = useCallback((index: number, progress: number) => {
+    if (index === activeIdxRef.current) {
+      const el = borderRef.current;
+      if (el) {
+        const deg = Math.min(progress * 360, 360);
+        el.style.background = `conic-gradient(from -90deg, var(--color-accent-primary) ${deg}deg, rgba(255,255,255,0.04) 0deg)`;
+      }
     }
-  };
+
+    // Unlock next section at 90% — next section appears in DOM below current
+    if (progress >= 0.9) {
+      setUnlockedCount((prev) => Math.max(prev, index + 2));
+    }
+  }, []);
+
+  // Only render sections that have been unlocked — locked sections are NOT in the DOM
+  const visibleSections = ABOUT_SECTIONS.slice(0, unlockedCount);
 
   return (
-      <section id="about" className="py-24 bg-bg-primary relative">
-        <div className="mx-auto max-w-6xl px-4 md:px-6">
-          <div className="text-center mb-16 md:mb-24">
-            <motion.h2
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ type: "spring", stiffness: 200, damping: 22 }}
-                className="font-poppins text-3xl md:text-5xl font-bold text-text-heading mb-4"
-            >
-              About <span className="text-accent-primary">Me</span>
-            </motion.h2>
-            <div className="w-16 h-1 bg-accent-primary mx-auto rounded-full" />
-          </div>
+    <section id="about" className="py-24 bg-bg-primary relative">
+      {/* Section heading */}
+      <div className="text-center mb-16 md:mb-20 px-4">
+        <motion.h2
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ type: "spring", stiffness: 200, damping: 22 }}
+          className="font-poppins text-3xl md:text-5xl font-bold text-text-heading mb-4"
+        >
+          About <span className="text-accent-primary">Me</span>
+        </motion.h2>
+        <div className="w-16 h-1 bg-accent-primary mx-auto rounded-full" />
+      </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-8 md:gap-16 items-start">
-            <div className="hidden md:block sticky top-[20vh] self-start z-50">
-              <StickyNav
-                  sections={ABOUT_SECTIONS}
-                  activeId={activeId}
-                  progressMap={progressMap}
-                  onClickSection={scrollToBlock}
-              />
-            </div>
+      {/* Sticky wrapper */}
+      <div className="about-sticky-wrapper">
 
-            <div className="flex flex-col relative pb-[10vh]">
-              {ABOUT_SECTIONS.map((block, index) => (
-                  <SectionCard
-                      key={block.id}
-                      block={block}
-                      index={index}
-                      onProgress={handleProgress}
-                      onActive={handleActive}
-                  />
-              ))}
-            </div>
-          </div>
+        {/* LEFT — sticky SVG panel */}
+        <div className="about-left-sticky">
+          <AboutSvgSwap activeId={activeId} borderRef={borderRef} />
         </div>
-      </section>
+
+        {/* RIGHT — only unlocked sections in DOM, no locked placeholders */}
+        <div className="about-right-scroll">
+          {visibleSections.map((block, i) => (
+            <AboutSubSection
+              key={block.id}
+              block={block}
+              index={i}
+              sectionRef={(el) => { sectionRefs.current[i] = el; }}
+              onScrollProgress={handleScrollProgress}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
   );
 };
 

@@ -1,0 +1,167 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 420" width="400" height="420">
+  <defs>
+    <radialGradient id="screenGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#4ecca3" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#4ecca3" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- === DECORATIVE FLOATING DOTS === -->
+  <circle cx="42"  cy="90"  r="4"   fill="#4ecca3" opacity="0.4"/>
+  <circle cx="358" cy="130" r="3"   fill="#4ecca3" opacity="0.35"/>
+  <circle cx="370" cy="68"  r="5"   fill="#8ECAE6" opacity="0.3"/>
+  <circle cx="28"  cy="200" r="3.5" fill="#4ecca3" opacity="0.4"/>
+  <circle cx="385" cy="260" r="4"   fill="#8ECAE6" opacity="0.35"/>
+
+  <!-- === CODE THOUGHT BUBBLE === -->
+  <g opacity="0.95">
+    <circle cx="222" cy="98" r="3"  fill="#12121A" stroke="#4ecca3" stroke-width="1.5"/>
+    <circle cx="230" cy="88" r="4"  fill="#12121A" stroke="#4ecca3" stroke-width="1.5"/>
+    <rect x="236" y="58" width="68" height="28" rx="8"
+          fill="#12121A" stroke="#4ecca3" stroke-width="1.5"/>
+    <text x="270" y="77" text-anchor="middle" font-family="monospace"
+          font-size="12" fill="#4ecca3" font-weight="bold">{ }</text>
+  </g>
+
+  <!-- === DESK === -->
+  <polygon points="40,272 360,272 378,292 22,292"
+           fill="#1a1a2e" stroke="#2d2d4e" stroke-width="1.5"/>
+  <polygon points="22,292 378,292 378,380 22,380"
+           fill="#12121A" stroke="#2d2d4e" stroke-width="1.5"/>
+  <line x1="40" y1="272" x2="360" y2="272" stroke="#4ecca3" stroke-width="0.6" opacity="0.25"/>
+  <rect x="38"  y="358" width="18" height="42" rx="3"
+        fill="#0A0A0F" stroke="#2d2d4e" stroke-width="1.5"/>
+  <rect x="344" y="358" width="18" height="42" rx="3"
+        fill="#0A0A0F" stroke="#2d2d4e" stroke-width="1.5"/>
+
+  <!-- === PLANT === -->
+  <g>
+    <polygon points="60,264 84,264 80,282 64,282"
+             fill="#1a1a2e" stroke="#2d2d4e" stroke-width="1.5"/>
+    <ellipse cx="72" cy="264" rx="12" ry="4" fill="#0A0A0F" stroke="#2d2d4e" stroke-width="1.2"/>
+    <ellipse cx="72" cy="250" rx="5" ry="11"
+             fill="#4ecca3" opacity="0.80" transform="rotate(-22 72 250)"/>
+    <ellipse cx="72" cy="250" rx="5" ry="11"
+             fill="#4ecca3" opacity="0.70" transform="rotate(22 72 250)"/>
+    <ellipse cx="72" cy="250" rx="4" ry="10"
+             fill="#4ecca3" opacity="0.90"/>
+  </g>
+
+  <!-- === COFFEE MUG === -->
+  <g>
+    <rect x="304" y="248" width="32" height="26" rx="4"
+          fill="#1a1a2e" stroke="#2d2d4e" stroke-width="1.5"/>
+    <path d="M336,254 Q350,254 350,261 Q350,268 336,268"
+          fill="none" stroke="#2d2d4e" stroke-width="2.2" stroke-linecap="round"/>
+    <ellipse cx="320" cy="248" rx="16" ry="4.5"
+             fill="#2d2d4e" stroke="#2d2d4e" stroke-width="1"/>
+    <path d="M311,243 Q313,235 311,227"
+          fill="none" stroke="#8ECAE6" stroke-width="1.5" stroke-linecap="round" opacity="0.65"/>
+    <path d="M320,241 Q322,232 320,223"
+          fill="none" stroke="#8ECAE6" stroke-width="1.5" stroke-linecap="round" opacity="0.55"/>
+    <path d="M329,243 Q331,235 329,227"
+          fill="none" stroke="#8ECAE6" stroke-width="1.5" stroke-linecap="round" opacity="0.45"/>
+  </g>
+
+  <!-- === LAPTOP === -->
+  <g>
+    <ellipse cx="200" cy="234" rx="88" ry="58" fill="url(#screenGlow)"/>
+    <rect x="130" y="184" width="140" height="74" rx="6"
+          fill="#0A0A0F" stroke="#2d2d4e" stroke-width="1.5"/>
+    <rect x="137" y="190" width="126" height="63" rx="3"
+          fill="#080810"/>
+    <rect x="137" y="190" width="126" height="63" rx="3"
+          fill="#4ecca3" opacity="0.04"/>
+    <text x="145" y="205" font-family="monospace" font-size="8.5"
+          fill="#4ecca3" opacity="0.90">const App = () =&gt; {</text>
+    <text x="145" y="218" font-family="monospace" font-size="8.5"
+          fill="#8ECAE6" opacity="0.85">  function render() {</text>
+    <text x="145" y="231" font-family="monospace" font-size="8.5"
+          fill="#4ecca3" opacity="0.80">    return &lt;View /&gt;;</text>
+    <text x="145" y="244" font-family="monospace" font-size="8.5"
+          fill="#4ecca3" opacity="0.65">  } // done</text>
+    <circle cx="200" cy="192" r="2.2" fill="#2d2d4e"/>
+    <rect x="128" y="256" width="144" height="16" rx="4"
+          fill="#1a1a2e" stroke="#2d2d4e" stroke-width="1.5"/>
+    <rect x="140" y="259" width="120" height="9" rx="2" fill="#0A0A0F"/>
+    <line x1="157" y1="259" x2="157" y2="268" stroke="#2d2d4e" stroke-width="0.7"/>
+    <line x1="173" y1="259" x2="173" y2="268" stroke="#2d2d4e" stroke-width="0.7"/>
+    <line x1="189" y1="259" x2="189" y2="268" stroke="#2d2d4e" stroke-width="0.7"/>
+    <line x1="205" y1="259" x2="205" y2="268" stroke="#2d2d4e" stroke-width="0.7"/>
+    <line x1="221" y1="259" x2="221" y2="268" stroke="#2d2d4e" stroke-width="0.7"/>
+    <line x1="237" y1="259" x2="237" y2="268" stroke="#2d2d4e" stroke-width="0.7"/>
+    <rect x="168" y="270" width="64" height="4" rx="2"
+          fill="#0A0A0F" stroke="#2d2d4e" stroke-width="1"/>
+  </g>
+
+  <!-- === CHARACTER === -->
+  <g>
+    <rect x="140" y="308" width="120" height="10" rx="3"
+          fill="#0A0A0F" stroke="#2d2d4e" stroke-width="1.5"/>
+    <rect x="146" y="292" width="14" height="28" rx="3"
+          fill="#0A0A0F" stroke="#2d2d4e" stroke-width="1.2"/>
+    <rect x="240" y="292" width="14" height="28" rx="3"
+          fill="#0A0A0F" stroke="#2d2d4e" stroke-width="1.2"/>
+
+    <!-- Torso / hoodie -->
+    <rect x="160" y="295" width="80" height="58" rx="14"
+          fill="#2d2d4e" stroke="#1a1a2e" stroke-width="1.5"/>
+    <line x1="200" y1="298" x2="200" y2="350"
+          stroke="#1a1a2e" stroke-width="1.2" opacity="0.6"/>
+    <path d="M183,332 Q200,327 217,332 L217,347 Q200,344 183,347 Z"
+          fill="#1a1a2e" stroke="#2d2d4e" stroke-width="1"/>
+    <path d="M194,310 Q191,320 193,328"
+          fill="none" stroke="#8ECAE6" stroke-width="1.2" stroke-linecap="round" opacity="0.55"/>
+    <path d="M206,310 Q209,320 207,328"
+          fill="none" stroke="#8ECAE6" stroke-width="1.2" stroke-linecap="round" opacity="0.55"/>
+
+    <!-- Arms -->
+    <path d="M162,315 Q136,318 128,270"
+          fill="none" stroke="#2d2d4e" stroke-width="20" stroke-linecap="round"/>
+    <ellipse cx="129" cy="269" rx="11" ry="7" fill="#FDBCB4"/>
+    <path d="M238,315 Q264,318 272,270"
+          fill="none" stroke="#2d2d4e" stroke-width="20" stroke-linecap="round"/>
+    <ellipse cx="271" cy="269" rx="11" ry="7" fill="#FDBCB4"/>
+
+    <!-- Neck -->
+    <rect x="191" y="283" width="18" height="15" rx="5" fill="#FDBCB4"/>
+
+    <!-- Head -->
+    <ellipse cx="200" cy="260" rx="32" ry="30" fill="#FDBCB4"/>
+
+    <!-- Hair -->
+    <ellipse cx="200" cy="244" rx="33" ry="22" fill="#2C2C2C"/>
+    <path d="M174,252 Q180,228 196,234 Q188,243 192,256" fill="#2C2C2C"/>
+    <path d="M183,247 Q192,222 205,229 Q199,240 200,254" fill="#2C2C2C"/>
+    <path d="M200,244 Q210,222 222,229 Q215,240 213,255" fill="#2C2C2C"/>
+    <path d="M210,248 Q221,228 230,235 Q223,245 221,258" fill="#2C2C2C"/>
+    <path d="M170,258 Q166,266 170,274"
+          fill="none" stroke="#2C2C2C" stroke-width="8" stroke-linecap="round"/>
+    <path d="M230,258 Q234,266 230,274"
+          fill="none" stroke="#2C2C2C" stroke-width="8" stroke-linecap="round"/>
+
+    <!-- Eyes -->
+    <ellipse cx="189" cy="263" rx="4.5" ry="5" fill="#2C2C2C"/>
+    <ellipse cx="211" cy="263" rx="4.5" ry="5" fill="#2C2C2C"/>
+    <circle cx="190.8" cy="261.2" r="1.4" fill="white" opacity="0.85"/>
+    <circle cx="212.8" cy="261.2" r="1.4" fill="white" opacity="0.85"/>
+    <!-- Nose -->
+    <path d="M197,270 Q200,274 203,270"
+          fill="none" stroke="#e8a898" stroke-width="1.3" stroke-linecap="round"/>
+    <!-- Smile -->
+    <path d="M190,277 Q200,285 210,277"
+          fill="none" stroke="#e8a898" stroke-width="1.6" stroke-linecap="round"/>
+    <!-- Blush -->
+    <ellipse cx="181" cy="272" rx="5.5" ry="3" fill="#e8a898" opacity="0.30"/>
+    <ellipse cx="219" cy="272" rx="5.5" ry="3" fill="#e8a898" opacity="0.30"/>
+
+    <!-- Headphones -->
+    <path d="M170,260 Q170,228 200,226 Q230,228 230,260"
+          fill="none" stroke="#1a1a2e" stroke-width="5.5" stroke-linecap="round"/>
+    <ellipse cx="170" cy="264" rx="10" ry="12" fill="#2d2d4e" stroke="#1a1a2e" stroke-width="1.5"/>
+    <ellipse cx="170" cy="264" rx="6"  ry="7.5" fill="#4ecca3" opacity="0.80"/>
+    <ellipse cx="230" cy="264" rx="10" ry="12" fill="#2d2d4e" stroke="#1a1a2e" stroke-width="1.5"/>
+    <ellipse cx="230" cy="264" rx="6"  ry="7.5" fill="#4ecca3" opacity="0.80"/>
+  </g>
+
+</svg>

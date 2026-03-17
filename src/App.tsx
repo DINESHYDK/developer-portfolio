@@ -7,7 +7,7 @@ import SkillsSection from "@/components/sections/skills-section";
 import ProjectsSection from "@/components/sections/projects-section";
 import CodingStatsSection from "@/components/sections/dashboard/coding-stats-section";
 import ContactSection from "@/components/sections/contact-section";
-import CustomCursor from "@/components/custom-cursor/CustomCursor";
+import SmoothCursor from "@/components/smooth-cursor/SmoothCursor";
 import SplashScreen from "@/components/splash-screen/SplashScreen";
 
 // Show splash only once per browser session
@@ -23,7 +23,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-bg-primary text-text-body">
-      <CustomCursor />
+      <SmoothCursor />
       {showSplash && <SplashScreen onDone={handleSplashDone} />}
       <Navbar />
       <main>

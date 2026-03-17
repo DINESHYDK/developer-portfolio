@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 420">
+
+  <!-- === SVG 2 — Coding Journey === -->
+
+  <!-- === DECORATIVE FLOATING DOTS === -->
+  <circle cx="22"  cy="60"  r="4"   fill="#4ecca3" opacity="0.40"/>
+  <circle cx="38"  cy="180" r="3"   fill="#8ECAE6" opacity="0.35"/>
+  <circle cx="18"  cy="310" r="3.5" fill="#4ecca3" opacity="0.30"/>
+  <circle cx="50"  cy="390" r="2.5" fill="#8ECAE6" opacity="0.30"/>
+
+  <!-- === TIMELINE WALL (right side) === -->
+  <line x1="310" y1="40" x2="310" y2="400"
+        stroke="#2d2d4e" stroke-width="2.5"/>
+
+  <!-- Node 1 — HTML/CSS -->
+  <circle cx="310" cy="80"  r="9" fill="#4ecca3" stroke="#0A0A0F" stroke-width="1.5"/>
+  <circle cx="310" cy="80"  r="4" fill="#0A0A0F"/>
+  <line x1="310" y1="80" x2="340" y2="80" stroke="#2d2d4e" stroke-width="1"/>
+  <rect x="342" y="70" width="52" height="20" rx="4" fill="#12121A" stroke="#2d2d4e" stroke-width="1"/>
+  <text x="348" y="84" font-family="monospace" font-size="9" fill="#8ECAE6">HTML/CSS</text>
+
+  <!-- Node 2 — JavaScript -->
+  <circle cx="310" cy="148" r="9" fill="#4ecca3" stroke="#0A0A0F" stroke-width="1.5"/>
+  <circle cx="310" cy="148" r="4" fill="#0A0A0F"/>
+  <line x1="310" y1="148" x2="340" y2="148" stroke="#2d2d4e" stroke-width="1"/>
+  <rect x="342" y="138" width="52" height="20" rx="4" fill="#12121A" stroke="#2d2d4e" stroke-width="1"/>
+  <text x="345" y="152" font-family="monospace" font-size="9" fill="#8ECAE6">JavaScript</text>
+
+  <!-- Node 3 — React -->
+  <circle cx="310" cy="216" r="9" fill="#4ecca3" stroke="#0A0A0F" stroke-width="1.5"/>
+  <circle cx="310" cy="216" r="4" fill="#0A0A0F"/>
+  <line x1="310" y1="216" x2="340" y2="216" stroke="#2d2d4e" stroke-width="1"/>
+  <rect x="342" y="206" width="52" height="20" rx="4" fill="#12121A" stroke="#2d2d4e" stroke-width="1"/>
+  <text x="355" y="220" font-family="monospace" font-size="9" fill="#8ECAE6">React</text>
+
+  <!-- Node 4 — DSA -->
+  <circle cx="310" cy="284" r="9" fill="#4ecca3" stroke="#0A0A0F" stroke-width="1.5"/>
+  <circle cx="310" cy="284" r="4" fill="#0A0A0F"/>
+  <line x1="310" y1="284" x2="340" y2="284" stroke="#2d2d4e" stroke-width="1"/>
+  <rect x="342" y="274" width="52" height="20" rx="4" fill="#12121A" stroke="#2d2d4e" stroke-width="1"/>
+  <text x="357" y="288" font-family="monospace" font-size="9" fill="#8ECAE6">DSA</text>
+
+  <!-- Node 5 — Full-Stack -->
+  <circle cx="310" cy="352" r="9" fill="#4ecca3" stroke="#0A0A0F" stroke-width="1.5"/>
+  <circle cx="310" cy="352" r="4" fill="#0A0A0F"/>
+  <line x1="310" y1="352" x2="340" y2="352" stroke="#2d2d4e" stroke-width="1"/>
+  <rect x="342" y="342" width="52" height="20" rx="4" fill="#12121A" stroke="#2d2d4e" stroke-width="1"/>
+  <text x="344" y="356" font-family="monospace" font-size="9" fill="#4ecca3">Full-Stack</text>
+
+  <!-- === THOUGHT BUBBLE — </> === -->
+  <circle cx="148" cy="108" r="3"  fill="#12121A" stroke="#4ecca3" stroke-width="1.4"/>
+  <circle cx="140" cy="98"  r="4"  fill="#12121A" stroke="#4ecca3" stroke-width="1.4"/>
+  <rect x="108" y="68" width="56" height="28" rx="9"
+        fill="#12121A" stroke="#4ecca3" stroke-width="1.5"/>
+  <text x="136" y="87" text-anchor="middle" font-family="monospace"
+        font-size="12" fill="#4ecca3" font-weight="bold">&lt;/&gt;</text>
+
+  <!-- === LEGS / JEANS === -->
+  <path d="M168,330 Q162,365 160,402"
+        fill="none" stroke="#1a1a2e" stroke-width="26" stroke-linecap="round"/>
+  <path d="M192,330 Q200,365 204,402"
+        fill="none" stroke="#1a1a2e" stroke-width="26" stroke-linecap="round"/>
+  <ellipse cx="159" cy="405" rx="16" ry="7"
+           fill="#0A0A0F" stroke="#2d2d4e" stroke-width="1.5"/>
+  <ellipse cx="205" cy="405" rx="16" ry="7"
+           fill="#0A0A0F" stroke="#2d2d4e" stroke-width="1.5"/>
+
+  <!-- === TORSO / HOODIE === -->
+
+  <!-- Left arm in pocket -->
+  <path d="M148,280 Q128,305 126,342"
+        fill="none" stroke="#2d2d4e" stroke-width="22" stroke-linecap="round"/>
+  <ellipse cx="126" cy="344" rx="12" ry="9" fill="#FDBCB4"/>
+
+  <!-- Right arm pointing at timeline -->
+  <path d="M232,272 Q262,255 290,230"
+        fill="none" stroke="#2d2d4e" stroke-width="22" stroke-linecap="round"/>
+  <ellipse cx="291" cy="228" rx="11" ry="9" fill="#FDBCB4" transform="rotate(-35 291 228)"/>
+
+  <!-- Hoodie body -->
+  <rect x="148" y="268" width="84" height="68" rx="16"
+        fill="#2d2d4e" stroke="#1a1a2e" stroke-width="1.5"/>
+  <line x1="190" y1="271" x2="190" y2="331"
+        stroke="#1a1a2e" stroke-width="1.2" opacity="0.6"/>
+  <path d="M170,306 Q190,300 210,306 L210,322 Q190,318 170,322 Z"
+        fill="#1a1a2e" stroke="#2d2d4e" stroke-width="1"/>
+  <path d="M181,279 Q178,290 180,300"
+        fill="none" stroke="#8ECAE6" stroke-width="1.2" stroke-linecap="round" opacity="0.55"/>
+  <path d="M197,279 Q200,290 198,300"
+        fill="none" stroke="#8ECAE6" stroke-width="1.2" stroke-linecap="round" opacity="0.55"/>
+
+  <!-- === NECK === -->
+  <rect x="181" y="255" width="18" height="16" rx="5" fill="#FDBCB4"/>
+
+  <!-- === HEAD (slightly tilted) === -->
+  <ellipse cx="190" cy="231" rx="34" ry="32" fill="#FDBCB4" transform="rotate(-6 190 231)"/>
+
+  <!-- === HAIR === -->
+  <ellipse cx="190" cy="214" rx="35" ry="24" fill="#2C2C2C" transform="rotate(-6 190 214)"/>
+  <path d="M160,222 Q167,196 183,203 Q176,213 179,227" fill="#2C2C2C"/>
+  <path d="M170,217 Q180,192 193,199 Q187,210 188,225" fill="#2C2C2C"/>
+  <path d="M188,217 Q198,193 211,200 Q204,211 202,226" fill="#2C2C2C"/>
+  <path d="M198,220 Q208,198 218,205 Q212,215 210,228" fill="#2C2C2C"/>
+  <path d="M158,228 Q154,238 158,248"
+        fill="none" stroke="#2C2C2C" stroke-width="9" stroke-linecap="round"/>
+  <path d="M222,226 Q226,236 222,246"
+        fill="none" stroke="#2C2C2C" stroke-width="9" stroke-linecap="round"/>
+
+  <!-- === FACE (thoughtful — one eye slightly squinted, small mouth) === -->
+  <ellipse cx="178" cy="234" rx="4.5" ry="4.2" fill="#2C2C2C"/>
+  <ellipse cx="202" cy="232" rx="4.5" ry="5"   fill="#2C2C2C"/>
+  <circle cx="179.8" cy="232.3" r="1.4" fill="white" opacity="0.85"/>
+  <circle cx="203.8" cy="230.3" r="1.4" fill="white" opacity="0.85"/>
+  <!-- Nose -->
+  <path d="M186,241 Q189,245 192,241"
+        fill="none" stroke="#e8a898" stroke-width="1.3" stroke-linecap="round"/>
+  <!-- Thoughtful closed mouth -->
+  <path d="M181,249 Q189,252 197,249"
+        fill="none" stroke="#e8a898" stroke-width="1.6" stroke-linecap="round"/>
+  <!-- Blush -->
+  <ellipse cx="170" cy="242" rx="5.5" ry="3" fill="#e8a898" opacity="0.28"/>
+  <ellipse cx="208" cy="240" rx="5.5" ry="3" fill="#e8a898" opacity="0.28"/>
+
+  <!-- === HEADPHONES === -->
+  <path d="M158,230 Q157,198 190,196 Q222,198 222,228"
+        fill="none" stroke="#1a1a2e" stroke-width="5.5" stroke-linecap="round"/>
+  <ellipse cx="158" cy="234" rx="10" ry="12"
+           fill="#2d2d4e" stroke="#1a1a2e" stroke-width="1.5"/>
+  <ellipse cx="158" cy="234" rx="6"  ry="7.5" fill="#4ecca3" opacity="0.80"/>
+  <ellipse cx="222" cy="232" rx="10" ry="12"
+           fill="#2d2d4e" stroke="#1a1a2e" stroke-width="1.5"/>
+  <ellipse cx="222" cy="232" rx="6"  ry="7.5" fill="#4ecca3" opacity="0.80"/>
+
+</svg>

@@ -2,24 +2,32 @@ import { useState } from "react";
 import { profileData } from "@/data/profile-data";
 import "./id-card.css";
 
-// Decorative barcode bars — widths alternate to mimic a real barcode
 const BARCODE_BARS = [2,1,3,1,2,2,1,3,1,1,2,3,1,2,1,3,2,1,2,1,3,1,2,2,1,3,2,1];
+
+const PHOTO_SRC = "/images/profile.jpg"; // user places photo here
 
 const IdCard = () => {
   const [isFlipped, setIsFlipped] = useState(false);
-  const isTouchDevice = window.matchMedia("(hover: none)").matches;
+  const [photoError, setPhotoError] = useState(false);
+  const isTouchDevice =
+    typeof window !== "undefined" &&
+    window.matchMedia("(hover: none)").matches;
 
   const handleCardClick = () => {
     if (isTouchDevice) setIsFlipped((p) => !p);
   };
 
   return (
-    <div className="id-card-wrapper relative" onClick={handleCardClick} aria-label="ID Card — tap to flip">
+    <div
+      className="id-card-wrapper"
+      onClick={handleCardClick}
+      aria-label="ID Card — hover/tap to flip"
+    >
       <div className={`id-card-inner${isFlipped ? " is-flipped" : ""}`}>
 
-        {/* ════════════════════════════════
+        {/* ════════════════════
             FRONT FACE
-        ════════════════════════════════ */}
+        ════════════════════ */}
         <div className="id-card-face id-card-front">
           {/* Header */}
           <div className="card-header">
@@ -27,13 +35,26 @@ const IdCard = () => {
             <div className="card-header-chip" aria-hidden="true" />
           </div>
 
-          {/* Photo / Avatar */}
+          {/* Photo / Fallback Avatar */}
           <div className="card-photo-area">
-            <div className="card-photo-bg" aria-hidden="true" />
-            <div className="card-avatar" aria-label="Avatar">YDK</div>
+            {!photoError ? (
+              <img
+                src={PHOTO_SRC}
+                alt={profileData.name}
+                className="card-photo"
+                onError={() => setPhotoError(true)}
+                draggable={false}
+              />
+            ) : (
+              <div className="card-avatar-fallback" aria-label="Avatar">
+                YDK
+              </div>
+            )}
+            <div className="card-photo-overlay" aria-hidden="true" />
+            <div className="card-photo-tint" aria-hidden="true" />
           </div>
 
-          {/* Name block */}
+          {/* Name block (overlaps faded photo) */}
           <div className="card-name-block">
             <div className="card-name">{profileData.name}</div>
             <div className="card-title">{profileData.title}</div>
@@ -41,7 +62,13 @@ const IdCard = () => {
 
           {/* Bottom bar */}
           <div className="card-bottom-bar">
-            <div className="card-bottom-avatar" aria-hidden="true">Y</div>
+            <div className="card-bottom-avatar" aria-hidden="true">
+              {!photoError ? (
+                <img src={PHOTO_SRC} alt="" draggable={false} />
+              ) : (
+                "Y"
+              )}
+            </div>
             <div className="card-bottom-info">
               <span className="card-handle">{profileData.handle}</span>
               <span className="card-status-text">{profileData.status}</span>
@@ -56,71 +83,76 @@ const IdCard = () => {
           </div>
         </div>
 
-        {/* ════════════════════════════════
+        {/* ════════════════════
             BACK FACE
-        ════════════════════════════════ */}
+        ════════════════════ */}
         <div className="id-card-face id-card-back">
-          <div className="back-label">Developer Profile</div>
+          {/* Header row */}
+          <div className="back-header">
+            <span className="back-label">Developer Profile</span>
+            <div className="back-header-logo" aria-hidden="true" />
+          </div>
 
+          <div className="back-divider" />
+
+          {/* Stats */}
           <div className="back-stats">
-            {/* CP Rating */}
             <div className="back-stat-row">
               <span className="back-stat-icon" aria-hidden="true">🏆</span>
-              <div className="back-stat-content">
+              <div>
                 <span className="back-stat-label">CP Rating</span>
-                <span className="back-stat-value">{profileData.stats.cpRating}</span>
-                <span className="back-stat-sub">[{profileData.stats.platform}]</span>
+                <span className="back-stat-value">
+                  {profileData.stats.cpRating}
+                  <span className="back-stat-sub">[{profileData.stats.platform}]</span>
+                </span>
               </div>
             </div>
 
-            {/* Problems Solved */}
             <div className="back-stat-row">
               <span className="back-stat-icon" aria-hidden="true">🎯</span>
-              <div className="back-stat-content">
+              <div>
                 <span className="back-stat-label">Problems Solved</span>
-                <span className="back-stat-value">{profileData.stats.problemsSolved.toLocaleString()}</span>
+                <span className="back-stat-value">
+                  {profileData.stats.problemsSolved.toLocaleString()}
+                </span>
               </div>
             </div>
 
-            {/* Projects */}
             <div className="back-stat-row">
               <span className="back-stat-icon" aria-hidden="true">📁</span>
-              <div className="back-stat-content">
-                <span className="back-stat-label">Projects</span>
-                <span className="back-stat-value">{profileData.stats.projects} shipped</span>
+              <div>
+                <span className="back-stat-label">Projects Shipped</span>
+                <span className="back-stat-value">{profileData.stats.projects}</span>
               </div>
             </div>
 
-            {/* College */}
             <div className="back-stat-row">
               <span className="back-stat-icon" aria-hidden="true">🎓</span>
-              <div className="back-stat-content">
+              <div>
                 <span className="back-stat-label">College</span>
-                <span className="back-stat-value" style={{ fontSize: "13px" }}>
-                  {profileData.college}
-                </span>
+                <span className="back-stat-college">{profileData.college}</span>
               </div>
             </div>
           </div>
 
           <div className="back-divider" />
 
-          {/* Status */}
-          <div className="back-status-line">
-            <span className="back-status-dot" aria-hidden="true" />
-            STATUS: ACTIVE
+          {/* Status + Resume */}
+          <div className="back-bottom">
+            <div className="back-status-line">
+              <span className="back-status-dot" aria-hidden="true" />
+              STATUS: ACTIVE
+            </div>
+            <a
+              href={profileData.resumeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="back-resume-link"
+              onClick={(e) => e.stopPropagation()}
+            >
+              open resume
+            </a>
           </div>
-
-          {/* Resume link */}
-          <a
-            href={profileData.resumeUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="back-resume-link"
-            onClick={(e) => e.stopPropagation()}
-          >
-            open resume
-          </a>
 
           {/* Decorative barcode */}
           <div className="back-barcode" aria-hidden="true">
@@ -131,7 +163,7 @@ const IdCard = () => {
                   className="back-barcode-bar"
                   style={{
                     width: `${w}px`,
-                    height: `${14 + (i % 3) * 6}px`,
+                    height: `${12 + (i % 3) * 5}px`,
                   }}
                 />
               ))}
@@ -141,9 +173,11 @@ const IdCard = () => {
         </div>
       </div>
 
-      {/* Flip hint — only visible on non-touch */}
+      {/* Flip hint — desktop only */}
       {!isTouchDevice && (
-        <span className="card-flip-hint" aria-hidden="true">hover to flip ↗</span>
+        <span className="card-flip-hint" aria-hidden="true">
+          hover to flip ↗
+        </span>
       )}
     </div>
   );

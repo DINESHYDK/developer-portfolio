@@ -86,6 +86,147 @@ code, pre, kbd {
 }
 
 /* ===========================
+   Footer Layout
+   =========================== */
+
+/* Desktop: brand (1fr) + connect (auto) side by side */
+.footer-top {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 48px;
+  align-items: start;
+  margin-bottom: 40px;
+}
+
+/* Mobile: stack brand above, hide connect (shown in footer-mobile-columns) */
+@media (max-width: 768px) {
+  .footer-top {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+  .footer-connect-col {
+    display: none;
+  }
+}
+
+/* Mobile-only 2-col: nav + connect */
+.footer-mobile-columns {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .footer-mobile-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+}
+
+/* YDK watermark zone: hide cursor inversion on touch */
+@media (max-width: 768px) {
+  .ydk-watermark-zone {
+    pointer-events: none;
+  }
+}
+
+/* ===========================
+   About Section — Sticky Layout
+   =========================== */
+
+.about-sticky-wrapper {
+  display: grid;
+  grid-template-columns: 42% 1fr;
+  align-items: start;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  gap: 48px;
+}
+
+.about-left-sticky {
+  position: sticky;
+  top: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.about-right-scroll {
+  display: flex;
+  flex-direction: column;
+  /* No gap — each section outer div is 180vh, provides its own spacing */
+  gap: 0;
+  padding: 0;
+}
+
+/*
+  Outer scroll container — tall so the page has room to scroll
+  while the sticky card inside stays put.
+  180vh = 1 viewport of pure scroll travel per section.
+*/
+.about-section-outer {
+  position: relative;
+  height: 180vh;
+}
+
+/*
+  Inner sticky wrapper — card is pinned at top: 100px and does NOT
+  move while the user scrolls through the 180vh outer container.
+  The scroll distance drives the word-scrub animation only.
+*/
+.about-section-sticky {
+  position: sticky;
+  top: 100px;
+}
+
+/* Card container — no min-height needed; outer div controls height */
+.about-section-card {
+  background: rgba(18, 18, 26, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 36px 32px;
+  backdrop-filter: blur(6px);
+}
+
+/* Mobile: single column, hide sticky SVG panel, revert outer to natural height */
+@media (max-width: 768px) {
+  .about-sticky-wrapper {
+    grid-template-columns: 1fr;
+    padding: 0 16px;
+    gap: 32px;
+  }
+  .about-left-sticky {
+    display: none;
+  }
+  .about-right-scroll {
+    gap: 32px;
+    padding: 0 0 48px;
+  }
+  /* On mobile: no sticky scroll pattern — just normal flow */
+  .about-section-outer {
+    height: auto;
+  }
+  .about-section-sticky {
+    position: static;
+  }
+  .about-section-card {
+    padding: 24px 20px;
+  }
+}
+
+/* ===========================
+   Custom Cursor — hide default
+   =========================== */
+@media (pointer: fine) {
+  html, body, * {
+    cursor: none !important;
+  }
+}
+
+/* ===========================
    Selection Styling
    =========================== */
 ::selection {
