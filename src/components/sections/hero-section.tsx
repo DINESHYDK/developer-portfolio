@@ -7,7 +7,7 @@ const HeroSection = () => {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center justify-center px-6"
+      className="group relative min-h-screen flex items-center justify-center px-6"
     >
       {/* Subtle gradient background glow */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -16,7 +16,7 @@ const HeroSection = () => {
       </div>
 
       {/* Two-column layout: Card (left) + Text (right) */}
-      <div className="relative z-10 w-full max-w-6xl mx-auto flex flex-col-reverse md:flex-row items-center justify-center gap-16 md:gap-24 py-8">
+      <div className="relative z-10 w-full max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-center gap-16 md:gap-24 py-8">
 
         {/* ── Left: ID Card ── */}
         <div className="flex justify-center">
@@ -31,17 +31,17 @@ const HeroSection = () => {
           </p>
 
           {/* Name */}
-          <h1 className="font-poppins text-5xl md:text-6xl font-bold text-text-heading leading-tight">
+          <h1 className="font-poppins text-5xl md:text-6xl font-bold text-white/45 leading-tight transition-all duration-500 ease-out group-hover:text-white group-hover:[text-shadow:0_0_40px_rgba(142,202,230,0.25)]">
             {SITE_METADATA.name}
           </h1>
 
           {/* Role */}
-          <h2 className="font-poppins text-2xl md:text-3xl font-semibold text-text-body">
+          <h2 className="font-poppins text-2xl md:text-3xl font-semibold text-white/30 transition-all duration-500 ease-out delay-75 group-hover:text-text-body">
             {SITE_METADATA.role}
           </h2>
 
           {/* Description */}
-          <p className="text-text-body font-jakarta text-lg md:text-xl leading-relaxed">
+          <p className="text-white/25 font-jakarta text-lg md:text-xl leading-relaxed transition-all duration-500 ease-out delay-100 group-hover:text-text-body">
             {SITE_METADATA.description}
           </p>
 

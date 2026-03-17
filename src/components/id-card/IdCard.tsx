@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { profileData } from "@/data/profile-data";
 import "./id-card.css";
+import profilePhoto from "@/public/images/profile.jpg";
 
 const BARCODE_BARS = [2,1,3,1,2,2,1,3,1,1,2,3,1,2,1,3,2,1,2,1,3,1,2,2,1,3,2,1];
 
-const PHOTO_SRC = "/images/profile.jpg"; // user places photo here
+const PHOTO_SRC = profilePhoto;
 
 const IdCard = () => {
   const [isFlipped, setIsFlipped] = useState(false);
@@ -64,7 +65,7 @@ const IdCard = () => {
           <div className="card-bottom-bar">
             <div className="card-bottom-avatar" aria-hidden="true">
               {!photoError ? (
-                <img src={PHOTO_SRC} alt="" draggable={false} />
+                <img src={PHOTO_SRC} alt="profile" draggable={false} />
               ) : (
                 "Y"
               )}

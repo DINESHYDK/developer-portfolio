@@ -128,7 +128,7 @@ const Navbar = () => {
           {NAV_ITEMS.map((item) => {
             const isActive = activeLink === item.href;
             return (
-              <li key={item.href}>
+              <li key={item.href} className="relative">
                 <a
                   href={item.href}
                   onClick={(e) => {

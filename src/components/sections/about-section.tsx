@@ -112,23 +112,40 @@ const AboutSvgSwap = ({
   activeId: string;
   borderRef: React.RefObject<HTMLDivElement | null>;
 }) => {
-  const [displayed, setDisplayed] = useState(activeId);
+  const [displayed, setDisplayed]         = useState(activeId);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const isAnimating = useRef(false);
+  const pendingId   = useRef<string | null>(null);
+
+  const runSwap = useCallback((targetId: string) => {
+    if (isAnimating.current) return;
+    isAnimating.current = true;
+    setIsTransitioning(true);
+
+    setTimeout(() => {
+      setDisplayed(targetId);
+      setIsTransitioning(false);
+      setTimeout(() => {
+        isAnimating.current = false;
+        if (pendingId.current && pendingId.current !== targetId) {
+          const next = pendingId.current;
+          pendingId.current = null;
+          runSwap(next);
+        } else {
+          pendingId.current = null;
+        }
+      }, 350);
+    }, 280);
+  }, []);
 
   useEffect(() => {
     if (activeId === displayed) return;
-    if (isAnimating.current) return; // block if mid-swap — latest activeId wins on next trigger
-
-    isAnimating.current = true;
-
-    const swap = setTimeout(() => {
-      setDisplayed(activeId);
-      // Release lock after the fade completes (300ms swap + 400ms settle)
-      setTimeout(() => { isAnimating.current = false; }, 400);
-    }, 300);
-
-    return () => clearTimeout(swap);
-  }, [activeId, displayed]);
+    if (isAnimating.current) {
+      pendingId.current = activeId;
+    } else {
+      runSwap(activeId);
+    }
+  }, [activeId, displayed, runSwap]);
 
   return (
     /* Outer dim ring — always visible as background track */
@@ -160,7 +177,7 @@ const AboutSvgSwap = ({
               width: "100%",
               height: "auto",
               display: "block",
-              opacity: 1,
+              opacity: isTransitioning ? 0 : 1,
               transition: "opacity 0.28s ease",
             }}
             draggable={false}
@@ -191,7 +208,9 @@ const AboutSubSection = ({
   sectionRef: (el: HTMLDivElement | null) => void;
   onScrollProgress: (index: number, progress: number) => void;
 }) => {
-  const outerRef = useRef<HTMLDivElement>(null);
+  const outerRef  = useRef<HTMLDivElement>(null);
+  const cardRef   = useRef<HTMLDivElement>(null);
+  const [cardVisible, setCardVisible] = useState(false);
 
   // Target the OUTER tall container — progress drives word scrub,
   // but the card itself never moves (it's sticky inside the outer div)
@@ -205,6 +224,23 @@ const AboutSubSection = ({
   useEffect(() => {
     return scrollYProgress.on("change", (v) => onScrollProgress(index, v));
   }, [scrollYProgress, onScrollProgress, index]);
+
+  // Mobile card entrance — IO-triggered; desktop always visible
+  useEffect(() => {
+    const isMobile = window.innerWidth <= 768;
+    if (!isMobile) {
+      setCardVisible(true);
+      return;
+    }
+    const el = cardRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setCardVisible(true); observer.disconnect(); } },
+      { threshold: 0.15 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   const totalWords = block.paragraphs.reduce((s, p) => s + p.split(" ").length, 0);
   let wordOffset = 0;
@@ -224,9 +260,9 @@ const AboutSubSection = ({
     >
       {/* Inner sticky: card is pinned here while outer container scrolls past */}
       <motion.div
+        ref={cardRef}
         className="about-section-sticky"
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
+        animate={cardVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
         <div className="about-section-card">
@@ -292,7 +328,7 @@ const AboutSection = () => {
           }
         });
       },
-      { threshold: 0.55, rootMargin: "0px 0px -30% 0px" }
+      { threshold: 0.35, rootMargin: "0px 0px -20% 0px" }
     );
 
     sectionRefs.current.forEach((el) => { if (el) observer.observe(el); });
@@ -309,8 +345,8 @@ const AboutSection = () => {
       }
     }
 
-    // Unlock next section at 90% — next section appears in DOM below current
-    if (progress >= 0.9) {
+    // Unlock next section at 80% — slightly earlier on mobile's faster scroll travel
+    if (progress >= 0.80) {
       setUnlockedCount((prev) => Math.max(prev, index + 2));
     }
   }, []);

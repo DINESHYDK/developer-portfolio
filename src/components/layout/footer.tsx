@@ -20,19 +20,18 @@ const SOCIAL_ICONS: Record<string, React.ReactNode> = {
    ─ Disabled on touch (pointer: coarse)
 ════════════════════════════════════════════ */
 
-const SPOT_SIZE  = 200;                    // base spotlight radius (px)
-const GLOW_RGB   = "142, 202, 230";       // --color-accent-primary (#8ECAE6)
-const BG_OVERLAY = "rgba(10, 10, 15, 0.90)"; // matches app bg, nearly opaque
+const SPOT_SIZE = 220;               // base spotlight radius (px)
+const GLOW_RGB  = "142, 202, 230";  // --color-accent-primary (#8ECAE6)
 
 const YdkSpotlight = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef    = useRef<HTMLCanvasElement>(null);
 
-  // Smooth lerped position (starts off-screen so first entry looks natural)
-  const spotPos   = useRef({ x: -600, y: -600 });
-  const targetPos = useRef({ x: -600, y: -600 });
-  const rafRef    = useRef<number>(0);
-  const hoveredRef = useRef(false);
+  const spotPos     = useRef({ x: 0, y: 0 });
+  const targetPos   = useRef({ x: 0, y: 0 });
+  const intensityRef = useRef(0);   // 0 = not hovered, 1 = fully hovered
+  const hoveredRef  = useRef(false);
+  const rafRef      = useRef<number>(0);
 
   useEffect(() => {
     // Skip on touch devices
@@ -45,7 +44,6 @@ const YdkSpotlight = () => {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // ── helpers ──
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
     const resize = () => {
@@ -53,77 +51,78 @@ const YdkSpotlight = () => {
       canvas.height = container.offsetHeight;
     };
 
-    // ── render loop (mirrors reference hook logic) ──
     const render = () => {
       const w = canvas.width;
       const h = canvas.height;
 
-      // Smooth position — same lerp approach as reference (fadeSpeed ≈ 0.1)
+      // Lerp position toward cursor
       spotPos.current.x = lerp(spotPos.current.x, targetPos.current.x, 0.10);
       spotPos.current.y = lerp(spotPos.current.y, targetPos.current.y, 0.10);
 
+      // Smooth intensity: fades in when hovered, fades out when not
+      intensityRef.current = lerp(intensityRef.current, hoveredRef.current ? 1 : 0, 0.07);
+
       ctx.clearRect(0, 0, w, h);
 
-      if (!hoveredRef.current) {
-        // When not hovered: canvas is transparent → YDK text fully visible
-        rafRef.current = requestAnimationFrame(render);
-        return;
-      }
-
-      const { x, y } = spotPos.current;
-
-      // 1 ─ Dark overlay (hides the text everywhere except the spotlight)
+      // 1 ─ Always draw the dim overlay (text is dark/subtle at rest)
       ctx.globalCompositeOperation = "source-over";
-      ctx.fillStyle = BG_OVERLAY;
+      ctx.fillStyle = "rgba(10, 10, 15, 0.88)";
       ctx.fillRect(0, 0, w, h);
 
-      // 2 ─ Pulse (matches reference pulseSpeed: 2000ms)
-      const pulse = 1 + 0.08 * Math.sin((Date.now() / 2000) * Math.PI * 2);
-      const size  = SPOT_SIZE * pulse;
+      // 2 ─ If any intensity, cut spotlight hole + draw glow
+      if (intensityRef.current > 0.01) {
+        const { x, y } = spotPos.current;
+        const pulse = 1 + 0.06 * Math.sin((Date.now() / 2000) * Math.PI * 2);
+        const size  = SPOT_SIZE * pulse;
+        const t     = intensityRef.current;
 
-      // 3 ─ Cut spotlight hole through overlay (destination-out)
-      const cutGrad = ctx.createRadialGradient(x, y, 0, x, y, size);
-      cutGrad.addColorStop(0,    "rgba(0,0,0,1)");
-      cutGrad.addColorStop(0.50, "rgba(0,0,0,0.85)");
-      cutGrad.addColorStop(1,    "rgba(0,0,0,0)");
+        // Cut a radial hole through the overlay (destination-out)
+        const cutGrad = ctx.createRadialGradient(x, y, 0, x, y, size);
+        cutGrad.addColorStop(0,   `rgba(0,0,0,${t})`);
+        cutGrad.addColorStop(0.55, `rgba(0,0,0,${t * 0.6})`);
+        cutGrad.addColorStop(1,   "rgba(0,0,0,0)");
 
-      ctx.globalCompositeOperation = "destination-out";
-      ctx.fillStyle = cutGrad;
-      ctx.beginPath();
-      ctx.arc(x, y, size, 0, Math.PI * 2);
-      ctx.fill();
+        ctx.globalCompositeOperation = "destination-out";
+        ctx.fillStyle = cutGrad;
+        ctx.beginPath();
+        ctx.arc(x, y, size, 0, Math.PI * 2);
+        ctx.fill();
 
-      // 4 ─ Teal glow ring around spotlight (source-over, consistent with theme)
-      ctx.globalCompositeOperation = "source-over";
-      const glowGrad = ctx.createRadialGradient(x, y, size * 0.55, x, y, size * 1.5);
-      glowGrad.addColorStop(0, `rgba(${GLOW_RGB}, 0.28)`);
-      glowGrad.addColorStop(1, `rgba(${GLOW_RGB}, 0)`);
+        // Teal glow ring around the revealed spot
+        ctx.globalCompositeOperation = "source-over";
+        const glowGrad = ctx.createRadialGradient(x, y, size * 0.35, x, y, size * 1.8);
+        glowGrad.addColorStop(0,   `rgba(${GLOW_RGB}, ${t * 0.45})`);
+        glowGrad.addColorStop(0.5, `rgba(${GLOW_RGB}, ${t * 0.18})`);
+        glowGrad.addColorStop(1,   `rgba(${GLOW_RGB}, 0)`);
 
-      ctx.fillStyle = glowGrad;
-      ctx.beginPath();
-      ctx.arc(x, y, size * 1.5, 0, Math.PI * 2);
-      ctx.fill();
+        ctx.fillStyle = glowGrad;
+        ctx.beginPath();
+        ctx.arc(x, y, size * 1.8, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.globalCompositeOperation = "source-over";
+      }
 
       rafRef.current = requestAnimationFrame(render);
     };
 
-    // ── events (container-scoped, not window-scoped) ──
+    // ── events ──
     const onMove = (e: MouseEvent) => {
       const rect = container.getBoundingClientRect();
       const rx = e.clientX - rect.left;
       const ry = e.clientY - rect.top;
 
       if (!hoveredRef.current) {
-        // Snap on first entry so spotlight doesn't fly in from off-screen
-        spotPos.current = { x: rx, y: ry };
+        // Snap position on first entry so spotlight doesn't slide in from edge
+        spotPos.current  = { x: rx, y: ry };
+        targetPos.current = { x: rx, y: ry };
+      } else {
+        targetPos.current = { x: rx, y: ry };
       }
-      targetPos.current  = { x: rx, y: ry };
       hoveredRef.current = true;
     };
 
-    const onLeave = () => {
-      hoveredRef.current = false;
-    };
+    const onLeave = () => { hoveredRef.current = false; };
 
     // ── init ──
     resize();
@@ -163,20 +162,22 @@ const YdkSpotlight = () => {
         Font size: clamp(9rem, 40vw, 46rem) makes 3 bold chars ≈ max-w-5xl width.
       */}
       <span
-        className="font-poppins font-black select-none pointer-events-none"
-        style={{
-          display: "block",
-          position: "relative",
-          zIndex: 0,
-          fontSize: "clamp(9rem, 40vw, 46rem)",
-          lineHeight: 1,
-          padding: "0.5rem 0 0",
-          color: "var(--color-accent-primary)",
-          letterSpacing: "-0.03em",
-        }}
+          className="select-none pointer-events-none"
+          style={{
+            display: "block",
+            position: "relative",
+            zIndex: 0,
+            fontFamily: "var(--font-bebas)",
+            fontSize: "clamp(9rem, 60vmin, 46rem)", // 👈 changed
+            lineHeight: 1.05,
+            padding: "0.5rem 0 0",
+            color: "#8ECAE6",
+            letterSpacing: "clamp(0.02em, 1.2vw, 0.12em)",
+            wordSpacing: "clamp(0.15rem, 1.2vw, 0.6rem)",
+          }}
       >
-        YDK
-      </span>
+  YDK
+</span>
 
       {/* Canvas sits on top — draws the overlay + spotlight + glow */}
       <canvas
@@ -308,7 +309,7 @@ const Footer = () => {
             whileTap={{ scale: 0.96 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
             className={cn(
-              "inline-flex items-center gap-2 px-5 py-2.5 rounded-full",
+                "md:hidden", "inline-flex items-center gap-2 px-5 py-2.5 rounded-full",
               "border border-border-subtle text-text-body/60 font-jakarta text-xs",
               "transition-colors duration-300",
               "hover:border-accent-primary/40 hover:text-accent-primary",

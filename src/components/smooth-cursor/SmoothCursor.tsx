@@ -16,8 +16,7 @@ const SmoothCursor = () => {
     if (!el) return;
 
     const move = (e: MouseEvent) => {
-      el.style.setProperty("--cx", e.clientX + "px");
-      el.style.setProperty("--cy", e.clientY + "px");
+      el.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
       el.style.opacity = "1";
     };
 
@@ -47,7 +46,8 @@ const SmoothCursor = () => {
         height: 24,
         pointerEvents: "none",
         zIndex: 99999,
-        transform: "translate(var(--cx, -40px), var(--cy, -40px))",
+        transform: "translate(-40px, -40px)",
+        willChange: "transform",
         opacity: 0,
         transition: "opacity 0.15s ease",
         // No translate transition — instant follow is intentional for this cursor style
@@ -62,8 +62,9 @@ const SmoothCursor = () => {
       >
         <path
           d="M4 2L20 12L12 14L8 22L4 2Z"
-          fill="none"
-          stroke="var(--color-accent-primary)"
+          fill="#8ECAE6"
+          fillOpacity="0.15"
+          stroke="#8ECAE6"
           strokeWidth="1.5"
           strokeLinejoin="round"
           strokeLinecap="round"

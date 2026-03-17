@@ -30,6 +30,7 @@
   --font-poppins: "Poppins", sans-serif;
   --font-jakarta: "Plus Jakarta Sans", sans-serif;
   --font-mono: "Fira Code", monospace;
+  --font-bebas: "Bebas Neue", sans-serif;
 }
 
 /* ===========================
@@ -191,29 +192,41 @@ code, pre, kbd {
   backdrop-filter: blur(6px);
 }
 
-/* Mobile: single column, hide sticky SVG panel, revert outer to natural height */
+/* Mobile: single column, hide sticky SVG panel, keep sticky scroll pattern */
 @media (max-width: 768px) {
   .about-sticky-wrapper {
     grid-template-columns: 1fr;
     padding: 0 16px;
-    gap: 32px;
+    gap: 0;
   }
+
   .about-left-sticky {
     display: none;
   }
+
   .about-right-scroll {
-    gap: 32px;
-    padding: 0 0 48px;
+    width: 100%;
   }
-  /* On mobile: no sticky scroll pattern — just normal flow */
+
+  /* CRITICAL: keep the tall outer container on mobile too */
+  /* This gives the sticky card room to stay pinned while scrolling */
   .about-section-outer {
-    height: auto;
+    height: 150vh;
+    position: relative;
+    margin-bottom: 0;
   }
+
+  /* CRITICAL: keep sticky position on mobile */
   .about-section-sticky {
-    position: static;
+    position: sticky;
+    top: 80px;
+    padding-bottom: 24px;
   }
+
   .about-section-card {
-    padding: 24px 20px;
+    padding: 24px 18px;
+    width: 100%;
+    box-sizing: border-box;
   }
 }
 

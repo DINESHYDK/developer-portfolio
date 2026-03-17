@@ -440,6 +440,13 @@
   letter-spacing: 0.25em;
 }
 
+@media (max-width: 400px) {
+  .id-card-wrapper {
+    width: 280px;
+    height: 400px;
+  }
+}
+
 /* ── Flip hint ── */
 .card-flip-hint {
   position: absolute;

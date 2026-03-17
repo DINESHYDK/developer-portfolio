@@ -91,3 +91,8 @@ Hidden on `pointer: coarse` (touch) devices. Cursor: none applied globally via
 | 2026-03-17 | Footer        | YdkWatermark → YdkSpotlight (canvas technique)               |
 | 2026-03-17 | Footer        | footer-top 1fr/auto grid; footer-mobile-columns 2-col        |
 | 2026-03-17 | Global        | Custom cursor: outline triangle, teal, instant follow        |
+| 2026-03-17 | Hero          | h1/h2/p: text-white/45→30→25 default, group-hover reveals; h1 gets teal text-shadow glow |
+| 2026-03-17 | ID Card       | Mobile ≤400px breakpoint: 280×400px                          |
+| 2026-03-17 | About         | SVG swap: pendingId queue replaces drop-on-busy lock         |
+| 2026-03-17 | About         | IO threshold 0.55→0.35, rootMargin -30%→-20%                 |
+| 2026-03-17 | About         | Mobile card entrance: IO-triggered (threshold 0.15), min-height 80vh |
