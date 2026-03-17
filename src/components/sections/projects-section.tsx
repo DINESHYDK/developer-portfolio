@@ -55,15 +55,17 @@ const FlowingMenuItem = ({
             {String(index + 1).padStart(2, "0")}
           </span>
           <h3 className={cn(
-            "flex-1 font-poppins font-bold text-2xl lg:text-3xl tracking-tight transition-colors duration-300 relative",
+            "flex-1 font-poppins font-bold text-2xl lg:text-3xl tracking-tight transition-colors duration-300",
             isHovered ? "text-white" : "text-white/75"
           )}>
-            {project.title}
-            <motion.span
-              className="absolute bottom-0 left-0 h-[2px] w-full bg-accent-secondary rounded-full origin-left"
-              animate={{ scaleX: isHovered ? 1 : 0 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-            />
+            <span className="relative inline-block">
+              {project.title}
+              <motion.span
+                className="absolute bottom-0 left-0 h-[2px] w-full bg-accent-secondary rounded-full origin-left"
+                animate={{ scaleX: isHovered ? 1 : 0 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+              />
+            </span>
           </h3>
           <span className={cn(
             "shrink-0 px-3 py-1 rounded-full text-xs font-mono font-semibold border tracking-widest uppercase",
@@ -96,15 +98,17 @@ const FlowingMenuItem = ({
             {project.domain ?? "WEB"}
           </span>
           <h3 className={cn(
-            "flex-1 text-right font-poppins font-bold text-2xl lg:text-3xl tracking-tight transition-colors duration-300 relative",
+            "flex-1 text-right font-poppins font-bold text-2xl lg:text-3xl tracking-tight transition-colors duration-300",
             isHovered ? "text-white" : "text-white/75"
           )}>
-            {project.title}
-            <motion.span
-              className="absolute bottom-0 right-0 h-[2px] w-full bg-accent-secondary rounded-full origin-right"
-              animate={{ scaleX: isHovered ? 1 : 0 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-            />
+            <span className="relative inline-block">
+              {project.title}
+              <motion.span
+                className="absolute bottom-0 left-0 h-[2px] w-full bg-accent-secondary rounded-full origin-right"
+                animate={{ scaleX: isHovered ? 1 : 0 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+              />
+            </span>
           </h3>
           <span className="font-mono text-xs text-accent-secondary w-6 shrink-0 text-right">
             {String(index + 1).padStart(2, "0")}

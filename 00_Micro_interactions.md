@@ -66,7 +66,7 @@ SECTION TASKS
     Files: src/components/sections/projects-section.tsx
     NOTE: Read file before implementing.
 
-⬜ S-6. Coding Stats Section — restructure + hover effects
+✅ S-6. Coding Stats Section — restructure + hover effects
     Layout: Keep all 4 cards [ Problems Solved | Contests | Best Rating | Platforms ]
     - Align flush, equal width, no orphan spacing
     - Clone hover lift+glow effect from Problems Solved → apply to all 4 cards
