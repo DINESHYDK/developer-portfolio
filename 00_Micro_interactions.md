@@ -32,7 +32,7 @@ SECTION TASKS
     - Add haptic("tap") to handleNavigate (mobile only)
     Files: src/components/layout/navbar.tsx
 
-⬜ S-2. Hero Section — CTA button feedback
+✅ S-2. Hero Section — CTA button feedback
     - Primary "View My Work": whileHover scale:1.03, whileTap scale:0.97
     - "Resume": same whileTap
     - haptic("tap") on mobile tap for both
@@ -111,10 +111,16 @@ EXTRAS (exceptional / premium touches)
     - Applies to: #skills, #projects, #coding, #contact
     - About already has its own entrance logic — skip
 
-⬜ E-3. Hero Page Load Stagger
-    - Content staggers in on mount: greeting → name → role → description → buttons
-    - Each item: opacity 0→1, y 16→0, with 0.1s delay cascade
-    - Check if already present before implementing
+✅ E-3. Hero Page Load Stagger
+    - ID Card: delay 0.10s, scale 0.94→1 + y 20→0 + opacity
+    - Greeting: delay 0.20s, y 18→0 + opacity
+    - Name:     delay 0.32s
+    - Role:     delay 0.44s
+    - Desc:     delay 0.56s
+    - Buttons:  delay 0.70s (wrapper div, both buttons inside)
+    - Scroll indicator: delay 0.90s
+    - transition-all → transition-colors on text elements (Framer Motion owns transform+opacity)
+    Files: src/components/sections/hero-section.tsx
 
 =============================================================
 DECISIONS LOG
