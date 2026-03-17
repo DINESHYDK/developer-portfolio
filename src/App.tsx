@@ -9,6 +9,7 @@ import CodingStatsSection from "@/components/sections/dashboard/coding-stats-sec
 import ContactSection from "@/components/sections/contact-section";
 import SmoothCursor from "@/components/smooth-cursor/SmoothCursor";
 import SplashScreen from "@/components/splash-screen/SplashScreen";
+import ScrollProgressBar from "@/components/ui/ScrollProgressBar";
 
 // Show splash only once per browser session
 const hasSeenSplash = sessionStorage.getItem("ydk_splash_seen") === "true";
@@ -23,6 +24,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-bg-primary text-text-body">
+      <ScrollProgressBar />
       <SmoothCursor />
       {showSplash && <SplashScreen onDone={handleSplashDone} />}
       <Navbar />
