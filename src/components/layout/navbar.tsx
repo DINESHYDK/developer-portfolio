@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, User, Wrench, FolderOpen, Mail, BarChart3 } from "lucide-react";
+import { Home, User, Layers, FolderOpen, Mail, BarChart3 } from "lucide-react";
+import { haptic } from "@/utils/haptic";
 import { LimelightNav } from "@/components/ui/limelight-nav";
 import type { LimelightNavItem } from "@/components/ui/limelight-nav";
 import { cn } from "@/utils/cn";
@@ -14,7 +15,7 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { label: "Home", href: "#hero", icon: <Home size={20} /> },
   { label: "About", href: "#about", icon: <User size={20} /> },
-  { label: "Skills", href: "#skills", icon: <Wrench size={20} /> },
+  { label: "Skills", href: "#skills", icon: <Layers size={20} /> },
   { label: "Projects", href: "#projects", icon: <FolderOpen size={20} /> },
   { label: "Stats", href: "#coding", icon: <BarChart3 size={20} /> },
   { label: "Contact", href: "#contact", icon: <Mail size={20} /> },
@@ -101,6 +102,7 @@ const Navbar = () => {
   }, []);
 
   const handleNavigate = (href: string) => {
+    haptic("tap"); // mobile: short pulse on section change; desktop: no-op
     setActiveLink(href);
 
     const targetId = href.replace("#", "");

@@ -27,7 +27,7 @@ FOUNDATION (must be done first — everything depends on these)
 SECTION TASKS
 =============================================================
 
-⬜ S-1. Navbar — Skills icon + haptic
+✅ S-1. Navbar — Skills icon + haptic
     - Change icon: Wrench → Layers  (CONFIRMED by user)
     - Add haptic("tap") to handleNavigate (mobile only)
     Files: src/components/layout/navbar.tsx
@@ -44,7 +44,7 @@ SECTION TASKS
     - Card entrance: add scale 0.97→1 alongside existing opacity/y
     Files: src/components/sections/about-section.tsx
 
-⬜ S-4. Skills Section — hover, rotation, mobile swipe + haptic
+✅ S-4. Skills Section — hover, rotation, mobile swipe + haptic
     Desktop:
     - Verify/add continuous slow ring rotation (CSS keyframe)
     - Skill cards: whileHover y:-4, scale:1.04, accent glow shadow
