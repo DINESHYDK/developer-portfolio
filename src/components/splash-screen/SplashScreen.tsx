@@ -10,6 +10,9 @@ const SplashScreen = ({ onDone }: SplashScreenProps) => {
   const sigWrapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Lock scroll so footer underneath can't be seen during splash
+    document.body.style.overflow = "hidden";
+
     // Glow fires after smiley + underline complete (~5.7s)
     const glowTimer = setTimeout(() => {
       sigWrapRef.current?.classList.add("glow");
@@ -27,6 +30,9 @@ const SplashScreen = ({ onDone }: SplashScreenProps) => {
     }, 8000);
 
     return () => {
+      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.width = "";
       clearTimeout(glowTimer);
       clearTimeout(exitTimer);
       clearTimeout(doneTimer);

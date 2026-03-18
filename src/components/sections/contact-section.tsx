@@ -424,7 +424,7 @@ const ContactSection = () => {
   const inputClasses = cn(
     "w-full px-4 py-4 rounded-2xl",
     "bg-bg-primary border-2 border-[rgba(255,255,255,0.14)]",
-    "text-text-heading font-jakarta placeholder-text-body/40",
+    "text-base text-text-heading font-jakarta placeholder-text-body/40",
     "transition-colors duration-200 outline-none",
     "hover:border-[rgba(255,255,255,0.3)]"
   );
@@ -508,7 +508,7 @@ const ContactSection = () => {
         </div>
 
         {/* Tab Content */}
-        <div className="max-w-2xl mx-auto overflow-hidden">
+        <div className="max-w-2xl mx-auto overflow-x-hidden">
           <AnimatePresence mode="wait" custom={slideDir}>
             {activeTab === "contact" ? (
               <motion.div
@@ -533,6 +533,7 @@ const ContactSection = () => {
                         onFocus={() => setFocusedField("name")}
                         onBlur={() => setFocusedField(null)}
                         placeholder="Your name" className={inputClasses}
+                        autoComplete="name"
                       />
                       <FocusRing focused={focusedField === "name"} />
                     </div>
@@ -549,6 +550,8 @@ const ContactSection = () => {
                         onFocus={() => setFocusedField("email")}
                         onBlur={() => setFocusedField(null)}
                         placeholder="your@email.com" className={inputClasses}
+                        autoComplete="email"
+                        inputMode="email"
                       />
                       <FocusRing focused={focusedField === "email"} />
                     </div>
@@ -566,6 +569,7 @@ const ContactSection = () => {
                         onBlur={() => setFocusedField(null)}
                         placeholder="Tell me about your project..."
                         className={cn(inputClasses, "resize-none")}
+                        autoComplete="off"
                       />
                       <FocusRing focused={focusedField === "message"} />
                     </div>

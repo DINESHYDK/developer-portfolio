@@ -15,16 +15,9 @@
   justify-content: center;
   font-family: var(--font-mono, 'Fira Code', monospace);
   overflow: hidden;
-  /* Hold invisible for 0.3s — lets Alex Brush load before anything renders */
-  opacity: 0;
-  animation: splash-initial-show 0.01s ease 0.3s forwards;
 }
 
-@keyframes splash-initial-show {
-  to { opacity: 1; }
-}
-
-/* Exit overrides the initial-show animation (higher specificity) */
+/* Exit animation */
 .splash-overlay.splash-exiting {
   animation: splash-page-out 1.5s ease forwards;
 }
@@ -38,7 +31,7 @@
 }
 
 .splash-sig-wrap svg {
-  width: clamp(260px, 58vw, 660px);
+  width: clamp(312px, 70vw, 720px);
   height: auto;
   overflow: visible;
 }
@@ -108,7 +101,7 @@
 /* ── Underline — accent-secondary (green) ── */
 .sig-underline {
   fill: none;
-  stroke: var(--color-accent-secondary);
+  stroke: var(--color-accent-primary);
   stroke-width: 7;
   stroke-linecap: round;
   stroke-dasharray: 700;
