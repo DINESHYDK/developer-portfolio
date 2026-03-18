@@ -16,10 +16,10 @@ type HapticPreset = "tap" | "tick" | "flip" | "confirm";
 type HapticPattern = number | number[];
 
 const PRESETS: Record<HapticPreset, HapticPattern> = {
-  tick:    6,
-  tap:     8,
-  flip:    12,
-  confirm: [10, 50, 10],
+  tick:    10,
+  tap:     13,
+  flip:    19,
+  confirm: [16, 80, 16],
 };
 
 export function haptic(input: HapticPreset | HapticPattern = "tap"): void {

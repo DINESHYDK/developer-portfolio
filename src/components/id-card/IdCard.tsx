@@ -4,8 +4,6 @@ import { profileData } from "@/data/profile-data";
 import "./id-card.css";
 import profilePhoto from "@/public/images/profile.png";
 
-const BARCODE_BARS = [2,1,3,1,2,2,1,3,1,1,2,3,1,2,1,3,2,1,2,1,3,1,2,2,1,3,2,1];
-
 const PHOTO_SRC = profilePhoto;
 
 const IdCard = () => {
@@ -50,8 +48,8 @@ const IdCard = () => {
             <div className="card-photo-tint" aria-hidden="true" />
           </div>
 
-          {/* Name block (overlaps faded photo) */}
-          <div className="card-name-block">
+          {/* Name block — mobile only (desktop hero text shows the name) */}
+          <div className="card-name-block card-name-block--mobile-only">
             <div className="card-name">{profileData.name}</div>
             <div className="card-title">{profileData.title}</div>
           </div>
@@ -137,7 +135,7 @@ const IdCard = () => {
           <div className="back-bottom">
             <div className="back-status-line">
               <span className="back-status-dot" aria-hidden="true" />
-              STATUS: ACTIVE
+              Open for internship
             </div>
             <a
               href={profileData.resumeUrl}
@@ -150,22 +148,6 @@ const IdCard = () => {
             </a>
           </div>
 
-          {/* Decorative barcode */}
-          <div className="back-barcode" aria-hidden="true">
-            <div className="back-barcode-bars">
-              {BARCODE_BARS.map((w, i) => (
-                <div
-                  key={i}
-                  className="back-barcode-bar"
-                  style={{
-                    width: `${w}px`,
-                    height: `${12 + (i % 3) * 5}px`,
-                  }}
-                />
-              ))}
-            </div>
-            <span className="back-barcode-text">YDK · 2024</span>
-          </div>
         </div>
       </div>
 

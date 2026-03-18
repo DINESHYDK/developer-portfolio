@@ -55,20 +55,19 @@ const HeroSection = () => {
         {/* ── Right: Text content — cascades in after card ── */}
         <div className="text-center md:text-left max-w-xl flex flex-col gap-4">
 
-          {/* 1 — Greeting */}
+          {/* 1 — Greeting (desktop only) */}
           <motion.p
-            className="text-accent-primary font-mono text-sm tracking-wider"
+            className="hidden md:block text-accent-primary font-mono text-sm tracking-wider"
             {...fadeUp(0.20)}
           >
             Hi, my name is
           </motion.p>
 
-          {/* 2 — Name */}
+          {/* 2 — Name (desktop only) */}
           <motion.h1
             className={cn(
-              "font-poppins text-5xl md:text-6xl font-bold leading-tight",
+              "hidden md:block font-poppins text-5xl md:text-6xl font-bold leading-tight",
               "text-white/45",
-              // Only transition color-related props — Framer Motion owns transform + opacity
               "transition-colors duration-500 ease-out",
               "group-hover:text-white group-hover:[text-shadow:0_0_40px_rgba(142,202,230,0.25)]"
             )}
@@ -77,10 +76,10 @@ const HeroSection = () => {
             {SITE_METADATA.name}
           </motion.h1>
 
-          {/* 3 — Role */}
+          {/* 3 — Role (desktop only) */}
           <motion.h2
             className={cn(
-              "font-poppins text-2xl md:text-3xl font-semibold",
+              "hidden md:block font-poppins text-2xl md:text-3xl font-semibold",
               "text-white/30",
               "transition-colors duration-500 ease-out delay-75",
               "group-hover:text-text-body"
@@ -100,6 +99,7 @@ const HeroSection = () => {
             )}
             {...fadeUp(0.56)}
           >
+            <span className="md:hidden">I'm </span>
             {SITE_METADATA.description}
           </motion.p>
 

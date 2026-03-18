@@ -76,7 +76,7 @@ const SplashScreen = ({ onDone }: SplashScreenProps) => {
       {/* ── Bottom loader ── */}
       <div className="splash-bottom">
         <p className="splash-tagline">
-          Stepping you into my creation
+          Taking you into my creation
           <span className="splash-dots">
             <span>.</span>
             <span>.</span>

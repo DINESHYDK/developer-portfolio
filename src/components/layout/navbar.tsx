@@ -88,17 +88,39 @@ const Navbar = () => {
   }, []);
 
   // Hide mobile navbar when footer enters viewport.
+  // Footer renders after splash (~8s), so wait for it via MutationObserver.
   useEffect(() => {
-    const footer = document.querySelector("footer");
-    if (!footer) return;
+    let intersectionObs: IntersectionObserver | null = null;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => setFooterVisible(entry.isIntersecting),
-      { threshold: 0.05 }
-    );
+    const attachIntersection = (footer: Element) => {
+      intersectionObs = new IntersectionObserver(
+        ([entry]) => setFooterVisible(entry.isIntersecting),
+        { threshold: 0.05 }
+      );
+      intersectionObs.observe(footer);
+    };
 
-    observer.observe(footer);
-    return () => observer.disconnect();
+    // Footer may already exist (e.g. HMR / session-skip)
+    const existing = document.querySelector("footer");
+    if (existing) {
+      attachIntersection(existing);
+      return () => intersectionObs?.disconnect();
+    }
+
+    // Otherwise watch the DOM for it to be inserted
+    const mutationObs = new MutationObserver(() => {
+      const footer = document.querySelector("footer");
+      if (footer) {
+        mutationObs.disconnect();
+        attachIntersection(footer);
+      }
+    });
+    mutationObs.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      mutationObs.disconnect();
+      intersectionObs?.disconnect();
+    };
   }, []);
 
   const handleNavigate = (href: string) => {
