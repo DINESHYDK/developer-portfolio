@@ -22,8 +22,8 @@ src/
     id-card/        Flip card (front + back), id-card.css
     layout/         Navbar, Footer (YdkSpotlight)
     sections/       HeroSection, AboutSection, SkillsSection, …
-    smooth-cursor/  SmoothCursor — two-layer: instant triangle + lerp ring (0.12)
-    splash-screen/  SplashScreen — SVG signature draw animation (CSS stroke-dashoffset)
+    smooth-cursor/  SmoothCursor — instant triangle follow, teal, hidden on touch
+    splash-screen/  SplashScreen — Alex Brush SVG text draw + smiley + green underline + box loader
   config/           site-metadata.ts, footer-links.ts
   data/             profile-data.ts, terminal-commands.ts
   utils/            cn.ts (clsx helper)
@@ -99,5 +99,7 @@ Hidden on `pointer: coarse` (touch) devices. `cursor: none` applied globally via
 | 2026-03-17 | About         | IO threshold 0.55→0.35, rootMargin -30%→-20%                 |
 | 2026-03-17 | About         | Mobile card entrance: IO-triggered (threshold 0.15), min-height 80vh |
 | 2026-03-18 | Splash        | Replaced progress-bar ID card with SVG signature draw animation      |
+| 2026-03-19 | Splash        | v3: Alex Brush SVG text draw, smiley flourish, green underline, 17-box loader, mobile responsive |
+| 2026-03-19 | index.html    | Added Alex Brush to Google Fonts import                              |
 | 2026-03-18 | ID Card       | Desktop size: 322×460 → 360×515px (+12%); mobile 300×430px           |
 | 2026-03-18 | Cursor        | Added lerp-trailing ring (0.12) + hover expand + click shrink states |

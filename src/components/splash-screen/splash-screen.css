@@ -1,85 +1,290 @@
 /* ===========================
-   Splash Screen — Signature Draw
+   Splash Screen — Signature Draw v3
    =========================== */
+
 
 .splash-overlay {
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background-color: var(--color-bg-primary);
+  background: var(--color-bg-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono, 'Fira Code', monospace);
+  overflow: hidden;
+  /* Hold invisible for 0.3s — lets Alex Brush load before anything renders */
+  opacity: 0;
+  animation: splash-initial-show 0.01s ease 0.3s forwards;
+}
+
+@keyframes splash-initial-show {
+  to { opacity: 1; }
+}
+
+/* Exit overrides the initial-show animation (higher specificity) */
+.splash-overlay.splash-exiting {
+  animation: splash-page-out 1.5s ease forwards;
+}
+
+/* ── Signature pushed upward so loader has room ── */
+.splash-sig-wrap {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
-  transition: opacity 0.5s ease;
+  margin-bottom: 120px;
 }
 
-.splash-overlay.splash-exit {
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* ── Wrapper ── */
-.splash-sig-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-}
-
-/* ── SVG signature ── */
-.splash-signature {
-  width: clamp(260px, 55vw, 420px);
+.splash-sig-wrap svg {
+  width: clamp(260px, 58vw, 660px);
   height: auto;
   overflow: visible;
 }
 
-/* All paths start invisible (dashoffset = length) */
-.sig-path {
+/* ── "Dinesh" ── */
+.sig-dinesh {
+  font-family: 'Alex Brush', cursive;
+  font-size: 140px;
+  fill: transparent;
+  stroke: var(--color-accent-primary);
+  stroke-width: 2;
+  stroke-dasharray: 1200;
+  stroke-dashoffset: 1200;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  animation:
+    sig-draw-dinesh 2.2s ease-in-out 0.2s forwards,
+    sig-fill-dinesh 0.8s ease-in   2.4s forwards;
+}
+
+/* ── "Krishna" ── */
+.sig-krishna {
+  font-family: 'Alex Brush', cursive;
+  font-size: 140px;
+  fill: transparent;
+  stroke: var(--color-accent-primary);
+  stroke-width: 2;
+  stroke-dasharray: 1400;
+  stroke-dashoffset: 1400;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  animation:
+    sig-draw-krishna 2.4s ease-in-out 1.8s forwards,
+    sig-fill-krishna 0.8s ease-in   4.2s forwards;
+}
+
+@keyframes sig-draw-dinesh  { to { stroke-dashoffset: 0; } }
+@keyframes sig-draw-krishna { to { stroke-dashoffset: 0; } }
+
+@keyframes sig-fill-dinesh {
+  0%   { fill: transparent; stroke-width: 2; }
+  100% { fill: var(--color-accent-primary); stroke-width: 0.5; }
+}
+@keyframes sig-fill-krishna {
+  0%   { fill: transparent; stroke-width: 2; }
+  100% { fill: var(--color-accent-primary); stroke-width: 0.5; }
+}
+
+/* ── Smiley flourish — hidden until Krishna finishes ── */
+.sig-smiley {
+  fill: none;
+  stroke: var(--color-accent-primary);
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
   stroke-dasharray: 500;
   stroke-dashoffset: 500;
-  fill: none;
-}
-
-/* "Dinesh" letters draw in sequence */
-.sig-path-1 { animation: draw 0.35s cubic-bezier(0.4, 0, 0.2, 1) 0.1s forwards; }
-.sig-path-2 { animation: draw 0.18s cubic-bezier(0.4, 0, 0.2, 1) 0.4s forwards; }
-.sig-path-3 { animation: draw 0.28s cubic-bezier(0.4, 0, 0.2, 1) 0.55s forwards; }
-.sig-path-4 { animation: draw 0.28s cubic-bezier(0.4, 0, 0.2, 1) 0.78s forwards; }
-.sig-path-5 { animation: draw 0.28s cubic-bezier(0.4, 0, 0.2, 1) 1.0s forwards; }
-.sig-path-6 { animation: draw 0.28s cubic-bezier(0.4, 0, 0.2, 1) 1.22s forwards; }
-
-/* "YDK" draws slightly after, slightly faster */
-.sig-path-7 { animation: draw 0.22s cubic-bezier(0.4, 0, 0.2, 1) 1.5s forwards; }
-.sig-path-8 { animation: draw 0.22s cubic-bezier(0.4, 0, 0.2, 1) 1.68s forwards; }
-.sig-path-9 { animation: draw 0.22s cubic-bezier(0.4, 0, 0.2, 1) 1.86s forwards; }
-
-/* Underline flourish last */
-.sig-path-10 { animation: draw 0.3s ease-out 1.95s forwards; }
-
-@keyframes draw {
-  to { stroke-dashoffset: 0; }
-}
-
-/* Glow phase — adds filter glow when all paths are drawn */
-.splash-sig-wrapper.glow .splash-signature {
-  filter: drop-shadow(0 0 8px var(--color-accent-primary))
-          drop-shadow(0 0 20px rgba(142, 202, 230, 0.4));
-  transition: filter 0.4s ease;
-}
-
-/* ── Tagline ── */
-.splash-tagline {
-  font-family: var(--font-mono, 'Fira Code', monospace);
-  font-size: 12px;
-  color: var(--color-accent-primary);
-  letter-spacing: 0.15em;
   opacity: 0;
-  transform: translateY(6px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  animation: sig-draw-smiley 1.65s ease-out 4.25s forwards;
 }
 
-.splash-tagline.visible {
-  opacity: 0.6;
-  transform: translateY(0);
+@keyframes sig-draw-smiley {
+  0%   { opacity: 1; stroke-dashoffset: 500; }
+  100% { opacity: 1; stroke-dashoffset: 0; }
+}
+
+/* ── Underline — accent-secondary (green) ── */
+.sig-underline {
+  fill: none;
+  stroke: var(--color-accent-secondary);
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-dasharray: 700;
+  stroke-dashoffset: 700;
+  opacity: 0;
+  animation: sig-draw-line 0.9s ease-out 4.85s forwards;
+}
+
+@keyframes sig-draw-line {
+  0%   { opacity: 1; stroke-dashoffset: 700; }
+  100% { opacity: 1; stroke-dashoffset: 0; }
+}
+
+/* ── Glow — fires after all paths drawn ── */
+.splash-sig-wrap.glow svg {
+  filter:
+    drop-shadow(0 0 10px rgba(142, 202, 230, 0.55))
+    drop-shadow(0 0 28px rgba(142, 202, 230, 0.22));
+  transition: filter 0.55s ease;
+}
+
+/* ══════════════════════════
+   BOTTOM LOADER
+══════════════════════════ */
+.splash-bottom {
+  position: fixed;
+  bottom: 44px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Tagline */
+.splash-tagline {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.32);
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+  opacity: 0;
+  animation: splash-tag-in 0.6s ease 1.0s forwards;
+}
+
+@keyframes splash-tag-in { to { opacity: 1; } }
+
+/* Animated dots */
+.splash-dots span {
+  opacity: 0;
+  animation: splash-dot-blink 1.4s ease-in-out infinite;
+}
+.splash-dots span:nth-child(1) { animation-delay: 0s; }
+.splash-dots span:nth-child(2) { animation-delay: 0.22s; }
+.splash-dots span:nth-child(3) { animation-delay: 0.44s; }
+
+@keyframes splash-dot-blink {
+  0%, 100% { opacity: 0; }
+  50%       { opacity: 1; }
+}
+
+/* ── Box loader: 17 green outlined rectangles, fill left to right ── */
+.splash-boxes {
+  display: flex;
+  gap: 4px;
+  align-items: flex-end;
+}
+
+.splash-box {
+  width: 14px;
+  height: 20px;
+  border: 1.5px solid rgba(167, 243, 208, 0.45);
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.splash-box::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-accent-secondary);
+  opacity: 0.85;
+  transform: scaleY(0);
+  transform-origin: bottom center;
+}
+
+/* Stagger: 17 boxes, 0.18s apart starting at 0.3s */
+.splash-box:nth-child(1)::after  { animation: splash-box-fill 0.22s ease-out 0.30s forwards; }
+.splash-box:nth-child(2)::after  { animation: splash-box-fill 0.22s ease-out 0.48s forwards; }
+.splash-box:nth-child(3)::after  { animation: splash-box-fill 0.22s ease-out 0.64s forwards; }
+.splash-box:nth-child(4)::after  { animation: splash-box-fill 0.22s ease-out 0.80s forwards; }
+.splash-box:nth-child(5)::after  { animation: splash-box-fill 0.22s ease-out 0.96s forwards; }
+.splash-box:nth-child(6)::after  { animation: splash-box-fill 0.22s ease-out 1.12s forwards; }
+.splash-box:nth-child(7)::after  { animation: splash-box-fill 0.22s ease-out 1.28s forwards; }
+.splash-box:nth-child(8)::after  { animation: splash-box-fill 0.22s ease-out 1.44s forwards; }
+.splash-box:nth-child(9)::after  { animation: splash-box-fill 0.22s ease-out 1.60s forwards; }
+.splash-box:nth-child(10)::after { animation: splash-box-fill 0.22s ease-out 1.76s forwards; }
+.splash-box:nth-child(11)::after { animation: splash-box-fill 0.22s ease-out 1.92s forwards; }
+.splash-box:nth-child(12)::after { animation: splash-box-fill 0.22s ease-out 2.08s forwards; }
+.splash-box:nth-child(13)::after { animation: splash-box-fill 0.22s ease-out 2.24s forwards; }
+.splash-box:nth-child(14)::after { animation: splash-box-fill 0.22s ease-out 2.40s forwards; }
+.splash-box:nth-child(15)::after { animation: splash-box-fill 0.22s ease-out 2.56s forwards; }
+.splash-box:nth-child(16)::after { animation: splash-box-fill 0.22s ease-out 2.72s forwards; }
+.splash-box:nth-child(17)::after { animation: splash-box-fill 0.22s ease-out 2.88s forwards; }
+
+@keyframes splash-box-fill {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+
+
+@keyframes splash-page-out {
+  to { opacity: 0; pointer-events: none; }
+}
+
+/* ══════════════════════════
+   MOBILE RESPONSIVE
+══════════════════════════ */
+
+/* Tablet / large phone — reduce gap between signature and loader */
+@media (max-width: 600px) {
+  .splash-sig-wrap {
+    margin-bottom: 90px;
+  }
+
+  .splash-bottom {
+    bottom: 36px;
+    gap: 10px;
+  }
+
+  .splash-tagline {
+    font-size: 10px;
+  }
+}
+
+/* Small phone (≤ 480px) — signature closer to center, boxes smaller */
+@media (max-width: 480px) {
+  .splash-sig-wrap {
+    margin-bottom: 72px;
+  }
+
+  .splash-bottom {
+    bottom: 28px;
+    gap: 8px;
+  }
+
+  /* Boxes: 12px wide so 17×(12+3) = 255px — fits a 320px screen */
+  .splash-box {
+    width: 12px;
+    height: 17px;
+  }
+
+  .splash-boxes {
+    gap: 3px;
+  }
+}
+
+/* Very small phone (≤ 360px) — tighten further */
+@media (max-width: 360px) {
+  .splash-sig-wrap {
+    margin-bottom: 56px;
+  }
+
+  /* Boxes: 10px × 17 + 2px gap × 16 = 170 + 32 = 202px — safe on 320px */
+  .splash-box {
+    width: 10px;
+    height: 15px;
+  }
+
+  .splash-boxes {
+    gap: 2px;
+  }
+
+  .splash-tagline {
+    font-size: 9px;
+    letter-spacing: 0.02em;
+  }
 }
