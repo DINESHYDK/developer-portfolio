@@ -8,9 +8,9 @@ export const SKILLS: SkillCategory[] = [
       { name: "TypeScript" },
       { name: "JavaScript" },
       { name: "Tailwind CSS" },
+      { name: "Framer Motion" },
       { name: "HTML5" },
       { name: "CSS3" },
-      { name: "Next.js" },
     ],
   },
   {
@@ -20,7 +20,7 @@ export const SKILLS: SkillCategory[] = [
       { name: "Express" },
       { name: "MongoDB" },
       { name: "REST APIs" },
-      { name: "PostgreSQL" },
+      { name: "Java" },
     ],
   },
   {
@@ -28,12 +28,10 @@ export const SKILLS: SkillCategory[] = [
     skills: [
       { name: "Git" },
       { name: "GitHub" },
-      { name: "VS Code" },
       { name: "Vite" },
-      { name: "Docker" },
-      { name: "Figma" },
+      { name: "VS Code" },
       { name: "Postman" },
+      { name: "Figma" },
     ],
   },
 ];
-

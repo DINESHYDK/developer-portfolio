@@ -1,6 +1,32 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, Github, Puzzle, ArrowUpRight, ArrowRight } from "lucide-react";
+
+/* Shimmer → image crossfade. Shows a pulsing skeleton while the asset
+   is in-flight, then fades in the real image. Zero layout shift. */
+const LazyImage = ({ src, alt, className }: { src: string; alt: string; className: string }) => {
+  const [loaded, setLoaded] = useState(false);
+  return (
+    <div className="relative w-full h-full">
+      {/* Shimmer skeleton — hidden once image is loaded */}
+      <div
+        className={cn(
+          "absolute inset-0 bg-accent-primary/8 animate-pulse",
+          "transition-opacity duration-500",
+          loaded ? "opacity-0 pointer-events-none" : "opacity-100"
+        )}
+      />
+      <img
+        src={src}
+        alt={alt}
+        className={cn(className, "transition-opacity duration-500", loaded ? "opacity-100" : "opacity-0")}
+        loading="lazy"
+        decoding="async"
+        onLoad={() => setLoaded(true)}
+      />
+    </div>
+  );
+};
 import { PROJECTS, PROJECT_CATEGORIES } from "@/data/projects";
 import type { Project } from "@/types";
 import ProjectModal from "@/components/ui/project-modal";
@@ -137,7 +163,7 @@ const FlowingMenuItem = ({
                 !isEven && "order-2"
               )}>
                 {project.imageUrl ? (
-                  <img src={project.imageUrl} alt={project.title} className="w-full h-full object-cover" />
+                  <LazyImage src={project.imageUrl} alt={project.title} className="w-full h-full object-cover" />
                 ) : (
                   <div className="flex flex-col items-center gap-3 text-white/15">
                     <Puzzle size={44} />
@@ -326,7 +352,7 @@ const ProjectsSection = () => {
               >
                 <div className="relative h-48 bg-gradient-to-br from-accent-primary/10 to-accent-secondary/5 flex items-center justify-center overflow-hidden">
                   {project.imageUrl ? (
-                    <img src={project.imageUrl} alt={project.title} className="w-full h-full object-cover" />
+                    <LazyImage src={project.imageUrl} alt={project.title} className="w-full h-full object-cover" />
                   ) : (
                     <div className="flex flex-col items-center gap-2 text-text-body/40 group-hover:scale-110 transition-transform duration-500">
                       <Puzzle size={36} />

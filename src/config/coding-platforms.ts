@@ -24,8 +24,12 @@ export const CP_API_ENDPOINTS = {
     userRating: (u: string) => `https://codeforces.com/api/user.rating?handle=${u}`,
   },
   codechef: {
-    // Local Vercel serverless function — scrapes CodeChef profile server-side (no CORS)
-    user: (u: string) => `/api/codechef/${u}`,
+    // Primary:  VITE_CODECHEF_API_URL → Reference/codechef-proxy/ deployed on Railway/Render
+    // Fallback: /api/codechef/:u    → Vercel serverless function (may be Cloudflare-blocked)
+    user: (u: string) => {
+      const base = import.meta.env.VITE_CODECHEF_API_URL as string | undefined;
+      return base ? `${base}/api/codechef/user/${u}` : `/api/codechef/${u}`;
+    },
   },
   // TUF is static — no API endpoint
   tuf: null,

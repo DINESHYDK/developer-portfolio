@@ -3,6 +3,7 @@ import { Trophy, Target, FolderOpen, GraduationCap } from "lucide-react";
 import { profileData } from "@/data/profile-data";
 import "./id-card.css";
 import profilePhoto from "@/public/images/profile.png";
+import ismLogo from "@/public/images/IIT_(ISM)_Dhanbad_Logo.svg";
 
 const PHOTO_SRC = profilePhoto;
 
@@ -84,7 +85,7 @@ const IdCard = () => {
           {/* Header row */}
           <div className="back-header">
             <span className="back-label">Developer Profile</span>
-            <div className="back-header-logo" aria-hidden="true" />
+            <img src={ismLogo} alt="IIT ISM Dhanbad" className="back-header-logo" aria-hidden="true" draggable={false} />
           </div>
 
           <div className="back-divider" />

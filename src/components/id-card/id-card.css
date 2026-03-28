@@ -287,11 +287,11 @@
 }
 
 .back-header-logo {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-secondary));
-  opacity: 0.4;
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  opacity: 0.85;
+  filter: brightness(0) invert(1);
 }
 
 /* ── Back: divider ── */

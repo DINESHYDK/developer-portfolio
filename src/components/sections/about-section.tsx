@@ -21,34 +21,34 @@ const ABOUT_SECTIONS: AboutBlock[] = [
     id: "intro",
     heading: "Who am I?",
     paragraphs: [
-      `I'm ${SITE_METADATA.name} — a full-stack developer who obsesses over the intersection of clean engineering and stunning visual design. I don't just build web apps, I build experiences that people remember.`,
-      `My stack centres on React, TypeScript and the MERN ecosystem. I believe every pixel has a purpose, every millisecond matters, and every line of code is a signature.`,
+      `I'm ${SITE_METADATA.name} — a MERN stack developer with a growing interest in AI and machine learning. I build full-stack web applications that are fast, clean, and actually useful. Currently a CS undergrad at IIT (ISM) Dhanbad.`,
+      `My stack is React, TypeScript, Node.js, Express, and MongoDB. When I'm not shipping features, I'm exploring how AI can make applications smarter — from intelligent assistants to ML-powered tooling.`,
     ],
   },
   {
     id: "journey",
     heading: "How it started.",
     paragraphs: [
-      `It started with a curiosity — how does a website actually work? That question led me down a rabbit hole of HTML, CSS, JavaScript and eventually into the world of frameworks, compilers, and distributed systems.`,
-      `Competitive programming sharpened the way I think. Solving problems on Codeforces and LeetCode rewired my brain to spot patterns, optimise solutions, and write code that scales.`,
-      `The jump to full-stack was inevitable. Backend architecture, API design, and database modelling aren't just complementary — they are the foundation that makes great frontend possible.`,
+      `It started with a simple question — how does a website actually work? That curiosity pulled me through HTML, CSS, JavaScript, and eventually into the world of frameworks and full-stack architecture.`,
+      `Competitive programming became a parallel obsession. Grinding DSA on Codeforces, LeetCode, and CodeChef rewired the way I think — teaching me to break problems down, spot patterns, and optimise under constraints.`,
+      `The MERN stack clicked because it let me own the entire product. Frontend design, API architecture, database modelling — I don't want to hand off at the boundary, I want to build through it.`,
     ],
   },
   {
     id: "projects",
     heading: "Projects that matter.",
     paragraphs: [
-      `From AI-powered study platforms to real-time dashboards, I gravitate toward projects that mix technical depth with genuine usefulness. I am drawn to problems where UX and performance have to co-exist under pressure.`,
-      `Every project in my portfolio was built to production standards — TypeScript strict mode, accessible markup, mobile-first responsive layouts, and optimised asset loading. No shortcuts.`,
+      `From AI-powered desk assistants to real-time chat apps and DSA visualisers, I build things that combine technical depth with a clear purpose. If there is no challenge, I don't find it interesting.`,
+      `Every project I ship is production-grade — TypeScript strict mode, proper error handling, mobile-first layouts, and clean commit history. I treat side projects like real products.`,
     ],
   },
   {
     id: "now",
     heading: "Presently working on.",
     paragraphs: [
-      `Building this portfolio — the one you are reading right now — as a living, breathing testament to what I can do. Scroll animations, real-time API integrations, a macOS-style terminal, orbital skills visualisation. Nothing is off limits.`,
-      `Exploring backend architecture with Node.js, Express, and MongoDB, while keeping a sharp eye on what is happening in the AI tooling space. The next generation of developer tools fascinates me.`,
-      `If you are reading this and thinking we should work together — you are probably right. Hit the Contact section.`,
+      `Sharpening my DSA and competitive programming skills — consistently solving problems across Codeforces, LeetCode, and CodeChef, pushing toward higher ratings and tougher problem sets.`,
+      `Deepening my understanding of AI/ML concepts alongside my MERN stack work — exploring how intelligent features can be layered into real applications in practical, meaningful ways.`,
+      `Actively looking for internship opportunities in full-stack or AI/ML roles. I'm open to work, ready to contribute from day one, and genuinely excited to build something real with a team. If that sounds useful — hit the Contact section.`,
     ],
   },
 ];

@@ -52,8 +52,8 @@ const SmoothCursor = () => {
       }}
     >
       <svg
-        width="42"
-        height="42"
+        width="36"
+        height="36"
         viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

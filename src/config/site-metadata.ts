@@ -2,12 +2,12 @@ import type { SiteMetadata } from "@/types";
 
 export const SITE_METADATA: SiteMetadata = {
   name: "Dinesh Krishna",
-  title: "Full-Stack Developer",
+  title: "MERN Stack Developer & AI/ML Enthusiast",
   description:
-    "Frontend developer transitioning to the MERN stack, building scalable and beautiful web experiences.",
-  role: "Full-Stack Developer",
+    "MERN stack developer with a passion for AI/ML — building full-stack web apps, sharpening DSA skills, and actively looking for internship opportunities.",
+  role: "MERN Stack Developer & AI/ML Enthusiast",
   email: "dineshkrishnayeturi@gmail.com",
-  github: "https://github.com/dineshydk",
+  github: "https://github.com/DINESHYDK",
   linkedin: "https://linkedin.com/in/dineshydk",
 };
 

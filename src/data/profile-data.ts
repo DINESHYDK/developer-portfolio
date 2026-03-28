@@ -1,14 +1,14 @@
 export const profileData = {
   name: "Y. Dinesh Krishna",
   handle: "@ydk",
-  title: "Full-Stack Developer",
-  status: "Available for work",
-  college: "IIT (ISM) Dhanbad", // TODO: update with actual college
+  title: "MERN Stack · AI/ML",
+  status: "Open to internships",
+  college: "IIT (ISM) Dhanbad",
   stats: {
-    cpRating: 1254,
-    platform: "Codeforces",
-    problemsSolved: 2003,
-    projects: 6,
+    cpRating: 1652,
+    platform: "CodeChef",
+    problemsSolved: 2270,
+    projects: 5,
   },
   resumeUrl: "/resume.pdf",
 } as const;
