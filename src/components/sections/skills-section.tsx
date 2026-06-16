@@ -4,9 +4,12 @@ import OrbitCard from "@/components/ui/orbit-card";
 
 // Color mapping for each category
 const CATEGORY_COLORS = {
-  Frontend: "#8ECAE6", // Cyan (accent-primary)
-  Backend: "#A7F3D0", // Green (accent-secondary)
-  "Tools & DevOps": "#FFA116", // Orange
+  Languages: "#8ECAE6",             // Cyan (accent-primary)
+  "Frontend Engineering": "#A7F3D0", // Green (accent-secondary)
+  "Backend & Databases": "#FFA116",  // Orange
+  "AI & Computer Vision": "#FF8E8E", // Coral/Red
+  "CS Fundamentals": "#FEE440",      // Yellow
+  "Tools & Deployment": "#CC77FF",   // Purple
 } as const;
 
 const SkillsSection = () => {
