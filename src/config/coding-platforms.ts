@@ -19,7 +19,9 @@ export const CP_API_ENDPOINTS = {
     profile: (u: string) => `https://leetcode-stats.tashif.codes/${u}/profile`,
   },
   codeforces: {
-    user: (u: string) => `/api/codeforces/${u}`,
+    userInfo: (u: string) => `https://codeforces.com/api/user.info?handles=${u}`,
+    userStatus: (u: string) => `https://codeforces.com/api/user.status?handle=${u}&from=1&count=10000`,
+    userRating: (u: string) => `https://codeforces.com/api/user.rating?handle=${u}`,
   },
   codechef: {
     // Primary:  VITE_CODECHEF_API_URL → Reference/codechef-proxy/ deployed on Railway/Render
