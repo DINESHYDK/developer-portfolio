@@ -83,6 +83,7 @@ export interface CodingPlatform {
   rank?: string;
   globalRanking?: number;
   contestsAttended?: number;
+  topPercentage?: number;
 
   // LeetCode specific
   breakdown?: PlatformProblemBreakdown[];

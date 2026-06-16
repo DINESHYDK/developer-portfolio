@@ -31,6 +31,16 @@ const LeetCodeView = ({ platform }: LeetCodeViewProps) => {
             </p>
           </div>
         )}
+        {platform.contestsAttended !== undefined && platform.contestsAttended > 0 && (
+          <div className="p-5 rounded-3xl bg-bg-primary border border-border-subtle">
+            <p className="text-xs text-text-body font-jakarta mb-1">
+              Contests Attended
+            </p>
+            <p className="text-2xl font-poppins font-semibold text-text-heading">
+              {platform.contestsAttended}
+            </p>
+          </div>
+        )}
         {platform.globalRanking !== undefined && (
           <div className="p-5 rounded-3xl bg-bg-primary border border-border-subtle">
             <p className="text-xs text-text-body font-jakarta mb-1">
@@ -39,9 +49,11 @@ const LeetCodeView = ({ platform }: LeetCodeViewProps) => {
             <p className="text-2xl font-poppins font-semibold text-text-heading">
               #{platform.globalRanking.toLocaleString()}
             </p>
-            <p className="text-xs text-text-body/60 font-jakarta mt-1">
-              Top 54.14%
-            </p>
+            {platform.topPercentage !== undefined && (
+              <p className="text-xs text-text-body/60 font-jakarta mt-1">
+                Top {platform.topPercentage.toFixed(2)}%
+              </p>
+            )}
           </div>
         )}
       </div>

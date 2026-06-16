@@ -90,6 +90,7 @@ const fetchLeetCodeStats: PlatformFetcher = async (username) => {
     rating: contestRaw?.contestRating ? Math.round(contestRaw.contestRating) : undefined,
     globalRanking: contestRaw?.contestGlobalRanking ?? statsRaw.ranking,
     contestsAttended: contestRaw?.contestAttend ?? 0,
+    topPercentage: contestRaw?.contestTopPercentage ?? undefined,
     breakdown: [
       { label: "Easy", solved: statsRaw.easySolved, total: statsRaw.totalEasy, color: "#00B8A3" },
       { label: "Medium", solved: statsRaw.mediumSolved, total: statsRaw.totalMedium, color: "#FFC01E" },
