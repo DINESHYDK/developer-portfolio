@@ -1,11 +1,19 @@
 import { useState } from "react";
 import { Trophy, Target, FolderOpen, GraduationCap } from "lucide-react";
 import { profileData } from "@/data/profile-data";
+import { PROJECTS } from "@/data/projects";
+import { useCodingStats } from "@/hooks/use-coding-stats";
+import type { CodingPlatform } from "@/types";
 import "./id-card.css";
 import profilePhoto from "@/public/images/profile.png";
 import ismLogo from "@/public/images/IIT_(ISM)_Dhanbad_Logo.svg";
 
 const PHOTO_SRC = profilePhoto;
+
+const RATING_PLATFORM_IDS = ["codeforces", "codechef", "leetcode"] as const;
+
+const getBestRating = (p: CodingPlatform): number =>
+  p.maxRating ?? p.highestRating ?? p.rating ?? 0;
 
 const IdCard = () => {
   const [isFlipped, setIsFlipped] = useState(false);
@@ -17,6 +25,33 @@ const IdCard = () => {
   const handleCardClick = () => {
     if (isTouchDevice) setIsFlipped((p) => !p);
   };
+
+  // Fetch live coding stats
+  const { data: codingStats } = useCodingStats();
+
+  // Compute live solved problems
+  const totalSolved = codingStats.platforms.reduce((s, p) => s + p.totalSolved, 0);
+  const displaySolved = totalSolved > 0 ? totalSolved : profileData.stats.problemsSolved;
+
+  // Compute overall highest CP rating
+  const ratingPlatforms = codingStats.platforms
+    .filter((p) => RATING_PLATFORM_IDS.includes(p.id as typeof RATING_PLATFORM_IDS[number]))
+    .map((p) => ({ name: p.name, rating: getBestRating(p) }));
+
+  let bestRating = 0;
+  let bestPlatform = "";
+  for (const p of ratingPlatforms) {
+    if (p.rating > bestRating) {
+      bestRating = p.rating;
+      bestPlatform = p.name;
+    }
+  }
+
+  const displayRating = bestRating > 0 ? bestRating : profileData.stats.cpRating;
+  const displayPlatform = bestPlatform || profileData.stats.platform;
+
+  // Compute live project count
+  const displayProjects = PROJECTS.length > 0 ? PROJECTS.length : profileData.stats.projects;
 
   return (
     <div
@@ -97,8 +132,8 @@ const IdCard = () => {
               <div>
                 <span className="back-stat-label">CP Rating</span>
                 <span className="back-stat-value">
-                  {profileData.stats.cpRating}
-                  <span className="back-stat-sub">[{profileData.stats.platform}]</span>
+                  {displayRating}
+                  <span className="back-stat-sub">[{displayPlatform}]</span>
                 </span>
               </div>
             </div>
@@ -108,7 +143,7 @@ const IdCard = () => {
               <div>
                 <span className="back-stat-label">Problems Solved</span>
                 <span className="back-stat-value">
-                  {profileData.stats.problemsSolved.toLocaleString()}
+                  {displaySolved.toLocaleString()}
                 </span>
               </div>
             </div>
@@ -117,7 +152,7 @@ const IdCard = () => {
               <span className="back-stat-icon" aria-hidden="true"><FolderOpen size={14} /></span>
               <div>
                 <span className="back-stat-label">Projects Shipped</span>
-                <span className="back-stat-value">{profileData.stats.projects}</span>
+                <span className="back-stat-value">{displayProjects}</span>
               </div>
             </div>
 
