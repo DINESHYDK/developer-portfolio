@@ -27,12 +27,12 @@ export interface LeetCodeRawStats {
 }
 
 export interface LeetCodeRawContest {
-  contestAttend: number;
-  contestRating: number;
-  contestGlobalRanking: number;
+  attendedContestsCount: number;
+  rating: number;
+  globalRanking: number;
   totalParticipants: number;
-  contestTopPercentage: number;
-  contestBadges: { name: string; icon: string }[];
+  topPercentage: number;
+  badge?: { name: string; icon?: string };
   contestHistory: {
     attended: boolean;
     rating: number;
