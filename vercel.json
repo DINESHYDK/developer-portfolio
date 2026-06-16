@@ -6,6 +6,10 @@
     "api/codechef/[username].ts": {
       "maxDuration": 30,
       "memory": 256
+    },
+    "api/codeforces/[username].ts": {
+      "maxDuration": 30,
+      "memory": 256
     }
   },
   "rewrites": [

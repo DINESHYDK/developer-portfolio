@@ -103,6 +103,15 @@ export interface CodeforcesRawRatingResponse {
   result: CodeforcesRawRatingChange[];
 }
 
+export interface CodeforcesProxyResponse {
+  status: number;
+  data: {
+    userInfo: CodeforcesRawUserInfoResponse;
+    userStatus: CodeforcesRawStatusResponse;
+    userRating: CodeforcesRawRatingResponse | null;
+  };
+}
+
 /* ===========================
    CodeChef (local Vercel serverless fn: /api/codechef/[username])
    Scrapes codechef.com server-side — no CORS issues.

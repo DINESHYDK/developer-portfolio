@@ -2,9 +2,7 @@ import type { CodingPlatform, CodingStatsData } from "@/types";
 import type {
   LeetCodeRawStats,
   LeetCodeRawContest,
-  CodeforcesRawUserInfoResponse,
-  CodeforcesRawStatusResponse,
-  CodeforcesRawRatingResponse,
+  CodeforcesProxyResponse,
   CodeChefRawResponse,
 } from "@/types/api-responses";
 import { CP_API_ENDPOINTS, CP_USERNAMES, CP_CACHE_TTL } from "@/config/coding-platforms";
@@ -112,12 +110,14 @@ const fetchCodeforcesStats: PlatformFetcher = async (username) => {
 
   const endpoints = CP_API_ENDPOINTS.codeforces;
 
-  // Fetch user info, submissions, and rating history in parallel
-  const [userInfoRaw, statusRaw, ratingRaw] = await Promise.all([
-    safeFetch<CodeforcesRawUserInfoResponse>(endpoints.userInfo(username)),
-    safeFetch<CodeforcesRawStatusResponse>(endpoints.userStatus(username)),
-    safeFetch<CodeforcesRawRatingResponse>(endpoints.userRating(username)).catch(() => null),
-  ]);
+  // Fetch aggregated data from our serverless proxy
+  const raw = await safeFetch<CodeforcesProxyResponse>(endpoints.user(username));
+
+  if (raw.status !== 200 || !raw.data) {
+    throw new Error("Failed to fetch Codeforces data from proxy");
+  }
+
+  const { userInfo: userInfoRaw, userStatus: statusRaw, userRating: ratingRaw } = raw.data;
 
   const user = userInfoRaw.result[0];
   if (!user) throw new Error("Codeforces user not found");
