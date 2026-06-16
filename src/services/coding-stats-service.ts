@@ -236,6 +236,26 @@ const fetchCodeforcesStats: PlatformFetcher = async (username) => {
   return platform;
 };
 
+const getStarCount = (ratingStar: string | undefined): number => {
+  if (!ratingStar) return 0;
+  const digitMatch = ratingStar.match(/\d/);
+  if (digitMatch) {
+    return parseInt(digitMatch[0], 10);
+  }
+  const starMatches = ratingStar.match(/★/g);
+  if (starMatches) {
+    return starMatches.length;
+  }
+  return 0;
+};
+
+const getCodeChefDivision = (rating: number): number => {
+  if (rating >= 2000) return 1;
+  if (rating >= 1600) return 2;
+  if (rating >= 1400) return 3;
+  return 4;
+};
+
 /* ============================================================
    CodeChef Fetcher + Mapper (hades.strawhats.tech)
    ============================================================ */
@@ -251,11 +271,10 @@ const fetchCodeChefStats: PlatformFetcher = async (username) => {
 
   const d = raw.data;
 
-  // Parse star count from string like "3★"
-  const starCount = parseInt(d.rating.ratingStar?.replace(/[^\d]/g, "") || "0", 10);
-  const division = starCount >= 5 ? 1 : starCount >= 3 ? 2 : 3;
   const currentRating = parseInt(d.rating.currentRatingNumber, 10) || 0;
-  const highestRating = parseInt(d.rating.highestRating, 10) || currentRating;
+  const starCount = getStarCount(d.rating.ratingStar);
+  const division = getCodeChefDivision(currentRating);
+  const highestRating = Math.max(parseInt(d.rating.highestRating, 10) || 0, currentRating);
   const globalRank = parseInt(d.rating.globalRank, 10) || undefined;
   const countryRank = parseInt(d.rating.countryRank, 10) || undefined;
   const problemsSolved = parseInt(d.problemSolved, 10) || 0;
