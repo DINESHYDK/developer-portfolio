@@ -10,5 +10,5 @@ export const profileData = {
     problemsSolved: 2270,
     projects: 5,
   },
-  resumeUrl: "/resume.pdf",
+  resumeUrl: "https://drive.google.com/file/d/1aBsDkbgIBzfhG_ainFhsMmdcR6Y6grFe/view?usp=sharing",
 } as const;

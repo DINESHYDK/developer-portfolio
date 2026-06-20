@@ -15,6 +15,7 @@ export const PROJECTS: Project[] = [
       "I wanted to bridge the gap between physical puzzles and digital algorithms. Users scan a scrambled physical Rubik's Cube via their camera, and the FastAPI backend extracts the color matrix using OpenCV and K-means clustering in the LAB color space. The app calculates the optimal sub-20-move solution using Kociemba's Two-Phase algorithm and renders the solving steps on a 60 FPS interactive 3D cube.",
     tags: ["React", "Three.js", "FastAPI", "OpenCV", "Algorithms", "Web"],
     repoUrl: "https://github.com/DINESHYDK/rubiks-cube-solver",
+    liveUrl: "https://rubiks.dineshydk.dev",
     imageUrl: "/images/projects/RubiksCube.png",
     challenges: [
       "Extracting accurate facelet colors from the camera feed across varying and uneven room lighting conditions.",

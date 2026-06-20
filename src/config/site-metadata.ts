@@ -4,7 +4,7 @@ export const SITE_METADATA: SiteMetadata = {
   name: "Dinesh Krishna",
   title: "Software Engineering Student & Competitive Programmer",
   description:
-    "CSE undergrad at IIT (ISM) Dhanbad who engineers high-performance systems by merging algorithmic rigor with modern AI integrations.",
+    "CSE undergrad at IIT (ISM) Dhanbad building algorithm-heavy, AI-integrated systems — 2,200+ competitive programming problems solved along the way",
   role: "Software Engineering Student & Competitive Programmer",
   email: "dineshkrishnayeturi@gmail.com",
   github: "https://github.com/DINESHYDK",
