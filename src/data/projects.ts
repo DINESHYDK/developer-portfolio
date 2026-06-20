@@ -8,18 +8,39 @@ export const PROJECTS: Project[] = [
     title: "Rubik’s Cube Solver",
     domain: "WEB",
     category: "Web Apps",
+    featured: true,
     description:
       "An interactive cross-platform 3D cube solver powered by Computer Vision and Kociemba's Algorithm, capable of resolving physical cubes in under 100ms.",
     modalDescription:
       "I wanted to bridge the gap between physical puzzles and digital algorithms. Users scan a scrambled physical Rubik's Cube via their camera, and the FastAPI backend extracts the color matrix using OpenCV and K-means clustering in the LAB color space. The app calculates the optimal sub-20-move solution using Kociemba's Two-Phase algorithm and renders the solving steps on a 60 FPS interactive 3D cube.",
     tags: ["React", "Three.js", "FastAPI", "OpenCV", "Algorithms", "Web"],
     repoUrl: "https://github.com/DINESHYDK/rubiks-cube-solver",
-    imageUrl: undefined,
+    imageUrl: "/images/projects/RubiksCube.png",
     challenges: [
       "Extracting accurate facelet colors from the camera feed across varying and uneven room lighting conditions.",
       "Preventing floating-point coordinate drift during complex 3D slice rotations using a quaternion-based pivot system.",
       "Offloading heavy Kociemba pruning table initializations asynchronously to prevent the UI thread from freezing.",
       "Managing complex global state and local device storage for solve history using Zustand and AsyncStorage.",
+    ],
+  },
+  {
+    id: "studysync",
+    title: "StudySync",
+    domain: "WEB",
+    category: "Web Apps",
+    featured: true,
+    description:
+      "A real-time, collaborative study tracker that gamifies focus sessions with live friend telemetry, head-to-head comparisons, and native PWA support.",
+    modalDescription:
+      "StudySync transforms studying from an isolating task into a competitive, social experience. I built this platform for students to track their focus sessions and broadcast their progress live to their friend group. The core loop—study, name your subject, and compare stats at the end of the day—deeply resonated with students, resulting in 50+ active users within two weeks of launch. The system features an installable Progressive Web App (PWA), a floating popup timer, daily task tracking, and an animated activity heatmap to visualize long-term streaks.",
+    tags: ["Next.js", "Supabase", "TypeScript", "Real-Time", "PWA"],
+    repoUrl: "https://github.com/DINESHYDK/StudySync",
+    imageUrl: "/images/projects/StudySync.png",
+    challenges: [
+      "Ensuring timer resilience against accidental tab closures and reloads using a custom recovery flow and the navigator.sendBeacon API for fire-and-forget server syncs.",
+      "Enforcing strict data privacy through PostgreSQL Row Level Security (RLS), ensuring users can only subscribe to the live telemetry of their accepted friends.",
+      "Synchronizing real-time dashboard states—like incoming friend requests and live study segments—across multiple clients simultaneously using Supabase Realtime and Zustand.",
+      "Engineering organic, GPU-accelerated CSS flame animations with staggered mathematical delays to dynamically render the user's streak heatmap.",
     ],
   },
   {
@@ -72,7 +93,7 @@ export const PROJECTS: Project[] = [
     tags: ["TypeScript", "React", "Algorithms", "Data Structures", "Animations", "Tools"],
     repoUrl: "https://github.com/DINESHYDK/DSA_Visualizer",
     liveUrl: "https://dsa-visualizer-ydk.vercel.app/",
-    imageUrl: undefined,
+    imageUrl: "/images/projects/DsaVisualiser.png",
     challenges: [
       "Synchronizing smooth animation frames with instantaneous algorithm execution steps.",
       "Supporting multiple diverse algorithms (graphs, arrays, trees) under a single unified visualization API.",
@@ -92,7 +113,7 @@ export const PROJECTS: Project[] = [
     tags: ["Next.js", "Supabase", "Stripe", "Tailwind CSS", "Web"],
     repoUrl: "https://github.com/DINESHYDK/golf_charity",
     liveUrl: "https://golf-charity-digitalheroes.vercel.app",
-    imageUrl: undefined,
+    imageUrl: "/images/projects/GolfGive.png",
     challenges: [
       "Integrating Stripe webhooks to reliably process one-time charity donations and recurring user subscriptions.",
       "Designing a secure Role-Based Access Control (RBAC) admin system to verify scores, trigger draws, and manage users.",
@@ -112,7 +133,7 @@ export const PROJECTS: Project[] = [
     tags: ["JavaScript", "HTML5 Canvas", "DOM Events", "Tools", "UI/UX"],
     repoUrl: "https://github.com/DINESHYDK/Trackpad-Writer",
     liveUrl: "https://trackpad-writer.vercel.app/",
-    imageUrl: undefined,
+    imageUrl: "/images/projects/TrackpadWriter.png",
     challenges: [
       "Mapping absolute screen coordinates to the relative HTML canvas bounds accurately during continuous mouse/touch events.",
       "Smoothing out jagged input coordinate movements to render natural-looking, fluid handwriting strokes.",

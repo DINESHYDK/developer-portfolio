@@ -194,7 +194,7 @@ const ProjectModal = ({
                         <h2 className="font-poppins text-2xl md:text-3xl font-bold text-text-heading">
                           {currentProject.title}
                         </h2>
-                        {currentProject.id === "project-1" && (
+                        {currentProject.featured && (
                           <span className="px-3 py-1 rounded-full bg-accent-primary/20 text-accent-primary text-xs font-jakarta font-semibold border border-accent-primary/30">
                             ⭐ Featured
                           </span>

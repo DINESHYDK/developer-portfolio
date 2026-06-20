@@ -16,6 +16,7 @@ export interface Project {
   repoUrl?: string;
   imageUrl?: string;
   challenges?: string[];
+  featured?: boolean;
 }
 
 export interface Skill {
