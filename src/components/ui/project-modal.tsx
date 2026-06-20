@@ -1,10 +1,33 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { PanInfo } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Github, ExternalLink } from "lucide-react";
 import type { Project } from "@/types";
 import { cn } from "@/utils/cn";
 import { haptic } from "@/utils/haptic";
+
+const LazyImage = ({ src, alt, className }: { src: string; alt: string; className: string }) => {
+  const [loaded, setLoaded] = useState(false);
+  return (
+    <div className="relative w-full h-full">
+      <div
+        className={cn(
+          "absolute inset-0 bg-accent-primary/8 animate-pulse",
+          "transition-opacity duration-500",
+          loaded ? "opacity-0 pointer-events-none" : "opacity-100"
+        )}
+      />
+      <img
+        src={src}
+        alt={alt}
+        className={cn(className, "transition-opacity duration-500", loaded ? "opacity-100" : "opacity-0")}
+        loading="lazy"
+        decoding="async"
+        onLoad={() => setLoaded(true)}
+      />
+    </div>
+  );
+};
 
 interface ProjectModalProps {
   projects: Project[];
@@ -176,14 +199,22 @@ const ProjectModal = ({
                   )}
                 >
                   {/* Project Preview Image */}
-                  <div className="relative h-64 md:h-80 bg-gradient-to-br from-accent-primary/20 to-accent-secondary/10 flex items-center justify-center">
-                    <div className="text-text-body/40 text-center">
-                      <div className="text-6xl mb-2">📱</div>
-                      <p className="text-sm font-jakarta">Image coming soon</p>
-                      <p className="text-xs text-text-body/30 font-mono mt-2">
-                        {currentProject.title}
-                      </p>
-                    </div>
+                  <div className="relative h-64 md:h-80 bg-gradient-to-br from-accent-primary/20 to-accent-secondary/10 flex items-center justify-center overflow-hidden">
+                    {currentProject.imageUrl ? (
+                      <LazyImage
+                        src={currentProject.imageUrl}
+                        alt={currentProject.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="text-text-body/40 text-center">
+                        <div className="text-6xl mb-2">📱</div>
+                        <p className="text-sm font-jakarta">Image coming soon</p>
+                        <p className="text-xs text-text-body/30 font-mono mt-2">
+                          {currentProject.title}
+                        </p>
+                      </div>
+                    )}
                   </div>
 
                   {/* Project Content */}
