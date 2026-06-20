@@ -21,34 +21,33 @@ const ABOUT_SECTIONS: AboutBlock[] = [
     id: "intro",
     heading: "Who am I?",
     paragraphs: [
-      `I'm ${SITE_METADATA.name} — a MERN stack developer with a growing interest in AI and machine learning. I build full-stack web applications that are fast, clean, and actually useful. Currently a CS undergrad at IIT (ISM) Dhanbad.`,
-      `My stack is React, TypeScript, Node.js, Express, and MongoDB. When I'm not shipping features, I'm exploring how AI can make applications smarter — from intelligent assistants to ML-powered tooling.`,
+      `I'm ${SITE_METADATA.name}, a Computer Science undergrad at IIT (ISM) Dhanbad. I don't just build standard web apps; I engineer full-stack systems that merge solid computer science fundamentals with modern AI integrations.`,
+      `My core stack has evolved way past the basic tutorials. Today, I'm shipping production-ready applications using Next.js, TypeScript, Tailwind, and Supabase, while actively weaving in LLMs and vector databases to solve real-world problems. When I'm not deep in a codebase, you'll usually find me working out at the gym, reading up on personal growth, or optimizing my daily routine.`,
     ],
   },
   {
     id: "journey",
     heading: "How it started.",
     paragraphs: [
-      `It started with a simple question — how does a website actually work? That curiosity pulled me through HTML, CSS, JavaScript, and eventually into the world of frameworks and full-stack architecture.`,
-      `Competitive programming became a parallel obsession. Grinding DSA on Codeforces, LeetCode, and CodeChef rewired the way I think — teaching me to break problems down, spot patterns, and optimise under constraints.`,
-      `The MERN stack clicked because it let me own the entire product. Frontend design, API architecture, database modelling — I don't want to hand off at the boundary, I want to build through it.`,
+      `My journey is split into two parallel tracks that constantly feed into each other: Development and Competitive Programming.`,
+      `I started out curious about how the web works, which quickly snowballed into building full-stack architectures. But I realized early on that building truly scalable apps requires deep algorithmic thinking. That's why I grind DSA. Solving over 2,200 problems across platforms—and earning LeetCode Knight and CodeChef 3★—completely rewired my brain.`,
+      `Competitive programming taught me how to break down complex architectures, spot edge cases before writing a single line of code, and optimize systems under extreme constraints. I don't just want to build the frontend; I want to own the database modeling, the API architecture, and the algorithmic logic in between.`,
     ],
   },
   {
     id: "projects",
     heading: "Projects that matter.",
     paragraphs: [
-      `From AI-powered desk assistants to real-time chat apps and DSA visualisers, I build things that combine technical depth with a clear purpose. If there is no challenge, I don't find it interesting.`,
-      `Every project I ship is production-grade — TypeScript strict mode, proper error handling, mobile-first layouts, and clean commit history. I treat side projects like real products.`,
+      `I don't build to sit on GitHub; I build products for real users and systems that compete. From StudySync—a real-time, collaborative study tracker that acquired 50+ active users within two weeks of launch—to Agent SLAM, an autonomous WebSockets-driven AI that won 2nd place in a live competitive arena.`,
+      `Every project I ship is treated like a real product. That means strict TypeScript, robust concurrent state management, proper error handling, and clean, glassmorphic UI designs. Whether I'm building a 3D Rubik's Cube solver with computer vision or an enterprise-grade email ticketing pipeline, if there is no technical challenge, I don't find it interesting.`,
     ],
   },
   {
     id: "now",
     heading: "Presently working on.",
     paragraphs: [
-      `Sharpening my DSA and competitive programming skills — consistently solving problems across Codeforces, LeetCode, and CodeChef, pushing toward higher ratings and tougher problem sets.`,
-      `Deepening my understanding of AI/ML concepts alongside my MERN stack work — exploring how intelligent features can be layered into real applications in practical, meaningful ways.`,
-      `Actively looking for internship opportunities in full-stack or AI/ML roles. I'm open to work, ready to contribute from day one, and genuinely excited to build something real with a team. If that sounds useful — hit the Contact section.`,
+      `Right now, my primary focus is preparing for the 2027 Software Engineering internship cycle. I'm actively sharpening my advanced DSA concepts while building out my next major project: Antigravity, a highly interactive, gamified task management and productivity system.`,
+      `I'm also deepening my understanding of AI/ML concepts, exploring how intelligent, autonomous features can be layered into practical applications without feeling like a gimmick. I'm open to work, ready to contribute from day one, and genuinely excited to build something real with a strong engineering team. If that sounds like the intern you need—hit the Contact section.`,
     ],
   },
 ];
