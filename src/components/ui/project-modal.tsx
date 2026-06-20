@@ -204,7 +204,7 @@ const ProjectModal = ({
                       <LazyImage
                         src={currentProject.imageUrl}
                         alt={currentProject.title}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain"
                       />
                     ) : (
                       <div className="text-text-body/40 text-center">

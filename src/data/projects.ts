@@ -34,7 +34,8 @@ export const PROJECTS: Project[] = [
     modalDescription:
       "StudySync transforms studying from an isolating task into a competitive, social experience. I built this platform for students to track their focus sessions and broadcast their progress live to their friend group. The core loop—study, name your subject, and compare stats at the end of the day—deeply resonated with students, resulting in 50+ active users within two weeks of launch. The system features an installable Progressive Web App (PWA), a floating popup timer, daily task tracking, and an animated activity heatmap to visualize long-term streaks.",
     tags: ["Next.js", "Supabase", "TypeScript", "Real-Time", "PWA"],
-    repoUrl: "https://github.com/DINESHYDK/StudySync",
+    repoUrl: "https://github.com/DINESHYDK/Study_Sync",
+    liveUrl: "https://studysync.dineshydk.dev/",
     imageUrl: "/images/projects/StudySync.png",
     challenges: [
       "Ensuring timer resilience against accidental tab closures and reloads using a custom recovery flow and the navigator.sendBeacon API for fire-and-forget server syncs.",
