@@ -99,7 +99,6 @@ const HeroSection = () => {
             )}
             {...fadeUp(0.56)}
           >
-            <span className="md:hidden">I'm </span>
             {SITE_METADATA.description}
           </motion.p>
 

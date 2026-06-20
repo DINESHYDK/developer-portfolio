@@ -1,7 +1,7 @@
 export const profileData = {
   name: "Y. Dinesh Krishna",
   handle: "@ydk",
-  title: "MERN Stack · AI/ML",
+  title: "Full-Stack · AI/ML",
   status: "Open to internships",
   college: "IIT (ISM) Dhanbad",
   stats: {
