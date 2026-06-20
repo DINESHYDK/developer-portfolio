@@ -6,13 +6,13 @@ export const PROJECTS: Project[] = [
   {
     id: "rubiks-cube-solver",
     title: "Rubik’s Cube Solver",
-    domain: "AI",
-    category: "AI Projects",
+    domain: "WEB",
+    category: "Web Apps",
     description:
       "An interactive cross-platform 3D cube solver powered by Computer Vision and Kociemba's Algorithm, capable of resolving physical cubes in under 100ms.",
     modalDescription:
       "I wanted to bridge the gap between physical puzzles and digital algorithms. Users scan a scrambled physical Rubik's Cube via their camera, and the FastAPI backend extracts the color matrix using OpenCV and K-means clustering in the LAB color space. The app calculates the optimal sub-20-move solution using Kociemba's Two-Phase algorithm and renders the solving steps on a 60 FPS interactive 3D cube.",
-    tags: ["React Native", "Three.js", "FastAPI", "OpenCV", "Algorithms", "Mobile"],
+    tags: ["React", "Three.js", "FastAPI", "OpenCV", "Algorithms", "Web"],
     repoUrl: "https://github.com/DINESHYDK/rubiks-cube-solver",
     imageUrl: undefined,
     challenges: [
