@@ -5,87 +5,119 @@ export const PROJECT_CATEGORIES = ["All", "Web Apps", "AI Projects", "Tools"] as
 export const PROJECTS: Project[] = [
   {
     id: "rubiks-cube-solver",
-    title: "Rubik's Cube Solver",
-    domain: "TOOL",
+    title: "Rubik’s Cube Solver",
+    domain: "AI",
+    category: "AI Projects",
     description:
-      "An interactive 3D Rubik's Cube visualizer and solver built with TypeScript. Features animated cube rotations, step-by-step solving algorithms, and an intuitive interface for exploring cube states and solutions.",
-    tags: ["TypeScript", "React", "3D Graphics", "Algorithms"],
-    category: "Tools",
+      "An interactive cross-platform 3D cube solver powered by Computer Vision and Kociemba's Algorithm, capable of resolving physical cubes in under 100ms.",
+    modalDescription:
+      "I wanted to bridge the gap between physical puzzles and digital algorithms. Users scan a scrambled physical Rubik's Cube via their camera, and the FastAPI backend extracts the color matrix using OpenCV and K-means clustering in the LAB color space. The app calculates the optimal sub-20-move solution using Kociemba's Two-Phase algorithm and renders the solving steps on a 60 FPS interactive 3D cube.",
+    tags: ["React Native", "Three.js", "FastAPI", "OpenCV", "Algorithms", "Mobile"],
     repoUrl: "https://github.com/DINESHYDK/rubiks-cube-solver",
     imageUrl: undefined,
     challenges: [
-      "Mapping 3D cube state to a flat 2D representation for algorithm processing",
-      "Implementing and animating valid move sequences without state corruption",
-      "Designing an intuitive UI to control cube orientation and apply moves",
-      "Debugging edge cases in the solving algorithm for scrambled states",
+      "Extracting accurate facelet colors from the camera feed across varying and uneven room lighting conditions.",
+      "Preventing floating-point coordinate drift during complex 3D slice rotations using a quaternion-based pivot system.",
+      "Offloading heavy Kociemba pruning table initializations asynchronously to prevent the UI thread from freezing.",
+      "Managing complex global state and local device storage for solve history using Zustand and AsyncStorage.",
+    ],
+  },
+  {
+    id: "agent-slam",
+    title: "Agent SLAM",
+    domain: "AI",
+    category: "AI Projects",
+    description:
+      "An autonomous, WebSocket-driven AI agent built for competitive arenas, utilizing LLMs to generate real-time logical counter-arguments.",
+    modalDescription:
+      "Winner of 2nd Place at the IIT (ISM) Dhanbad tournament. Agent SLAM is a fully autonomous AI system designed to compete in live, multi-team adversarial environments. Operating over continuous WebSocket connections, the agent maintains a live transcript of the debate arena and uses an event-driven asyncio architecture to query Google Gemini for structured, context-aware counter-arguments.",
+    tags: ["Python", "Asyncio", "Gemini AI", "WebSockets", "Pydantic", "AI"],
+    repoUrl: "https://github.com/DINESHYDK/agent-slam",
+    imageUrl: undefined,
+    challenges: [
+      "Managing continuous WebSocket communication concurrently with blocking network responses from the Gemini API.",
+      "Enforcing strict, deterministic JSON payloads from the LLM using Pydantic schemas to prevent live parsing crashes.",
+      "Building a robust custom state machine to accurately track dynamic turn-based transitions and server events.",
+      "Maintaining and injecting the ever-growing debate transcript into the LLM context window efficiently.",
     ],
   },
   {
     id: "intellidesk-ai",
     title: "IntelliDesk AI",
     domain: "AI",
-    description:
-      "An AI-powered smart desk assistant that unifies productivity — note-taking, task management, and intelligent suggestions — into one seamless workspace. Built for developers who want their tools to think ahead.",
-    tags: ["TypeScript", "React", "AI", "Node.js", "Tailwind CSS"],
     category: "AI Projects",
+    description:
+      "An enterprise-grade automated customer support pipeline featuring semantic vector search, live SLA tracking, and intelligent ticket classification.",
+    modalDescription:
+      "Designed to eliminate manual support bottlenecks, IntelliDesk AI intercepts raw support emails and routes them through an intelligent pipeline. It uses Google Gemini to classify issue category, severity, and customer sentiment. By generating 768-dimensional embeddings and querying a Pinecone vector database, it actively prevents duplicate tickets and drafts context-aware automated replies based on FAQs.",
+    tags: ["Next.js", "Supabase", "Pinecone", "Gemini AI", "Vector DB", "AI"],
     repoUrl: "https://github.com/DINESHYDK/IntelliDesk-AI",
     imageUrl: undefined,
     challenges: [
-      "Integrating AI suggestions without disrupting the user's workflow",
-      "Designing a context-aware system that learns from usage patterns",
-      "Keeping the UI minimal while exposing rich AI-powered features",
-      "Managing async AI responses to feel snappy and non-blocking",
-    ],
-  },
-  {
-    id: "chatsphere",
-    title: "ChatSphere",
-    domain: "WEB",
-    description:
-      "A real-time full-stack chat application built with the MERN stack. Features JWT authentication, live messaging, and a clean responsive UI. My first complete full-stack project — shipped end-to-end.",
-    tags: ["React", "Node.js", "MongoDB", "Express", "JavaScript"],
-    category: "Web Apps",
-    repoUrl: "https://github.com/DINESHYDK/ChatSphere",
-    imageUrl: undefined,
-    challenges: [
-      "Setting up real-time bi-directional communication between client and server",
-      "Implementing secure JWT-based authentication with refresh token flow",
-      "Handling concurrent users and message ordering without race conditions",
-      "Deploying a MERN app end-to-end for the first time",
-    ],
-  },
-  {
-    id: "golf-give",
-    title: "GolfGive",
-    domain: "WEB",
-    description:
-      "A charity golf event platform connecting donors with golf tournament organizers. Features event listings, real-time donation tracking, and participant management for fundraising tournaments.",
-    tags: ["TypeScript", "React", "REST APIs", "Tailwind CSS"],
-    category: "Web Apps",
-    repoUrl: "https://github.com/DINESHYDK/golf_charity",
-    imageUrl: undefined,
-    challenges: [
-      "Designing a clean donation flow that minimizes friction for donors",
-      "Building a real-time leaderboard for live tournament tracking",
-      "Managing event state across organizers, participants, and donors",
-      "Ensuring the platform works smoothly on mobile for on-course use",
+      "Preventing duplicate tickets accurately using 768-dimensional embeddings and cosine similarity thresholds.",
+      "Parsing messy, raw IMAP email headers to accurately group related messages into unified thread chains.",
+      "Synchronizing live dashboard telemetry across multiple clients in real-time using Supabase PostgreSQL subscriptions.",
+      "Automating P1-P4 priority assignments and visually alerting agents to impending SLA breaches without delay.",
     ],
   },
   {
     id: "dsa-visualizer",
     title: "DSA Visualizer",
     domain: "TOOL",
-    description:
-      "An interactive visualizer for data structures and algorithms. Animates sorting, searching, and graph traversal algorithms step-by-step — making CS fundamentals visual, intuitive, and easy to learn.",
-    tags: ["TypeScript", "React", "Algorithms", "Data Structures", "Animations"],
     category: "Tools",
+    description:
+      "An interactive visualizer for data structures and algorithms. Animates sorting, searching, and graph traversals step-by-step to make CS fundamentals intuitive.",
+    modalDescription:
+      "As an active competitive programmer, I built this engine to help engineering peers visually comprehend how complex algorithms execute under the hood. Instead of reading static code, users can watch arrays sort, graphs traverse, and dynamic programming tables populate step-by-step. The engine handles the heavy state-management required to pause, play, and step through recursive call stacks in real time.",
+    tags: ["TypeScript", "React", "Algorithms", "Data Structures", "Animations", "Tools"],
     repoUrl: "https://github.com/DINESHYDK/DSA_Visualizer",
+    liveUrl: "https://dsa-visualizer-ydk.vercel.app/",
     imageUrl: undefined,
     challenges: [
-      "Synchronizing animation frames with algorithm execution steps",
-      "Supporting multiple algorithms under a unified visualization API",
-      "Making complex data structure mutations visually clear without clutter",
-      "Keeping the visualizer performant during rapid algorithm steps",
+      "Synchronizing smooth animation frames with instantaneous algorithm execution steps.",
+      "Supporting multiple diverse algorithms (graphs, arrays, trees) under a single unified visualization API.",
+      "Making complex data structure mutations visually clear without cluttering the UI.",
+      "Keeping the visualizer highly performant during rapid, high-speed algorithmic steps.",
+    ],
+  },
+  {
+    id: "golf-give",
+    title: "GolfGive",
+    domain: "WEB",
+    category: "Web Apps",
+    description:
+      "A full-stack charity golf tournament platform featuring live scoring, automated prize draws, and secure donation processing.",
+    modalDescription:
+      "GolfGive is a comprehensive web platform designed to streamline charity golf tournaments. Built with Next.js and Supabase, it handles the entire event lifecycle. The system features a secure authentication flow, allowing users to access a personalized dashboard to track their live scores, manage subscriptions, and view potential winnings. Simultaneously, it provides a dedicated Admin shell to manage charities, verify winners, and securely oversee donation flows integrated via Stripe.",
+    tags: ["Next.js", "Supabase", "Stripe", "Tailwind CSS", "Web"],
+    repoUrl: "https://github.com/DINESHYDK/golf_charity",
+    liveUrl: "https://golf-charity-digitalheroes.vercel.app",
+    imageUrl: undefined,
+    challenges: [
+      "Integrating Stripe webhooks to reliably process one-time charity donations and recurring user subscriptions.",
+      "Designing a secure Role-Based Access Control (RBAC) admin system to verify scores, trigger draws, and manage users.",
+      "Structuring the Supabase relational database to seamlessly link users, their live tournament scores, and their respective charity contributions.",
+      "Building a responsive, real-time dashboard for users to track their tournament standings and winnings dynamically.",
+    ],
+  },
+  {
+    id: "trackpad-writer",
+    title: "Trackpad Writer",
+    domain: "TOOL",
+    category: "Tools",
+    description:
+      "A lightweight, browser-based digital canvas that transforms a laptop trackpad into a fluid handwriting and signature capture tool.",
+    modalDescription:
+      "Trackpad Writer is a minimalist web frontend experiment. I built it to capture smooth, precise handwriting directly from a laptop's trackpad without needing an external stylus or drawing tablet. Leveraging the HTML5 Canvas API and native DOM pointer events, the tool allows users to draw, write, and capture digital signatures instantly, right inside their browser.",
+    tags: ["JavaScript", "HTML5 Canvas", "DOM Events", "Tools", "UI/UX"],
+    repoUrl: "https://github.com/DINESHYDK/Trackpad-Writer",
+    liveUrl: "https://trackpad-writer.vercel.app/",
+    imageUrl: undefined,
+    challenges: [
+      "Mapping absolute screen coordinates to the relative HTML canvas bounds accurately during continuous mouse/touch events.",
+      "Smoothing out jagged input coordinate movements to render natural-looking, fluid handwriting strokes.",
+      "Handling dynamic window resizing and ensuring the canvas context doesn't stretch or warp the user's drawing.",
+      "Keeping the application extremely lightweight and performant by strictly using vanilla web technologies without heavy external frameworks.",
     ],
   },
 ];

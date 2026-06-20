@@ -208,7 +208,7 @@ const ProjectModal = ({
                         Description
                       </h3>
                       <p className="text-text-body font-jakarta text-base leading-relaxed">
-                        {currentProject.description}
+                        {currentProject.modalDescription ?? currentProject.description}
                       </p>
                     </div>
 

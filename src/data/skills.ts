@@ -34,6 +34,7 @@ export const SKILLS: SkillCategory[] = [
   {
     category: "AI & Computer Vision",
     skills: [
+      { name: "Claude Code" },
       { name: "Google Gemini" },
       { name: "Pinecone" },
       { name: "OpenCV" },
@@ -43,10 +44,10 @@ export const SKILLS: SkillCategory[] = [
   {
     category: "CS Fundamentals",
     skills: [
-      { name: "Data Structures & Algorithms" },
-      { name: "Object-Oriented Design" },
-      { name: "Operating Systems" },
-      { name: "DBMS" },
+      { name: "DSA (C & CPP)" },
+      { name: "OOPs (CPP & JAVA)" },
+      { name: "Operating System" },
+      { name: "DBMS (SQL + MongoDB)" },
     ],
   },
   {
@@ -57,6 +58,7 @@ export const SKILLS: SkillCategory[] = [
       { name: "Vercel" },
       { name: "Figma" },
       { name: "PostHog" },
+      { name: "Antigravity" },
     ],
   },
 ];

@@ -8,6 +8,7 @@ export interface Project {
   id: string;
   title: string;
   description: string;
+  modalDescription?: string;
   tags: string[];
   category: string;
   domain?: string;        // short domain badge e.g. "WEB", "AI", "MOBILE", "TOOL"
