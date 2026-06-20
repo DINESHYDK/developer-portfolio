@@ -313,7 +313,7 @@ const ProjectModal = ({
                           )}
                         >
                           <ExternalLink size={18} />
-                          Live Demo
+                          {currentProject.liveUrlLabel ?? "Live Demo"}
                         </a>
                       )}
                     </div>

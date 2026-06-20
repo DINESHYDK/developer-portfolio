@@ -128,18 +128,18 @@ export const PROJECTS: Project[] = [
     domain: "TOOL",
     category: "Tools",
     description:
-      "A lightweight, browser-based digital canvas that transforms a laptop trackpad into a fluid handwriting and signature capture tool.",
+      "A cost-effective hardware & software hack re-purposing a laptop trackpad into a functional digital drawing tablet for just ₹200.",
     modalDescription:
-      "Trackpad Writer is a minimalist web frontend experiment. I built it to capture smooth, precise handwriting directly from a laptop's trackpad without needing an external stylus or drawing tablet. Leveraging the HTML5 Canvas API and native DOM pointer events, the tool allows users to draw, write, and capture digital signatures instantly, right inside their browser.",
-    tags: ["JavaScript", "HTML5 Canvas", "DOM Events", "Tools", "UI/UX"],
+      "Trackpad Writer is a cost-effective hardware and software hack designed to replicate a ₹3,000 graphics tablet experience for just ₹200. By combining a universal capacitive stylus with a custom AutoHotkey script that remaps the Caps Lock key to toggle a continuous left-click, this solution transforms an ordinary laptop trackpad into a fully functional digital drawing surface for notes, whiteboarding, and system design.",
+    tags: ["AutoHotkey", "Scripting", "Hardware Hack", "Automation"],
     repoUrl: "https://github.com/DINESHYDK/Trackpad-Writer",
-    liveUrl: "https://trackpad-writer.vercel.app/",
+    liveUrl: "https://github.com/DINESHYDK/Trackpad-Writer#readme",
+    liveUrlLabel: "View the Guide",
     imageUrl: "/images/projects/TrackpadWriter.png",
     challenges: [
-      "Mapping absolute screen coordinates to the relative HTML canvas bounds accurately during continuous mouse/touch events.",
-      "Smoothing out jagged input coordinate movements to render natural-looking, fluid handwriting strokes.",
-      "Handling dynamic window resizing and ensuring the canvas context doesn't stretch or warp the user's drawing.",
-      "Keeping the application extremely lightweight and performant by strictly using vanilla web technologies without heavy external frameworks.",
+      "Iterating through early workarounds—such as drawing with a standard mouse or using two hands to coordinate a left-click while swiping the trackpad—which resulted in terrible handwriting and user fatigue.",
+      "Developing a software solution to bypass the need for physical clicking on the trackpad, ultimately resolved by scripting a keyboard toggle (Caps Lock) to mimic a continuous left-click.",
+      "Sourcing a low-cost physical tool that naturally mimics human touch on a laptop trackpad without requiring Bluetooth pairing or charging, leading to the use of a universal capacitive stylus.",
     ],
   },
 ];

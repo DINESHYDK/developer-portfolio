@@ -13,6 +13,7 @@ export interface Project {
   category: string;
   domain?: string;        // short domain badge e.g. "WEB", "AI", "MOBILE", "TOOL"
   liveUrl?: string;
+  liveUrlLabel?: string;
   repoUrl?: string;
   imageUrl?: string;
   challenges?: string[];
