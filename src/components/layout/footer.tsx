@@ -219,17 +219,17 @@ const Footer = () => {
             <p className="font-poppins text-lg font-bold text-text-heading">
               Dinesh <span className="text-accent-primary">YDK</span>
             </p>
-            <p className="text-text-body/60 font-jakarta text-sm leading-relaxed max-w-xs">
+            <p className="text-text-body/80 font-jakarta text-sm leading-relaxed max-w-xs">
               Building clean, scalable, and beautiful web experiences — one commit at a time.
             </p>
-            <p className="text-text-body/40 font-jakarta text-xs">
+            <p className="text-text-body/70 font-jakarta text-xs">
               &copy; {currentYear} {SITE_METADATA.name}. All rights reserved.
             </p>
           </div>
 
           {/* Connect column — right of brand on desktop */}
           <div className="footer-connect-col space-y-3">
-            <p className="font-jakarta text-xs font-semibold uppercase tracking-widest text-text-body/40">
+            <p className="font-jakarta text-xs font-semibold uppercase tracking-widest text-text-body/70">
               Connect
             </p>
             <ul className="space-y-2">
@@ -246,7 +246,7 @@ const Footer = () => {
                     transition={SOCIAL_SPRING}
                     className={cn(
                       "inline-flex items-center gap-2",
-                      "text-text-body/60 font-jakarta text-sm",
+                      "text-text-body/80 font-jakarta text-sm",
                       "transition-colors duration-300 hover:text-accent-primary"
                     )}
                   >
@@ -262,7 +262,7 @@ const Footer = () => {
         {/* ── Mobile-only: nav + connect 2-col grid ── */}
         <div className="footer-mobile-columns">
           <div className="space-y-3">
-            <p className="font-jakarta text-xs font-semibold uppercase tracking-widest text-text-body/40">
+            <p className="font-jakarta text-xs font-semibold uppercase tracking-widest text-text-body/70">
               Navigation
             </p>
             <ul className="space-y-2">
@@ -271,7 +271,7 @@ const Footer = () => {
                   <a
                     href={link.href}
                     className={cn(
-                      "text-text-body/60 font-jakarta text-sm",
+                      "text-text-body/80 font-jakarta text-sm",
                       "transition-colors duration-300 hover:text-accent-primary"
                     )}
                   >
@@ -283,7 +283,7 @@ const Footer = () => {
           </div>
 
           <div className="space-y-3">
-            <p className="font-jakarta text-xs font-semibold uppercase tracking-widest text-text-body/40">
+            <p className="font-jakarta text-xs font-semibold uppercase tracking-widest text-text-body/70">
               Connect
             </p>
             <ul className="space-y-2">
@@ -300,7 +300,7 @@ const Footer = () => {
                     transition={SOCIAL_SPRING}
                     className={cn(
                       "inline-flex items-center gap-2",
-                      "text-text-body/60 font-jakarta text-sm",
+                      "text-text-body/80 font-jakarta text-sm",
                       "transition-colors duration-300 hover:text-accent-primary"
                     )}
                   >
@@ -322,7 +322,7 @@ const Footer = () => {
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
             className={cn(
                 "md:hidden", "inline-flex items-center gap-2 px-5 py-2.5 rounded-full",
-              "border border-border-subtle text-text-body/60 font-jakarta text-xs",
+              "border border-border-subtle text-text-body/80 font-jakarta text-xs",
               "transition-colors duration-300",
               "hover:border-accent-primary/40 hover:text-accent-primary",
               "focus:outline-none focus:ring-2 focus:ring-accent-primary"
@@ -344,7 +344,7 @@ const Footer = () => {
       {/* ── Sub-footer ── */}
       <div className="border-t border-white/5">
         <div className="mx-auto max-w-5xl px-6 py-3 flex justify-center">
-          <p className="text-text-body/40 font-jakarta text-xs text-center">
+          <p className="text-text-body/70 font-jakarta text-xs text-center">
             Made with{" "}
             <motion.span
               className="inline-block text-accent-primary"

@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { ContactFormData } from "@/types";
+import { sendContactMessage } from "@/services/contact-service";
 import { cn } from "@/utils/cn";
 import { haptic } from "@/utils/haptic";
 import {
@@ -395,7 +396,9 @@ const ContactSection = () => {
   const [formData, setFormData] = useState<ContactFormData>(INITIAL_FORM_STATE);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [focusedField, setFocusedField] = useState<string | null>(null);
+  const honeypotRef = useRef<HTMLInputElement>(null);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -408,17 +411,21 @@ const ContactSection = () => {
     e.preventDefault();
     haptic("confirm");
     setIsLoading(true);
+    setErrorMessage(null);
 
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+    const result = await sendContactMessage(
+      formData,
+      honeypotRef.current?.value ?? ""
+    );
+
+    if (result.success) {
       setIsSuccess(true);
       setFormData(INITIAL_FORM_STATE);
-      setTimeout(() => setIsSuccess(false), 3000);
-    } catch {
-      console.error("Failed to send message");
-    } finally {
-      setIsLoading(false);
+      setTimeout(() => setIsSuccess(false), 4000);
+    } else {
+      setErrorMessage(result.message);
     }
+    setIsLoading(false);
   };
 
   const inputClasses = cn(
@@ -522,6 +529,16 @@ const ContactSection = () => {
               >
                 {/* Contact Form — clean, no extra motion */}
                 <form onSubmit={handleSubmit} className="space-y-5">
+                  {/* Honeypot — invisible to humans, bots fill it */}
+                  <input
+                    ref={honeypotRef}
+                    type="text"
+                    name="botcheck"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden="true"
+                    className="absolute -left-[9999px] h-0 w-0 opacity-0"
+                  />
                   <div>
                     <label htmlFor="name" className="block text-text-heading font-jakarta text-sm font-medium mb-2">
                       Name
@@ -615,6 +632,21 @@ const ContactSection = () => {
                         <CheckCircle2 size={18} className="text-accent-secondary shrink-0" />
                         <p className="text-accent-secondary font-jakarta font-medium text-sm">
                           Message sent! I&apos;ll get back to you soon.
+                        </p>
+                      </motion.div>
+                    )}
+                    {errorMessage && (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.95, y: 6 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95, y: -6 }}
+                        transition={{ type: "spring", stiffness: 320, damping: 24 }}
+                        className="flex items-center justify-center gap-2 p-4 rounded-2xl bg-red-400/10 border border-red-400/30"
+                        role="alert"
+                      >
+                        <AlertTriangle size={18} className="text-red-400 shrink-0" />
+                        <p className="text-red-400 font-jakarta font-medium text-sm">
+                          {errorMessage}
                         </p>
                       </motion.div>
                     )}

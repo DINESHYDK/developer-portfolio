@@ -1,20 +1,27 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, createContext, useContext } from "react";
 import type { CodingStatsData } from "@/types";
-import { fetchAllCodingStats, clearStatsCache } from "@/services/coding-stats-service";
-import { CODING_STATS } from "@/data/coding-stats";
+import {
+  fetchAllCodingStats,
+  clearStatsCache,
+  getInitialStats,
+} from "@/services/coding-stats-service";
 
 /**
  * useCodingStats
  *
  * React hook that fetches live coding stats from all platform APIs.
  *
- * - Shows mock data immediately (zero loading delay)
+ * NOTE: Do not call this hook directly from components — use the
+ * shared instance via `useCodingStatsContext` (context/coding-stats-context)
+ * so all consumers share one fetch cycle and stay in sync.
+ *
+ * - Shows last-known data immediately (persisted or mock, zero loading delay)
  * - Fetches real data in the background
  * - Merges live data once available
- * - Gracefully falls back to mock on failure
+ * - Gracefully falls back on failure
  * - Provides manual refresh capability
  */
-interface UseCodingStatsReturn {
+export interface UseCodingStatsReturn {
   /** The current stats data (mock or live) */
   data: CodingStatsData;
   /** True while the initial API fetch is in progress */
@@ -28,7 +35,7 @@ interface UseCodingStatsReturn {
 }
 
 export const useCodingStats = (): UseCodingStatsReturn => {
-  const [data, setData] = useState<CodingStatsData>(CODING_STATS);
+  const [data, setData] = useState<CodingStatsData>(getInitialStats);
   const [isLoading, setIsLoading] = useState(true);
   const [isLive, setIsLive] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -63,5 +70,21 @@ export const useCodingStats = (): UseCodingStatsReturn => {
   }, [loadStats]);
 
   return { data, isLoading, isLive, error, refresh };
+};
+
+/* ============================================================
+   Shared context — one hook instance for the whole app.
+   Provider lives in context/coding-stats-context.tsx.
+   ============================================================ */
+export const CodingStatsContext = createContext<UseCodingStatsReturn | null>(null);
+
+export const useCodingStatsContext = (): UseCodingStatsReturn => {
+  const ctx = useContext(CodingStatsContext);
+  if (!ctx) {
+    throw new Error(
+      "useCodingStatsContext must be used within a <CodingStatsProvider>"
+    );
+  }
+  return ctx;
 };
 

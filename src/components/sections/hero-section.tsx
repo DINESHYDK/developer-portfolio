@@ -93,7 +93,7 @@ const HeroSection = () => {
           <motion.p
             className={cn(
               "font-jakarta text-lg md:text-xl leading-relaxed",
-              "text-white/25",
+              "text-white/50",
               "transition-colors duration-500 ease-out delay-100",
               "group-hover:text-text-body"
             )}

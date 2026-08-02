@@ -2,10 +2,10 @@ import { useState } from "react";
 import { Trophy, Target, FolderOpen, GraduationCap } from "lucide-react";
 import { profileData } from "@/data/profile-data";
 import { PROJECTS } from "@/data/projects";
-import { useCodingStats } from "@/hooks/use-coding-stats";
+import { useCodingStatsContext } from "@/hooks/use-coding-stats";
 import type { CodingPlatform } from "@/types";
 import "./id-card.css";
-import profilePhoto from "@/public/images/profile.png";
+import profilePhoto from "@/public/images/profile.webp";
 import ismLogo from "@/public/images/IIT_(ISM)_Dhanbad_Logo.svg";
 
 const PHOTO_SRC = profilePhoto;
@@ -26,8 +26,8 @@ const IdCard = () => {
     if (isTouchDevice) setIsFlipped((p) => !p);
   };
 
-  // Fetch live coding stats
-  const { data: codingStats } = useCodingStats();
+  // Shared live coding stats (single fetch cycle app-wide)
+  const { data: codingStats } = useCodingStatsContext();
 
   // Compute live solved problems
   const totalSolved = codingStats.platforms.reduce((s, p) => s + p.totalSolved, 0);

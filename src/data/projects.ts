@@ -16,7 +16,7 @@ export const PROJECTS: Project[] = [
     tags: ["React", "Three.js", "FastAPI", "OpenCV", "Algorithms", "Web"],
     repoUrl: "https://github.com/DINESHYDK/rubiks-cube-solver",
     liveUrl: "https://rubiks.dineshydk.dev",
-    imageUrl: "/images/projects/RubiksCube.png",
+    imageUrl: "/images/projects/RubiksCube.webp",
     challenges: [
       "Extracting accurate facelet colors from the camera feed across varying and uneven room lighting conditions.",
       "Preventing floating-point coordinate drift during complex 3D slice rotations using a quaternion-based pivot system.",
@@ -37,7 +37,7 @@ export const PROJECTS: Project[] = [
     tags: ["Next.js", "Supabase", "TypeScript", "Real-Time", "PWA"],
     repoUrl: "https://github.com/DINESHYDK/Study_Sync",
     liveUrl: "https://studysync.dineshydk.dev/",
-    imageUrl: "/images/projects/StudySync.png",
+    imageUrl: "/images/projects/StudySync.webp",
     challenges: [
       "Ensuring timer resilience against accidental tab closures and reloads using a custom recovery flow and the navigator.sendBeacon API for fire-and-forget server syncs.",
       "Enforcing strict data privacy through PostgreSQL Row Level Security (RLS), ensuring users can only subscribe to the live telemetry of their accepted friends.",
@@ -95,7 +95,7 @@ export const PROJECTS: Project[] = [
     tags: ["TypeScript", "React", "Algorithms", "Data Structures", "Animations", "Tools"],
     repoUrl: "https://github.com/DINESHYDK/DSA_Visualizer",
     liveUrl: "https://dsa-visualizer-ydk.vercel.app/",
-    imageUrl: "/images/projects/DsaVisualiser.png",
+    imageUrl: "/images/projects/DsaVisualiser.webp",
     challenges: [
       "Synchronizing smooth animation frames with instantaneous algorithm execution steps.",
       "Supporting multiple diverse algorithms (graphs, arrays, trees) under a single unified visualization API.",
@@ -115,7 +115,7 @@ export const PROJECTS: Project[] = [
     tags: ["Next.js", "Supabase", "Stripe", "Tailwind CSS", "Web"],
     repoUrl: "https://github.com/DINESHYDK/golf_charity",
     liveUrl: "https://golf-charity-digitalheroes.vercel.app",
-    imageUrl: "/images/projects/GolfGive.png",
+    imageUrl: "/images/projects/GolfGive.webp",
     challenges: [
       "Integrating Stripe webhooks to reliably process one-time charity donations and recurring user subscriptions.",
       "Designing a secure Role-Based Access Control (RBAC) admin system to verify scores, trigger draws, and manage users.",
@@ -136,7 +136,7 @@ export const PROJECTS: Project[] = [
     repoUrl: "https://github.com/DINESHYDK/Trackpad-Writer",
     liveUrl: "https://github.com/DINESHYDK/Trackpad-Writer#readme",
     liveUrlLabel: "View the Guide",
-    imageUrl: "/images/projects/TrackpadWriter.png",
+    imageUrl: "/images/projects/TrackpadWriter.webp",
     challenges: [
       "Iterating through early workarounds—such as drawing with a standard mouse or using two hands to coordinate a left-click while swiping the trackpad—which resulted in terrible handwriting and user fatigue.",
       "Developing a software solution to bypass the need for physical clicking on the trackpad, ultimately resolved by scripting a keyboard toggle (Caps Lock) to mimic a continuous left-click.",

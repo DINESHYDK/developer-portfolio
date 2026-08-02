@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Trophy, Target, Star, Layers, RefreshCw, Wifi, WifiOff } from "lucide-react";
-import { useCodingStats } from "@/hooks/use-coding-stats";
+import { useCodingStatsContext } from "@/hooks/use-coding-stats";
 import type { CodingPlatform } from "@/types";
 import PlatformSelector from "./platform-selector";
 import LeetCodeView from "./platforms/leetcode-view";
@@ -121,7 +121,7 @@ const StatCard = ({ icon, label, value, delay, hoverContent }: StatCardProps) =>
    Main Section
 ───────────────────────────────────────────── */
 const CodingStatsSection = () => {
-  const { data: codingStats, isLoading, isLive, refresh } = useCodingStats();
+  const { data: codingStats, isLoading, isLive, refresh } = useCodingStatsContext();
 
   const [activePlatform, setActivePlatform] = useState<string>(
     codingStats.platforms[0]?.id ?? "leetcode"
@@ -248,7 +248,7 @@ const CodingStatsSection = () => {
               {isLive ? (
                 <><Wifi size={12} className="text-green-400" /><span className="text-green-400">Live</span></>
               ) : (
-                <><WifiOff size={12} className="text-text-body/40" /><span className="text-text-body/40">Cached</span></>
+                <><WifiOff size={12} className="text-text-body/60" /><span className="text-text-body/60">Cached</span></>
               )}
             </div>
             <button
@@ -343,7 +343,7 @@ const CodingStatsSection = () => {
 
         {/* Last Updated */}
         <motion.p
-          className="text-center text-text-body/40 text-xs font-jakarta mt-8"
+          className="text-center text-text-body/60 text-xs font-jakarta mt-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}

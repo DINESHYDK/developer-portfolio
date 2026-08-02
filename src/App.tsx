@@ -1,16 +1,22 @@
-import { useState, useEffect } from "react";
-import {AnimatePresence} from "framer-motion";
+import { useState, useEffect, lazy, Suspense } from "react";
+import {AnimatePresence, MotionConfig} from "framer-motion";
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 import HeroSection from "@/components/sections/hero-section";
 import AboutSection from "@/components/sections/about-section";
 import SkillsSection from "@/components/sections/skills-section";
 import ProjectsSection from "@/components/sections/projects-section";
-import CodingStatsSection from "@/components/sections/dashboard/coding-stats-section";
 import ContactSection from "@/components/sections/contact-section";
+
+// Code-split: the stats dashboard pulls in recharts (~300 kB), so it
+// loads as a separate chunk instead of blocking first paint.
+const CodingStatsSection = lazy(
+    () => import("@/components/sections/dashboard/coding-stats-section")
+);
 import SmoothCursor from "@/components/smooth-cursor/SmoothCursor";
 import SplashScreen from "@/components/splash-screen/SplashScreen";
 import ScrollProgressBar from "@/components/ui/ScrollProgressBar";
+import { CodingStatsProvider } from "@/context/coding-stats-context";
 
 // Show splash only once per browser session
 const hasSeenSplash = sessionStorage.getItem("ydk_splash_seen") === "true";
@@ -33,6 +39,9 @@ function App() {
     }, [splashDone]);
 
     return (
+        <CodingStatsProvider>
+        {/* reducedMotion="user" — respects OS prefers-reduced-motion for all framer animations */}
+        <MotionConfig reducedMotion="user">
         <div className="min-h-screen bg-bg-primary text-text-body">
             <ScrollProgressBar/>
             <SmoothCursor/>
@@ -57,12 +66,16 @@ function App() {
                 <AboutSection/>
                 <SkillsSection/>
                 <ProjectsSection/>
-                <CodingStatsSection/>
+                <Suspense fallback={<section id="coding" className="min-h-[50vh]"/>}>
+                    <CodingStatsSection/>
+                </Suspense>
                 <ContactSection/>
             </main>
             {splashDone && <Footer />}
             {splashDone && <div className="h-16 md:h-0"/>}
         </div>
+        </MotionConfig>
+        </CodingStatsProvider>
     );
 }
 

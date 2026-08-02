@@ -27,7 +27,9 @@ import { CODING_STATS } from "@/data/coding-stats";
 type PlatformFetcher = (username: string) => Promise<CodingPlatform | null>;
 
 /* ============================================================
-   In-memory cache to avoid hammering APIs on every mount
+   Two-layer cache:
+   1. In-memory (fastest, cleared on reload)
+   2. localStorage (survives reloads — powers stale-while-revalidate)
    ============================================================ */
 interface CacheEntry {
   data: CodingPlatform;
@@ -36,18 +38,69 @@ interface CacheEntry {
 
 const cache = new Map<string, CacheEntry>();
 
+const LS_KEY = "ydk_coding_stats_v1";
+
+type PersistedStore = Record<string, CacheEntry>;
+
+const readPersistedStore = (): PersistedStore => {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    return raw ? (JSON.parse(raw) as PersistedStore) : {};
+  } catch {
+    return {};
+  }
+};
+
+const persistPlatform = (key: string, entry: CacheEntry) => {
+  try {
+    const store = readPersistedStore();
+    store[key] = entry;
+    localStorage.setItem(LS_KEY, JSON.stringify(store));
+  } catch {
+    // Storage full / unavailable — persistence is best-effort only
+  }
+};
+
 const getCached = (key: string): CodingPlatform | null => {
   const entry = cache.get(key);
-  if (!entry) return null;
-  if (Date.now() - entry.timestamp > CP_CACHE_TTL) {
+  if (entry) {
+    if (Date.now() - entry.timestamp <= CP_CACHE_TTL) return entry.data;
     cache.delete(key);
-    return null;
   }
-  return entry.data;
+
+  // Fall back to localStorage (fresh entries only)
+  const persisted = readPersistedStore()[key];
+  if (persisted && Date.now() - persisted.timestamp <= CP_CACHE_TTL) {
+    cache.set(key, persisted);
+    return persisted.data;
+  }
+  return null;
 };
 
 const setCache = (key: string, data: CodingPlatform) => {
-  cache.set(key, { data, timestamp: Date.now() });
+  const entry: CacheEntry = { data, timestamp: Date.now() };
+  cache.set(key, entry);
+  persistPlatform(key, entry);
+};
+
+/* ============================================================
+   In-flight request deduplication
+   Multiple components mounting at once (IdCard + stats section,
+   StrictMode double-mount) share ONE request per platform instead
+   of each firing their own.
+   ============================================================ */
+const inFlight = new Map<string, Promise<CodingPlatform | null>>();
+
+const dedupedFetch = (
+  key: string,
+  run: () => Promise<CodingPlatform | null>
+): Promise<CodingPlatform | null> => {
+  const existing = inFlight.get(key);
+  if (existing) return existing;
+
+  const promise = run().finally(() => inFlight.delete(key));
+  inFlight.set(key, promise);
+  return promise;
 };
 
 /* ============================================================
@@ -311,7 +364,7 @@ const fetchCodeChefStats: PlatformFetcher = async (username) => {
 /* ============================================================
    TUF Fetcher (Static data — no public API)
    ============================================================ */
-const fetchTufStats: PlatformFetcher = async (_username) => {
+const fetchTufStats: PlatformFetcher = async () => {
   // TUF (Striver's A2Z sheet) has no public API.
   // Returns static data from data/coding-stats.ts.
   // Update the data file manually each week.
@@ -350,7 +403,7 @@ export const fetchAllCodingStats = async (
   const today = new Date().toISOString().split("T")[0];
 
   if (forceRefresh) {
-    cache.clear();
+    clearStatsCache();
   }
 
   const platformConfigs = CODING_STATS.platforms;
@@ -361,13 +414,16 @@ export const fetchAllCodingStats = async (
       if (!fetcher) return config;
 
       try {
-        const result = await fetcher(
-          CP_USERNAMES[config.id as keyof typeof CP_USERNAMES] ?? config.username
+        const result = await dedupedFetch(config.id, () =>
+          fetcher(
+            CP_USERNAMES[config.id as keyof typeof CP_USERNAMES] ?? config.username
+          )
         );
         return result ?? config;
       } catch (err) {
         console.warn(`[CodingStats] ${config.id} API failed, using fallback:`, err);
-        return config;
+        // Prefer last-known-live data over the hardcoded mock
+        return readPersistedStore()[config.id]?.data ?? config;
       }
     })
   );
@@ -401,11 +457,33 @@ export const fetchPlatformStats = async (
     "dineshydk";
 
   try {
-    return await fetcher(handle);
+    return await dedupedFetch(platformId, () => fetcher(handle));
   } catch (err) {
     console.warn(`[CodingStats] ${platformId} failed, using fallback:`, err);
-    return getMockPlatform(platformId);
+    return readPersistedStore()[platformId]?.data ?? getMockPlatform(platformId);
   }
+};
+
+/**
+ * Initial stats for first render (before any network call):
+ * mock data overridden by whatever was persisted from previous
+ * visits — even if stale. Stale data is then revalidated by the
+ * normal fetch flow.
+ */
+export const getInitialStats = (): CodingStatsData => {
+  const store = readPersistedStore();
+  const timestamps = Object.values(store).map((e) => e.timestamp);
+
+  const platforms = CODING_STATS.platforms.map(
+    (p) => store[p.id]?.data ?? p
+  );
+
+  const lastUpdated =
+    timestamps.length > 0
+      ? new Date(Math.max(...timestamps)).toISOString().split("T")[0]
+      : CODING_STATS.lastUpdated;
+
+  return { platforms, lastUpdated };
 };
 
 /**
@@ -415,8 +493,17 @@ export const getSupportedPlatforms = (): string[] =>
   Object.keys(PLATFORM_FETCHERS);
 
 /**
- * Clear the in-memory cache (useful for manual refresh).
+ * Invalidate all caches so the next fetch hits the network.
+ * Persisted data is kept (timestamp zeroed) so it can still serve
+ * as a fallback if the refresh fails.
  */
 export const clearStatsCache = () => {
   cache.clear();
+  try {
+    const store = readPersistedStore();
+    for (const key of Object.keys(store)) store[key].timestamp = 0;
+    localStorage.setItem(LS_KEY, JSON.stringify(store));
+  } catch {
+    // best-effort
+  }
 };

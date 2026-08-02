@@ -29,6 +29,7 @@ const PlatformSelector = ({
           <select
             value={activePlatform}
             onChange={(e) => onSelect(e.target.value)}
+            aria-label="Select coding platform"
             className={cn(
               "w-full appearance-none px-6 py-3.5 pr-12 rounded-2xl",
               "bg-bg-surface border border-border-subtle",

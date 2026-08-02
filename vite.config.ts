@@ -11,6 +11,18 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Stable vendor chunks → better long-term caching and
+          // parallel downloads on first visit
+          "react-vendor": ["react", "react-dom"],
+          "framer-motion": ["framer-motion"],
+        },
+      },
+    },
+  },
   server: {
     proxy: {
       // Proxy /api calls to the Vercel dev server (port 3000) during local development.
