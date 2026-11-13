@@ -67,6 +67,13 @@ Page order: Hero → About → Skills → Projects → Coding Stats (lazy) → C
 - [ ] Screenshots for Agent SLAM and IntelliDesk AI.
 - [ ] Dinesh's own pass over all copy (last step).
 
+## Trailer (`trailer/`)
+
+- Separate Remotion 4 project (own `package.json`, ignored by the site's ESLint and build). 36 s, 1920×1080, 30 fps.
+- `cd trailer && npm run studio` (live preview) / `npm run render` → `trailer/out/trailer.mp4`.
+- `scripts/prepare.mjs` copies site images into `trailer/public/assets` and synthesises `click.wav` + `music.wav` (120 BPM). Drop a real track at `trailer/public/audio/music.wav` to replace the music.
+- Timeline, click frames and palette: `trailer/src/theme.ts`. Scenes: `trailer/src/scenes/*`.
+
 ## Assets
 
 Regenerate the OG image / favicons after editing `public/og-source.svg` or `public/favicon.svg`:
