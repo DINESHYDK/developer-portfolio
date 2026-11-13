@@ -337,7 +337,7 @@ const fetchCodeChefStats: PlatformFetcher = async (username) => {
     name: "CodeChef",
     username,
     profileUrl: `https://www.codechef.com/users/${username}`,
-    accentColor: "#5B4638",
+    accentColor: "#B58863",
     totalSolved: problemsSolved,
     totalProblems: 5000,
     rating: currentRating,

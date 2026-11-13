@@ -1,12 +1,26 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { PanInfo } from "framer-motion";
-import { X, ChevronLeft, ChevronRight, Github, ExternalLink } from "lucide-react";
+import {
+  X,
+  ChevronLeft,
+  ChevronRight,
+  Github,
+  ExternalLink,
+} from "lucide-react";
 import type { Project } from "@/types";
 import { cn } from "@/utils/cn";
 import { haptic } from "@/utils/haptic";
 
-const LazyImage = ({ src, alt, className }: { src: string; alt: string; className: string }) => {
+const LazyImage = ({
+  src,
+  alt,
+  className,
+}: {
+  src: string;
+  alt: string;
+  className: string;
+}) => {
   const [loaded, setLoaded] = useState(false);
   return (
     <div className="relative w-full h-full">
@@ -14,13 +28,17 @@ const LazyImage = ({ src, alt, className }: { src: string; alt: string; classNam
         className={cn(
           "absolute inset-0 bg-accent-primary/8 animate-pulse",
           "transition-opacity duration-500",
-          loaded ? "opacity-0 pointer-events-none" : "opacity-100"
+          loaded ? "opacity-0 pointer-events-none" : "opacity-100",
         )}
       />
       <img
         src={src}
         alt={alt}
-        className={cn(className, "transition-opacity duration-500", loaded ? "opacity-100" : "opacity-0")}
+        className={cn(
+          className,
+          "transition-opacity duration-500",
+          loaded ? "opacity-100" : "opacity-0",
+        )}
         loading="lazy"
         decoding="async"
         onLoad={() => setLoaded(true)}
@@ -41,7 +59,8 @@ const ProjectModal = ({
   setSelectedIndex,
 }: ProjectModalProps) => {
   const isOpen = selectedIndex !== null;
-  const currentProject = selectedIndex !== null ? projects[selectedIndex] : null;
+  const currentProject =
+    selectedIndex !== null ? projects[selectedIndex] : null;
 
   // Navigation functions
   const goToNext = () => {
@@ -52,7 +71,8 @@ const ProjectModal = ({
 
   const goToPrevious = () => {
     if (selectedIndex === null) return;
-    const prevIndex = selectedIndex === 0 ? projects.length - 1 : selectedIndex - 1;
+    const prevIndex =
+      selectedIndex === 0 ? projects.length - 1 : selectedIndex - 1;
     setSelectedIndex(prevIndex);
   };
 
@@ -60,11 +80,45 @@ const ProjectModal = ({
     setSelectedIndex(null);
   };
 
-  // Desktop: Keyboard navigation
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
+  const returnFocusRef = useRef<HTMLElement | null>(null);
+
+  // Focus management: remember the opener, focus the close button on open,
+  // and hand focus back to the opener on close.
+  useEffect(() => {
+    if (!isOpen) return;
+    returnFocusRef.current = document.activeElement as HTMLElement | null;
+    const t = setTimeout(() => closeBtnRef.current?.focus(), 0);
+    return () => {
+      clearTimeout(t);
+      returnFocusRef.current?.focus?.();
+    };
+  }, [isOpen]);
+
+  // Desktop: Keyboard navigation + focus trap
   useEffect(() => {
     if (!isOpen) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Tab" && dialogRef.current) {
+        const focusables = Array.from(
+          dialogRef.current.querySelectorAll<HTMLElement>(
+            'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+          ),
+        ).filter((el) => el.offsetParent !== null); // skip display:none (desktop-only arrows on mobile)
+        if (focusables.length === 0) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+        return;
+      }
       if (e.key === "ArrowRight") {
         e.preventDefault();
         goToNext();
@@ -126,7 +180,13 @@ const ProjectModal = ({
           />
 
           {/* Modal Container */}
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:px-20 pointer-events-none">
+          <div
+            ref={dialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="project-modal-title"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 md:px-20 pointer-events-none"
+          >
             {/* Navigation Arrows (Desktop) - Outside Modal */}
             <button
               onClick={goToPrevious}
@@ -136,7 +196,7 @@ const ProjectModal = ({
                 "bg-bg-surface/80 backdrop-blur-md border border-border-subtle",
                 "text-text-body hover:text-accent-primary",
                 "transition-all duration-300 hover:scale-110",
-                "focus:outline-none focus:ring-2 focus:ring-accent-primary"
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary",
               )}
               aria-label="Previous project"
             >
@@ -151,7 +211,7 @@ const ProjectModal = ({
                 "bg-bg-surface/80 backdrop-blur-md border border-border-subtle",
                 "text-text-body hover:text-accent-primary",
                 "transition-all duration-300 hover:scale-110",
-                "focus:outline-none focus:ring-2 focus:ring-accent-primary"
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary",
               )}
               aria-label="Next project"
             >
@@ -167,13 +227,14 @@ const ProjectModal = ({
             >
               {/* Close Button */}
               <button
+                ref={closeBtnRef}
                 onClick={closeModal}
                 className={cn(
                   "absolute top-4 right-4 z-10 p-2 rounded-full",
                   "bg-bg-surface/80 backdrop-blur-md border border-border-subtle",
                   "text-text-body hover:text-text-heading",
                   "transition-all duration-300 hover:scale-110",
-                  "focus:outline-none focus:ring-2 focus:ring-accent-primary"
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary",
                 )}
                 aria-label="Close modal"
               >
@@ -195,7 +256,7 @@ const ProjectModal = ({
                   className={cn(
                     "rounded-3xl overflow-hidden",
                     "bg-bg-surface border border-border-subtle",
-                    "max-h-[90vh] overflow-y-auto"
+                    "max-h-[90vh] overflow-y-auto",
                   )}
                 >
                   {/* Project Preview Image */}
@@ -207,11 +268,12 @@ const ProjectModal = ({
                         className="w-full h-full object-contain"
                       />
                     ) : (
-                      <div className="text-text-body/40 text-center">
-                        <div className="text-6xl mb-2">📱</div>
-                        <p className="text-sm font-jakarta">Image coming soon</p>
-                        <p className="text-xs text-text-body/30 font-mono mt-2">
+                      <div className="text-text-body/70 text-center px-6">
+                        <p className="font-mono text-lg text-text-heading/80">
                           {currentProject.title}
+                        </p>
+                        <p className="text-sm font-jakarta mt-2">
+                          No screenshot yet
                         </p>
                       </div>
                     )}
@@ -222,12 +284,15 @@ const ProjectModal = ({
                     {/* Title + Featured Badge */}
                     <div>
                       <div className="flex items-center gap-3 mb-2">
-                        <h2 className="font-poppins text-2xl md:text-3xl font-bold text-text-heading">
+                        <h2
+                          id="project-modal-title"
+                          className="font-poppins text-2xl md:text-3xl font-bold text-text-heading"
+                        >
                           {currentProject.title}
                         </h2>
                         {currentProject.featured && (
                           <span className="px-3 py-1 rounded-full bg-accent-primary/20 text-accent-primary text-xs font-jakarta font-semibold border border-accent-primary/30">
-                            ⭐ Featured
+                            Featured
                           </span>
                         )}
                       </div>
@@ -239,7 +304,8 @@ const ProjectModal = ({
                         Description
                       </h3>
                       <p className="text-text-body font-jakarta text-base leading-relaxed">
-                        {currentProject.modalDescription ?? currentProject.description}
+                        {currentProject.modalDescription ??
+                          currentProject.description}
                       </p>
                     </div>
 
@@ -261,24 +327,27 @@ const ProjectModal = ({
                     </div>
 
                     {/* Challenges While Building */}
-                    {currentProject.challenges && currentProject.challenges.length > 0 && (
-                      <div>
-                        <h3 className="text-sm font-jakarta font-semibold text-text-heading mb-3">
-                          Challenges While Building
-                        </h3>
-                        <ul className="space-y-3">
-                          {currentProject.challenges.map((challenge, i) => (
-                            <li
-                              key={i}
-                              className="flex items-start gap-3 text-text-body font-jakarta text-sm leading-relaxed"
-                            >
-                              <span className="text-accent-primary flex-shrink-0 mt-0.5">•</span>
-                              <span className="flex-1">{challenge}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
+                    {currentProject.challenges &&
+                      currentProject.challenges.length > 0 && (
+                        <div>
+                          <h3 className="text-sm font-jakarta font-semibold text-text-heading mb-3">
+                            Challenges While Building
+                          </h3>
+                          <ul className="space-y-3">
+                            {currentProject.challenges.map((challenge, i) => (
+                              <li
+                                key={i}
+                                className="flex items-start gap-3 text-text-body font-jakarta text-sm leading-relaxed"
+                              >
+                                <span className="text-accent-primary flex-shrink-0 mt-0.5">
+                                  •
+                                </span>
+                                <span className="flex-1">{challenge}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
 
                     {/* Action Buttons */}
                     <div className="flex flex-col sm:flex-row gap-4 pt-4">
@@ -292,7 +361,7 @@ const ProjectModal = ({
                             "bg-accent-primary text-bg-primary font-jakarta font-semibold",
                             "transition-all duration-300",
                             "hover:bg-accent-primary/90 hover:shadow-[0_0_20px_rgba(142,202,230,0.3)]",
-                            "focus:outline-none focus:ring-2 focus:ring-accent-primary"
+                            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary",
                           )}
                         >
                           <Github size={18} />
@@ -309,7 +378,7 @@ const ProjectModal = ({
                             "border border-accent-secondary text-accent-secondary font-jakarta font-semibold",
                             "transition-all duration-300",
                             "hover:bg-accent-secondary/10",
-                            "focus:outline-none focus:ring-2 focus:ring-accent-secondary"
+                            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-secondary",
                           )}
                         >
                           <ExternalLink size={18} />
@@ -320,8 +389,10 @@ const ProjectModal = ({
 
                     {/* Navigation Hint */}
                     <div className="flex items-center justify-center gap-8 pt-4 border-t border-border-subtle">
-                      <p className="text-xs text-text-body/50 font-jakarta text-center">
-                        <span className="hidden md:inline">Use ← → arrow keys</span>
+                      <p className="text-xs text-text-body/80 font-jakarta text-center">
+                        <span className="hidden md:inline">
+                          Use ← → arrow keys
+                        </span>
                         <span className="md:hidden">Swipe to navigate</span>
                         {" • "}
                         <span className="text-accent-primary">
@@ -341,5 +412,3 @@ const ProjectModal = ({
 };
 
 export default ProjectModal;
-
-

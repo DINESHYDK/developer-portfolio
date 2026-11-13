@@ -5,6 +5,7 @@ import { haptic } from "@/utils/haptic";
 import { LimelightNav } from "@/components/ui/limelight-nav";
 import type { LimelightNavItem } from "@/components/ui/limelight-nav";
 import { cn } from "@/utils/cn";
+import { scrollBehavior } from "@/utils/scroll";
 
 interface NavItem {
   label: string;
@@ -130,7 +131,7 @@ const Navbar = () => {
     const targetId = href.replace("#", "");
     const target = document.getElementById(targetId);
     if (target) {
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      target.scrollIntoView({ behavior: scrollBehavior(), block: "start" });
       history.replaceState(null, "", href);
     }
   };
@@ -163,7 +164,7 @@ const Navbar = () => {
                     "relative flex items-center gap-2 px-5 py-2.5 rounded-full overflow-hidden",
                     "text-sm font-jakarta font-medium",
                     "transition-colors duration-300",
-                    "focus:outline-none focus:ring-2 focus:ring-accent-primary",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary",
                     isActive ? "text-bg-primary" : "text-text-body hover:text-text-heading"
                   )}
                 >

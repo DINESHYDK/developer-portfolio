@@ -4,14 +4,15 @@ import { Github, Linkedin, Mail, Twitter, ArrowUp } from "lucide-react";
 import { SITE_METADATA, FOOTER_LINKS } from "@/config/site-metadata";
 import { cn } from "@/utils/cn";
 import { haptic } from "@/utils/haptic";
+import { scrollBehavior } from "@/utils/scroll";
 
 const SOCIAL_SPRING = { type: "spring" as const, stiffness: 380, damping: 22 };
 
 const SOCIAL_ICONS: Record<string, React.ReactNode> = {
-  GitHub:   <Github   size={18} />,
+  GitHub: <Github size={18} />,
   LinkedIn: <Linkedin size={18} />,
-  Email:    <Mail     size={18} />,
-  Twitter:  <Twitter  size={18} />,
+  Email: <Mail size={18} />,
+  Twitter: <Twitter size={18} />,
 };
 
 /* ════════════════════════════════════════════
@@ -23,24 +24,27 @@ const SOCIAL_ICONS: Record<string, React.ReactNode> = {
    ─ Disabled on touch (pointer: coarse)
 ════════════════════════════════════════════ */
 
-const SPOT_SIZE = 220;               // base spotlight radius (px)
-const GLOW_RGB  = "142, 202, 230";  // --color-accent-primary (#8ECAE6)
+const SPOT_SIZE = 220; // base spotlight radius (px)
+const GLOW_RGB = "142, 202, 230"; // --color-accent-primary (#8ECAE6)
 
 const YdkSpotlight = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const canvasRef    = useRef<HTMLCanvasElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const spotPos     = useRef({ x: 0, y: 0 });
-  const targetPos   = useRef({ x: 0, y: 0 });
-  const intensityRef = useRef(0);   // 0 = not hovered, 1 = fully hovered
-  const hoveredRef  = useRef(false);
-  const rafRef      = useRef<number>(0);
+  const spotPos = useRef({ x: 0, y: 0 });
+  const targetPos = useRef({ x: 0, y: 0 });
+  const intensityRef = useRef(0); // 0 = not hovered, 1 = fully hovered
+  const hoveredRef = useRef(false);
+  const rafRef = useRef<number>(0);
 
   useEffect(() => {
     // Skip on touch devices
     if (window.matchMedia("(pointer: coarse)").matches) return;
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
 
-    const canvas    = canvasRef.current;
+    const canvas = canvasRef.current;
     const container = containerRef.current;
     if (!canvas || !container) return;
 
@@ -50,7 +54,7 @@ const YdkSpotlight = () => {
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
     const resize = () => {
-      canvas.width  = container.offsetWidth;
+      canvas.width = container.offsetWidth;
       canvas.height = container.offsetHeight;
     };
 
@@ -59,11 +63,15 @@ const YdkSpotlight = () => {
       const h = canvas.height;
 
       // Lerp position toward cursor
-      spotPos.current.x = lerp(spotPos.current.x, targetPos.current.x, 0.10);
-      spotPos.current.y = lerp(spotPos.current.y, targetPos.current.y, 0.10);
+      spotPos.current.x = lerp(spotPos.current.x, targetPos.current.x, 0.1);
+      spotPos.current.y = lerp(spotPos.current.y, targetPos.current.y, 0.1);
 
       // Smooth intensity: fades in when hovered, fades out when not
-      intensityRef.current = lerp(intensityRef.current, hoveredRef.current ? 1 : 0, 0.07);
+      intensityRef.current = lerp(
+        intensityRef.current,
+        hoveredRef.current ? 1 : 0,
+        0.07,
+      );
 
       ctx.clearRect(0, 0, w, h);
 
@@ -75,15 +83,17 @@ const YdkSpotlight = () => {
       // 2 ─ If any intensity, cut spotlight hole + draw glow
       if (intensityRef.current > 0.01) {
         const { x, y } = spotPos.current;
-        const pulse = 1 + 0.06 * Math.sin((Date.now() / 2000) * Math.PI * 2);
-        const size  = SPOT_SIZE * pulse;
-        const t     = intensityRef.current;
+        const pulse = reduceMotion
+          ? 1
+          : 1 + 0.06 * Math.sin((Date.now() / 2000) * Math.PI * 2);
+        const size = SPOT_SIZE * pulse;
+        const t = intensityRef.current;
 
         // Cut a radial hole through the overlay (destination-out)
         const cutGrad = ctx.createRadialGradient(x, y, 0, x, y, size);
-        cutGrad.addColorStop(0,   `rgba(0,0,0,${t})`);
+        cutGrad.addColorStop(0, `rgba(0,0,0,${t})`);
         cutGrad.addColorStop(0.55, `rgba(0,0,0,${t * 0.6})`);
-        cutGrad.addColorStop(1,   "rgba(0,0,0,0)");
+        cutGrad.addColorStop(1, "rgba(0,0,0,0)");
 
         ctx.globalCompositeOperation = "destination-out";
         ctx.fillStyle = cutGrad;
@@ -93,10 +103,17 @@ const YdkSpotlight = () => {
 
         // Teal glow ring around the revealed spot
         ctx.globalCompositeOperation = "source-over";
-        const glowGrad = ctx.createRadialGradient(x, y, size * 0.35, x, y, size * 1.8);
-        glowGrad.addColorStop(0,   `rgba(${GLOW_RGB}, ${t * 0.45})`);
+        const glowGrad = ctx.createRadialGradient(
+          x,
+          y,
+          size * 0.35,
+          x,
+          y,
+          size * 1.8,
+        );
+        glowGrad.addColorStop(0, `rgba(${GLOW_RGB}, ${t * 0.45})`);
         glowGrad.addColorStop(0.5, `rgba(${GLOW_RGB}, ${t * 0.18})`);
-        glowGrad.addColorStop(1,   `rgba(${GLOW_RGB}, 0)`);
+        glowGrad.addColorStop(1, `rgba(${GLOW_RGB}, 0)`);
 
         ctx.fillStyle = glowGrad;
         ctx.beginPath();
@@ -117,7 +134,7 @@ const YdkSpotlight = () => {
 
       if (!hoveredRef.current) {
         // Snap position on first entry so spotlight doesn't slide in from edge
-        spotPos.current  = { x: rx, y: ry };
+        spotPos.current = { x: rx, y: ry };
         targetPos.current = { x: rx, y: ry };
       } else {
         targetPos.current = { x: rx, y: ry };
@@ -125,7 +142,9 @@ const YdkSpotlight = () => {
       hoveredRef.current = true;
     };
 
-    const onLeave = () => { hoveredRef.current = false; };
+    const onLeave = () => {
+      hoveredRef.current = false;
+    };
 
     // ── init ──
     resize();
@@ -154,7 +173,8 @@ const YdkSpotlight = () => {
         textAlign: "center",
         lineHeight: 0,
         maskImage: "linear-gradient(to bottom, transparent 0%, black 12%)",
-        WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 12%)",
+        WebkitMaskImage:
+          "linear-gradient(to bottom, transparent 0%, black 12%)",
       }}
     >
       {/*
@@ -166,22 +186,22 @@ const YdkSpotlight = () => {
         Font size: clamp(9rem, 40vw, 46rem) makes 3 bold chars ≈ max-w-5xl width.
       */}
       <span
-          className="select-none pointer-events-none"
-          style={{
-            display: "block",
-            position: "relative",
-            zIndex: 0,
-            fontFamily: "var(--font-bebas)",
-            fontSize: "clamp(9rem, 60vmin, 46rem)",
-            lineHeight: 0.85,
-            padding: "0.5rem 0 0",
-            color: "#8ECAE6",
-            letterSpacing: "clamp(0.02em, 1.2vw, 0.12em)",
-            wordSpacing: "clamp(0.15rem, 1.2vw, 0.6rem)",
-          }}
+        className="select-none pointer-events-none"
+        style={{
+          display: "block",
+          position: "relative",
+          zIndex: 0,
+          fontFamily: "var(--font-bebas)",
+          fontSize: "clamp(9rem, 60vmin, 46rem)",
+          lineHeight: 0.85,
+          padding: "0.5rem 0 0",
+          color: "#8ECAE6",
+          letterSpacing: "clamp(0.02em, 1.2vw, 0.12em)",
+          wordSpacing: "clamp(0.15rem, 1.2vw, 0.6rem)",
+        }}
       >
-  YDK
-</span>
+        YDK
+      </span>
 
       {/* Canvas sits on top — draws the overlay + spotlight + glow */}
       <canvas
@@ -204,23 +224,22 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: scrollBehavior() });
   };
 
   return (
     <footer className="border-t border-white/5 bg-bg-primary pt-16 overflow-hidden">
       <div className="mx-auto max-w-5xl px-6">
-
         {/* ── Top: Brand (left, 1fr) + Connect (right, auto) on desktop ── */}
         <div className="footer-top">
-
           {/* Brand block */}
           <div className="footer-brand space-y-4">
             <p className="font-poppins text-lg font-bold text-text-heading">
               Dinesh <span className="text-accent-primary">Krishna</span>
             </p>
             <p className="text-text-body/80 font-jakarta text-sm leading-relaxed max-w-xs">
-              CSE at IIT (ISM) Dhanbad. I build web products and solve contest problems in C++.
+              CSE at IIT (ISM) Dhanbad. I build web products and solve contest
+              problems in C++.
             </p>
             <p className="text-text-body/70 font-jakarta text-xs">
               &copy; {currentYear} {SITE_METADATA.name}. All rights reserved.
@@ -237,7 +256,9 @@ const Footer = () => {
                 <li key={social.name}>
                   <motion.a
                     href={social.href}
-                    target={social.href.startsWith("mailto") ? undefined : "_blank"}
+                    target={
+                      social.href.startsWith("mailto") ? undefined : "_blank"
+                    }
                     rel="noopener noreferrer"
                     aria-label={social.ariaLabel}
                     onClick={() => haptic("tick")}
@@ -247,7 +268,7 @@ const Footer = () => {
                     className={cn(
                       "inline-flex items-center gap-2",
                       "text-text-body/80 font-jakarta text-sm",
-                      "transition-colors duration-300 hover:text-accent-primary"
+                      "transition-colors duration-300 hover:text-accent-primary",
                     )}
                   >
                     {SOCIAL_ICONS[social.name]}
@@ -272,7 +293,7 @@ const Footer = () => {
                     href={link.href}
                     className={cn(
                       "text-text-body/80 font-jakarta text-sm",
-                      "transition-colors duration-300 hover:text-accent-primary"
+                      "transition-colors duration-300 hover:text-accent-primary",
                     )}
                   >
                     {link.name}
@@ -291,7 +312,9 @@ const Footer = () => {
                 <li key={social.name}>
                   <motion.a
                     href={social.href}
-                    target={social.href.startsWith("mailto") ? undefined : "_blank"}
+                    target={
+                      social.href.startsWith("mailto") ? undefined : "_blank"
+                    }
                     rel="noopener noreferrer"
                     aria-label={social.ariaLabel}
                     onClick={() => haptic("tick")}
@@ -301,7 +324,7 @@ const Footer = () => {
                     className={cn(
                       "inline-flex items-center gap-2",
                       "text-text-body/80 font-jakarta text-sm",
-                      "transition-colors duration-300 hover:text-accent-primary"
+                      "transition-colors duration-300 hover:text-accent-primary",
                     )}
                   >
                     {SOCIAL_ICONS[social.name]}
@@ -321,11 +344,12 @@ const Footer = () => {
             whileTap={{ scale: 0.96 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
             className={cn(
-                "md:hidden", "inline-flex items-center gap-2 px-5 py-2.5 rounded-full",
+              "md:hidden",
+              "inline-flex items-center gap-2 px-5 py-2.5 rounded-full",
               "border border-border-subtle text-text-body/80 font-jakarta text-xs",
               "transition-colors duration-300",
               "hover:border-accent-primary/40 hover:text-accent-primary",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary",
             )}
             aria-label="Back to top"
           >
@@ -349,7 +373,11 @@ const Footer = () => {
             <motion.span
               className="inline-block text-accent-primary"
               animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
             >
               ♥
             </motion.span>{" "}

@@ -43,7 +43,7 @@ export const CODING_STATS: CodingStatsData = {
       name: "CodeChef",
       username: "dinesh_ydk",
       profileUrl: "https://www.codechef.com/users/dinesh_ydk",
-      accentColor: "#5B4638",
+      accentColor: "#B58863",
       totalSolved: 2478,
       totalProblems: 5000,
       rating: 1717,

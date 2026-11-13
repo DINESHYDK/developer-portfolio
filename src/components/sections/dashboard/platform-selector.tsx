@@ -34,7 +34,7 @@ const PlatformSelector = ({
               "w-full appearance-none px-6 py-3.5 pr-12 rounded-2xl",
               "bg-bg-surface border border-border-subtle",
               "text-text-heading font-jakarta font-medium text-sm",
-              "focus:outline-none focus:ring-2 focus:ring-accent-primary",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary",
               "transition-all duration-300",
               "cursor-pointer"
             )}
@@ -78,7 +78,7 @@ const PlatformSelector = ({
               className={cn(
                 "relative px-6 py-2.5 rounded-full text-sm font-jakarta font-medium",
                 "transition-colors duration-300",
-                "focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-offset-2 focus:ring-offset-bg-primary",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary",
                 activePlatform === platform.id
                   ? "text-bg-primary"
                   : "text-text-body hover:text-text-heading"

@@ -30,7 +30,7 @@ const SkillsSection = () => {
           </h2>
           <div className="w-16 h-1 bg-accent-primary mx-auto rounded-full" />
           <p className="text-text-body font-jakarta mt-4 max-w-lg mx-auto">
-            Interactive orbital visualization of my tech stack. Hover to interact.
+            What I use day to day, grouped by where it sits in the stack.
           </p>
         </div>
 

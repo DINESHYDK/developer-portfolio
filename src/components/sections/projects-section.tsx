@@ -1,10 +1,24 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink, Github, Puzzle, ArrowUpRight, ArrowRight } from "lucide-react";
+import {
+  ExternalLink,
+  Github,
+  Puzzle,
+  ArrowUpRight,
+  ArrowRight,
+} from "lucide-react";
 
 /* Shimmer → image crossfade. Shows a pulsing skeleton while the asset
    is in-flight, then fades in the real image. Zero layout shift. */
-const LazyImage = ({ src, alt, className }: { src: string; alt: string; className: string }) => {
+const LazyImage = ({
+  src,
+  alt,
+  className,
+}: {
+  src: string;
+  alt: string;
+  className: string;
+}) => {
   const [loaded, setLoaded] = useState(false);
   return (
     <div className="relative w-full h-full">
@@ -13,13 +27,17 @@ const LazyImage = ({ src, alt, className }: { src: string; alt: string; classNam
         className={cn(
           "absolute inset-0 bg-accent-primary/8 animate-pulse",
           "transition-opacity duration-500",
-          loaded ? "opacity-0 pointer-events-none" : "opacity-100"
+          loaded ? "opacity-0 pointer-events-none" : "opacity-100",
         )}
       />
       <img
         src={src}
         alt={alt}
-        className={cn(className, "transition-opacity duration-500", loaded ? "opacity-100" : "opacity-0")}
+        className={cn(
+          className,
+          "transition-opacity duration-500",
+          loaded ? "opacity-100" : "opacity-0",
+        )}
         loading="lazy"
         decoding="async"
         onLoad={() => setLoaded(true)}
@@ -58,18 +76,32 @@ const FlowingMenuItem = ({
   onOpenModal: () => void;
 }) => {
   const isEven = index % 2 === 0;
-  const domainColor = DOMAIN_COLORS[project.domain ?? "WEB"] ?? DOMAIN_COLORS.WEB;
+  const domainColor =
+    DOMAIN_COLORS[project.domain ?? "WEB"] ?? DOMAIN_COLORS.WEB;
+
+  // Keyboard: focusing the title expands the row, so Tab reaches its links.
+  // Clicking the title (or pressing Enter on it) opens the modal.
+  const handleTitleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onOpenModal();
+  };
 
   return (
     <motion.div
       layout
       onHoverStart={onHover}
       onHoverEnd={onLeave}
+      onFocus={onHover}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null))
+          onLeave();
+      }}
+      onClick={onOpenModal}
       className={cn(
         "relative w-full overflow-hidden cursor-pointer",
         "border-b border-white/[0.06]",
         "bg-[#0D1117]",
-        index === 0 && "border-t border-white/[0.06]"
+        index === 0 && "border-t border-white/[0.06]",
       )}
       transition={{ type: "spring", stiffness: 260, damping: 28 }}
     >
@@ -80,23 +112,32 @@ const FlowingMenuItem = ({
           <span className="font-mono text-xs text-accent-secondary w-6 shrink-0">
             {String(index + 1).padStart(2, "0")}
           </span>
-          <h3 className={cn(
-            "flex-1 font-poppins font-bold text-2xl lg:text-3xl tracking-tight transition-colors duration-300",
-            isHovered ? "text-white" : "text-white/75"
-          )}>
-            <span className="relative inline-block">
+          <h3
+            className={cn(
+              "flex-1 font-poppins font-bold text-2xl lg:text-3xl tracking-tight transition-colors duration-300",
+              isHovered ? "text-white" : "text-white/75",
+            )}
+          >
+            <button
+              type="button"
+              onClick={handleTitleClick}
+              aria-expanded={isHovered}
+              className="relative inline-block text-left"
+            >
               {project.title}
               <motion.span
                 className="absolute bottom-0 left-0 h-[2px] w-full bg-accent-secondary rounded-full origin-left"
                 animate={{ scaleX: isHovered ? 1 : 0 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
               />
-            </span>
+            </button>
           </h3>
-          <span className={cn(
-            "shrink-0 px-3 py-1 rounded-full text-xs font-mono font-semibold border tracking-widest uppercase",
-            domainColor
-          )}>
+          <span
+            className={cn(
+              "shrink-0 px-3 py-1 rounded-full text-xs font-mono font-semibold border tracking-widest uppercase",
+              domainColor,
+            )}
+          >
             {project.domain ?? "WEB"}
           </span>
           <motion.span
@@ -117,24 +158,33 @@ const FlowingMenuItem = ({
           >
             <ArrowUpRight size={20} />
           </motion.span>
-          <span className={cn(
-            "shrink-0 px-3 py-1 rounded-full text-xs font-mono font-semibold border tracking-widest uppercase",
-            domainColor
-          )}>
+          <span
+            className={cn(
+              "shrink-0 px-3 py-1 rounded-full text-xs font-mono font-semibold border tracking-widest uppercase",
+              domainColor,
+            )}
+          >
             {project.domain ?? "WEB"}
           </span>
-          <h3 className={cn(
-            "flex-1 text-right font-poppins font-bold text-2xl lg:text-3xl tracking-tight transition-colors duration-300",
-            isHovered ? "text-white" : "text-white/75"
-          )}>
-            <span className="relative inline-block">
+          <h3
+            className={cn(
+              "flex-1 text-right font-poppins font-bold text-2xl lg:text-3xl tracking-tight transition-colors duration-300",
+              isHovered ? "text-white" : "text-white/75",
+            )}
+          >
+            <button
+              type="button"
+              onClick={handleTitleClick}
+              aria-expanded={isHovered}
+              className="relative inline-block text-right"
+            >
               {project.title}
               <motion.span
                 className="absolute bottom-0 left-0 h-[2px] w-full bg-accent-secondary rounded-full origin-right"
                 animate={{ scaleX: isHovered ? 1 : 0 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
               />
-            </span>
+            </button>
           </h3>
           <span className="font-mono text-xs text-accent-secondary w-6 shrink-0 text-right">
             {String(index + 1).padStart(2, "0")}
@@ -156,31 +206,47 @@ const FlowingMenuItem = ({
             <div className="mx-8 border-t border-white/[0.06]" />
             <div className="grid grid-cols-2 gap-8 px-8 py-8">
               {/* Image col — order swaps for odd rows to mirror strip alignment */}
-              <div className={cn(
-                "rounded-2xl overflow-hidden border border-white/[0.06]",
-                "bg-gradient-to-br from-accent-primary/8 to-accent-secondary/5",
-                "flex items-center justify-center min-h-[220px]",
-                !isEven && "order-2"
-              )}>
+              <div
+                className={cn(
+                  "rounded-2xl overflow-hidden border border-white/[0.06]",
+                  "bg-gradient-to-br from-accent-primary/8 to-accent-secondary/5",
+                  "flex items-center justify-center min-h-[220px]",
+                  !isEven && "order-2",
+                )}
+              >
                 {project.imageUrl ? (
-                  <LazyImage src={project.imageUrl} alt={project.title} className="w-full h-full object-cover" />
+                  <LazyImage
+                    src={project.imageUrl}
+                    alt={project.title}
+                    className="w-full h-full object-cover"
+                  />
                 ) : (
-                  <div className="flex flex-col items-center gap-3 text-white/15">
+                  <div className="flex flex-col items-center gap-3 text-white/50">
                     <Puzzle size={44} />
-                    <span className="text-xs font-jakarta tracking-wide">No preview yet</span>
+                    <span className="text-xs font-jakarta tracking-wide">
+                      No screenshot yet
+                    </span>
                   </div>
                 )}
               </div>
 
               {/* Details col */}
-              <div className={cn("flex flex-col justify-between py-1", !isEven && "order-1")}>
+              <div
+                className={cn(
+                  "flex flex-col justify-between py-1",
+                  !isEven && "order-1",
+                )}
+              >
                 <div>
                   <p className="text-text-body font-jakarta text-sm leading-relaxed mb-5">
                     {project.description}
                   </p>
                   <div className="flex flex-wrap gap-2 mb-6">
                     {project.tags.map((tag) => (
-                      <span key={tag} className="px-3 py-1 text-xs font-mono rounded-full bg-accent-primary/10 text-accent-primary border border-accent-primary/20">
+                      <span
+                        key={tag}
+                        className="px-3 py-1 text-xs font-mono rounded-full bg-accent-primary/10 text-accent-primary border border-accent-primary/20"
+                      >
                         {tag}
                       </span>
                     ))}
@@ -198,7 +264,7 @@ const FlowingMenuItem = ({
                       className={cn(
                         "flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl",
                         "bg-accent-primary text-bg-primary font-jakarta font-semibold text-sm",
-                        "transition-all duration-200 hover:brightness-105 hover:shadow-[0_0_16px_rgba(142,202,230,0.28)]"
+                        "transition-all duration-200 hover:brightness-105 hover:shadow-[0_0_16px_rgba(142,202,230,0.28)]",
                       )}
                     >
                       <Github size={15} /> View Code
@@ -213,25 +279,32 @@ const FlowingMenuItem = ({
                       className={cn(
                         "flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl",
                         "border border-accent-secondary text-accent-secondary font-jakarta font-semibold text-sm",
-                        "transition-all duration-200 hover:bg-accent-secondary/10"
+                        "transition-all duration-200 hover:bg-accent-secondary/10",
                       )}
                     >
                       <ExternalLink size={15} /> Live Demo
                     </a>
                   )}
                   <motion.button
-                    onClick={(e) => { e.stopPropagation(); onOpenModal(); }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onOpenModal();
+                    }}
                     whileHover="hovered"
                     className={cn(
                       "group/btn inline-flex items-center justify-center gap-1.5 px-4 py-3 rounded-2xl",
-                      "border border-white/10 text-white/50 font-jakarta text-sm",
-                      "transition-colors duration-200 hover:border-white/25 hover:text-white/80"
+                      "border border-white/10 text-white/70 font-jakarta text-sm",
+                      "transition-colors duration-200 hover:border-white/25 hover:text-white/80",
                     )}
                   >
                     Full details
                     <motion.span
                       variants={{ hovered: { x: 4 }, initial: { x: 0 } }}
-                      transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 400,
+                        damping: 20,
+                      }}
                     >
                       <ArrowRight size={14} />
                     </motion.span>
@@ -312,14 +385,17 @@ const ProjectsSection = () => {
             {PROJECT_CATEGORIES.map((cat) => (
               <button
                 key={cat}
-                onClick={() => { haptic("tick"); setActiveCategory(cat); }}
+                onClick={() => {
+                  haptic("tick");
+                  setActiveCategory(cat);
+                }}
                 className={cn(
                   "px-6 py-2.5 rounded-full text-sm font-jakarta font-medium",
                   "transition-all duration-300",
-                  "focus:outline-none focus:ring-2 focus:ring-accent-primary",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary",
                   activeCategory === cat
                     ? "bg-accent-primary text-bg-primary shadow-[0_0_16px_rgba(142,202,230,0.25)]"
-                    : "bg-bg-surface text-text-body border border-border-subtle hover:border-accent-primary/30 hover:text-text-heading"
+                    : "bg-bg-surface text-text-body border border-border-subtle hover:border-accent-primary/30 hover:text-text-heading",
                 )}
               >
                 {cat}
@@ -346,30 +422,52 @@ const ProjectsSection = () => {
                 transition={{ ...SPRING_CARD, delay: i * 0.07 }}
                 whileHover={{ scale: 1.02, y: -4 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => { haptic("tap"); handleProjectClick(project.id); }}
+                onClick={() => {
+                  haptic("tap");
+                  handleProjectClick(project.id);
+                }}
                 className="group rounded-3xl overflow-hidden bg-bg-surface border border-border-subtle cursor-pointer"
                 style={{ willChange: "transform" }}
               >
                 <div className="relative h-48 bg-gradient-to-br from-accent-primary/10 to-accent-secondary/5 flex items-center justify-center overflow-hidden">
                   {project.imageUrl ? (
-                    <LazyImage src={project.imageUrl} alt={project.title} className="w-full h-full object-cover" />
+                    <LazyImage
+                      src={project.imageUrl}
+                      alt={project.title}
+                      className="w-full h-full object-cover"
+                    />
                   ) : (
-                    <div className="flex flex-col items-center gap-2 text-text-body/40 group-hover:scale-110 transition-transform duration-500">
-                      <Puzzle size={36} />
-                      <span className="text-sm font-jakarta">Preview</span>
+                    <div className="flex flex-col items-center gap-2 text-text-body/60">
+                      <Puzzle size={36} aria-hidden="true" />
+                      <span className="text-sm font-jakarta">
+                        No screenshot yet
+                      </span>
                     </div>
                   )}
                 </div>
                 <div className="p-6">
                   <h3 className="font-poppins text-lg font-semibold text-text-heading mb-2 group-hover:text-accent-primary transition-colors duration-300">
-                    {project.title}
+                    {/* The card is clickable for touch; this button gives keyboard users the same action */}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleProjectClick(project.id);
+                      }}
+                      className="text-left"
+                    >
+                      {project.title}
+                    </button>
                   </h3>
                   <p className="text-text-body font-jakarta text-sm leading-relaxed mb-4 line-clamp-2">
                     {project.description}
                   </p>
                   <div className="flex flex-wrap gap-2 mb-4">
                     {project.tags.slice(0, 3).map((tag) => (
-                      <span key={tag} className="px-3 py-1 text-xs font-mono rounded-full bg-accent-primary/10 text-accent-primary border border-accent-primary/20">
+                      <span
+                        key={tag}
+                        className="px-3 py-1 text-xs font-mono rounded-full bg-accent-primary/10 text-accent-primary border border-accent-primary/20"
+                      >
                         {tag}
                       </span>
                     ))}
@@ -381,20 +479,29 @@ const ProjectsSection = () => {
                   </div>
                   <div className="flex items-center gap-4 pt-2 border-t border-border-subtle">
                     {project.repoUrl && (
-                      <button
-                        onClick={(e) => { e.stopPropagation(); window.open(project.repoUrl, "_blank"); }}
-                        className="inline-flex items-center gap-2 text-sm text-text-body font-jakarta transition-colors duration-300 hover:text-accent-primary focus:outline-none"
+                      <a
+                        href={project.repoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        aria-label={`${project.title} source code on GitHub`}
+                        className="inline-flex items-center gap-2 text-sm text-text-body font-jakarta transition-colors duration-300 hover:text-accent-primary"
                       >
                         <Github size={16} /> Code
-                      </button>
+                      </a>
                     )}
                     {project.liveUrl && (
-                      <button
-                        onClick={(e) => { e.stopPropagation(); window.open(project.liveUrl, "_blank"); }}
-                        className="inline-flex items-center gap-2 text-sm text-text-body font-jakarta transition-colors duration-300 hover:text-accent-secondary focus:outline-none"
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        aria-label={`${project.title}: ${project.liveUrlLabel ?? "live demo"}`}
+                        className="inline-flex items-center gap-2 text-sm text-text-body font-jakarta transition-colors duration-300 hover:text-accent-secondary"
                       >
-                        <ExternalLink size={16} /> Demo
-                      </button>
+                        <ExternalLink size={16} />{" "}
+                        {project.liveUrlLabel ? "Guide" : "Demo"}
+                      </a>
                     )}
                   </div>
                 </div>

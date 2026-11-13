@@ -257,7 +257,7 @@ const CodingStatsSection = () => {
               className={cn(
                 "p-1.5 rounded-full transition-all duration-300",
                 "text-text-body/40 hover:text-accent-primary hover:bg-accent-primary/10",
-                "focus:outline-none focus:ring-2 focus:ring-accent-primary/30",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/30",
                 isLoading && "animate-spin"
               )}
               aria-label="Refresh stats"

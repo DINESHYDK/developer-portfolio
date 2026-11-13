@@ -4,14 +4,14 @@
    Bioluminescent Dark Theme
    =========================== */
 :root {
-  --color-bg-primary: #0A0A0F;
-  --color-bg-surface: #12121A;
-  --color-accent-primary: #8ECAE6;
-  --color-accent-secondary: #A7F3D0;
-  --color-text-heading: #FFFFFF;
-  --color-text-body: #94A3B8;
+  --color-bg-primary: #0a0a0f;
+  --color-bg-surface: #12121a;
+  --color-accent-primary: #8ecae6;
+  --color-accent-secondary: #a7f3d0;
+  --color-text-heading: #ffffff;
+  --color-text-body: #94a3b8;
   --color-border-subtle: rgba(255, 255, 255, 0.05);
-  --color-border-default: rgba(255, 255, 255, 0.10);
+  --color-border-default: rgba(255, 255, 255, 0.1);
 }
 
 /* ===========================
@@ -56,13 +56,20 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-poppins);
   color: var(--color-text-heading);
   line-height: 1.2;
 }
 
-code, pre, kbd {
+code,
+pre,
+kbd {
   font-family: var(--font-mono);
 }
 
@@ -234,8 +241,46 @@ code, pre, kbd {
    Custom Cursor — hide default
    =========================== */
 @media (pointer: fine) {
-  html, body, * {
+  html,
+  body,
+  * {
     cursor: none !important;
+  }
+
+  /* Keep the native I-beam in text fields so users can see where they type */
+  input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]),
+  textarea,
+  [contenteditable="true"] {
+    cursor: text !important;
+  }
+}
+
+/* ===========================
+   Keyboard focus — visible on every interactive element.
+   Components may add their own ring; this is the fallback.
+   =========================== */
+:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ===========================
+   Reduced motion — covers CSS animations, smooth scrolling
+   and anything Framer's MotionConfig doesn't reach.
+   =========================== */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
@@ -246,4 +291,3 @@ code, pre, kbd {
   background-color: var(--color-accent-primary);
   color: var(--color-bg-primary);
 }
-

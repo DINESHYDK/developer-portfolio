@@ -1,14 +1,25 @@
 import { useState, useRef, useEffect } from "react";
 import {
-  Send, Loader2, Mail, Terminal,
-  Sun, X, Minus, Maximize2, Minimize2,
-  AlertTriangle, Zap, Lock, CheckCircle2,
+  Send,
+  Loader2,
+  Mail,
+  Terminal,
+  Sun,
+  X,
+  Minus,
+  Maximize2,
+  Minimize2,
+  AlertTriangle,
+  Zap,
+  Lock,
+  CheckCircle2,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { ContactFormData } from "@/types";
 import { sendContactMessage } from "@/services/contact-service";
 import { cn } from "@/utils/cn";
 import { haptic } from "@/utils/haptic";
+import { scrollBehavior } from "@/utils/scroll";
 import {
   VALID_COMMAND_NAMES,
   BOOT_SEQUENCE,
@@ -68,8 +79,8 @@ const DevTerminal = ({ onClose }: DevTerminalProps) => {
   const liveInputColor = () => {
     if (!inputValue.trim()) return "text-white/70";
     return VALID_COMMAND_NAMES.has(inputValue.trim().toLowerCase())
-      ? "text-[#A7F3D0]"   // valid → pastel green
-      : "text-[#FDBA74]";  // invalid → pastel orange
+      ? "text-[#A7F3D0]" // valid → pastel green
+      : "text-[#FDBA74]"; // invalid → pastel orange
   };
 
   const handleCommand = (e: React.FormEvent) => {
@@ -91,7 +102,10 @@ const DevTerminal = ({ onClose }: DevTerminalProps) => {
       setHistory((prev) => [
         ...prev,
         { type: "input", text: raw },
-        { type: "error", text: result.lines[0]?.type === "text" ? result.lines[0].text : "" },
+        {
+          type: "error",
+          text: result.lines[0]?.type === "text" ? result.lines[0].text : "",
+        },
       ]);
       setInputValue("");
       setShowEasterEgg(true);
@@ -116,14 +130,20 @@ const DevTerminal = ({ onClose }: DevTerminalProps) => {
         // Smooth scroll to target
         if (line.target) {
           const el = document.querySelector(line.target);
-          if (el) el.scrollIntoView({ behavior: "smooth" });
+          if (el) el.scrollIntoView({ behavior: scrollBehavior() });
         }
         if (line.text) newLines.push({ type: "output", text: line.text });
       } else if (line.type === "link") {
-        newLines.push({ type: result.isError ? "error" : "output", text: line.text });
+        newLines.push({
+          type: result.isError ? "error" : "output",
+          text: line.text,
+        });
       } else {
         if (line.text) {
-          newLines.push({ type: result.isError ? "error" : "output", text: line.text });
+          newLines.push({
+            type: result.isError ? "error" : "output",
+            text: line.text,
+          });
         }
       }
     }
@@ -142,7 +162,7 @@ const DevTerminal = ({ onClose }: DevTerminalProps) => {
           "bg-[#0D1117]",
           "border-2 border-[rgba(142,202,230,0.18)] rounded-2xl",
           "shadow-[0_0_40px_rgba(142,202,230,0.07),0_8px_32px_rgba(0,0,0,0.7)]",
-          isMaximized ? "h-[540px]" : "h-[420px]"
+          isMaximized ? "h-[540px]" : "h-[420px]",
         )}
         onClick={() => inputRef.current?.focus()}
       >
@@ -151,30 +171,57 @@ const DevTerminal = ({ onClose }: DevTerminalProps) => {
           {/* Traffic lights */}
           <button
             type="button"
-            onClick={(e) => { e.stopPropagation(); onClose(); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              onClose();
+            }}
             title="Back to Contact"
+            aria-label="Close terminal and go back to the contact form"
             className="w-3.5 h-3.5 rounded-full bg-[#FF5F57] hover:brightness-110 transition-all flex items-center justify-center group"
           >
-            <X size={7} className="opacity-0 group-hover:opacity-100 text-[#6e0c00] stroke-[3]" />
+            <X
+              size={7}
+              className="opacity-0 group-hover:opacity-100 text-[#6e0c00] stroke-[3]"
+            />
           </button>
           <button
             type="button"
-            onClick={(e) => { e.stopPropagation(); setHistory([]); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              setHistory([]);
+            }}
             title="Clear terminal"
+            aria-label="Clear terminal"
             className="w-3.5 h-3.5 rounded-full bg-[#FEBC2E] hover:brightness-110 transition-all flex items-center justify-center group"
           >
-            <Minus size={7} className="opacity-0 group-hover:opacity-100 text-[#6e4a00] stroke-[3]" />
+            <Minus
+              size={7}
+              className="opacity-0 group-hover:opacity-100 text-[#6e4a00] stroke-[3]"
+            />
           </button>
           <button
             type="button"
-            onClick={(e) => { e.stopPropagation(); setIsMaximized((p) => !p); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsMaximized((p) => !p);
+            }}
             title={isMaximized ? "Restore" : "Maximize"}
+            aria-label={
+              isMaximized ? "Restore terminal size" : "Maximize terminal"
+            }
             className="w-3.5 h-3.5 rounded-full bg-[#28C840] hover:brightness-110 transition-all flex items-center justify-center group"
           >
-            {isMaximized
-              ? <Minimize2 size={7} className="opacity-0 group-hover:opacity-100 text-[#0a3d0a] stroke-[3]" />
-              : <Maximize2 size={7} className="opacity-0 group-hover:opacity-100 text-[#0a3d0a] stroke-[3]" />
-            }
+            {isMaximized ? (
+              <Minimize2
+                size={7}
+                className="opacity-0 group-hover:opacity-100 text-[#0a3d0a] stroke-[3]"
+              />
+            ) : (
+              <Maximize2
+                size={7}
+                className="opacity-0 group-hover:opacity-100 text-[#0a3d0a] stroke-[3]"
+              />
+            )}
           </button>
 
           <span className="ml-3 text-[#8ECAE6]/40 text-xs tracking-wide select-none">
@@ -184,8 +231,12 @@ const DevTerminal = ({ onClose }: DevTerminalProps) => {
           {/* Easter egg trigger */}
           <button
             type="button"
-            onClick={(e) => { e.stopPropagation(); setShowEasterEgg(true); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowEasterEgg(true);
+            }}
             title="Toggle theme (dare you)"
+            aria-label="Switch to light theme"
             className="ml-auto p-1 rounded-md text-[#8ECAE6]/30 hover:text-[#8ECAE6]/70 hover:bg-white/5 transition-colors"
           >
             <Sun size={13} />
@@ -203,22 +254,37 @@ const DevTerminal = ({ onClose }: DevTerminalProps) => {
               {line.type === "input" ? (
                 <div className="flex items-baseline gap-2">
                   {/* prompt arrow */}
-                  <span className="text-[#A7F3D0] text-sm leading-none shrink-0">❯</span>
+                  <span className="text-[#A7F3D0] text-sm leading-none shrink-0">
+                    ❯
+                  </span>
                   {/* sent command — always blue */}
-                  <span className="text-[#60A5FA] text-sm break-all">{line.text}</span>
+                  <span className="text-[#60A5FA] text-sm break-all">
+                    {line.text}
+                  </span>
                 </div>
               ) : line.type === "error" ? (
-                <p className="text-[#FCA5A5] text-sm pl-5 break-all">{line.text}</p>
+                <p className="text-[#FCA5A5] text-sm pl-5 break-all">
+                  {line.text}
+                </p>
               ) : (
-                <p className="text-[#94A3B8] text-sm pl-5 break-all">{line.text}</p>
+                <p className="text-[#94A3B8] text-sm pl-5 break-all">
+                  {line.text}
+                </p>
               )}
             </div>
           ))}
 
           {/* ── Live preview: mirrors what's in the input box in real-time ── */}
           <div className="flex items-baseline gap-2 leading-[1.65]">
-            <span className="text-[#A7F3D0] text-sm leading-none shrink-0">❯</span>
-            <span className={cn("text-sm break-all transition-colors duration-100", liveInputColor())}>
+            <span className="text-[#A7F3D0] text-sm leading-none shrink-0">
+              ❯
+            </span>
+            <span
+              className={cn(
+                "text-sm break-all transition-colors duration-100",
+                liveInputColor(),
+              )}
+            >
               {inputValue || <span className="opacity-0">_</span>}
               {/* blinking cursor */}
               {!inputValue && (
@@ -247,9 +313,10 @@ const DevTerminal = ({ onClose }: DevTerminalProps) => {
               className={cn(
                 "flex-1 min-w-0 bg-transparent outline-none border-none font-mono text-sm",
                 "placeholder-white/20 transition-colors duration-100",
-                liveInputColor()
+                liveInputColor(),
               )}
               placeholder="Type a command…"
+              aria-label="Terminal command. Type help to see commands."
               autoComplete="off"
               spellCheck={false}
             />
@@ -287,8 +354,7 @@ const DevTerminal = ({ onClose }: DevTerminalProps) => {
                 Gotcha!
               </h3>
               <p className="font-mono text-sm text-[#FDBA74] leading-relaxed">
-                You are{" "}
-                <span className="line-through text-[#FCA5A5]">not</span>{" "}
+                You are <span className="line-through text-[#FCA5A5]">not</span>{" "}
                 a real developer.
               </p>
               <p className="font-mono text-xs text-[#94A3B8] mt-2 leading-relaxed">
@@ -327,7 +393,7 @@ const DevTerminal = ({ onClose }: DevTerminalProps) => {
    Clockwise from top-left, completes in ~550ms
    =========================== */
 const FocusRing = ({ focused }: { focused: boolean }) => {
-  const svgRef  = useRef<SVGSVGElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
   const [path, setPath] = useState("");
 
   const measure = useRef(() => {
@@ -336,19 +402,19 @@ const FocusRing = ({ focused }: { focused: boolean }) => {
     const w = el.clientWidth;
     const h = el.clientHeight;
     if (!w || !h) return;
-    const r = 14;   // matches rounded-2xl (≈16px) minus stroke inset
-    const s = 1.5;  // half-stroke inset
+    const r = 14; // matches rounded-2xl (≈16px) minus stroke inset
+    const s = 1.5; // half-stroke inset
     // Clockwise path starting at top-left straight edge
     setPath(
       `M ${s + r} ${s}` +
-      ` H ${w - s - r}` +
-      ` Q ${w - s} ${s} ${w - s} ${s + r}` +
-      ` V ${h - s - r}` +
-      ` Q ${w - s} ${h - s} ${w - s - r} ${h - s}` +
-      ` H ${s + r}` +
-      ` Q ${s} ${h - s} ${s} ${h - s - r}` +
-      ` V ${s + r}` +
-      ` Q ${s} ${s} ${s + r} ${s} Z`
+        ` H ${w - s - r}` +
+        ` Q ${w - s} ${s} ${w - s} ${s + r}` +
+        ` V ${h - s - r}` +
+        ` Q ${w - s} ${h - s} ${w - s - r} ${h - s}` +
+        ` H ${s + r}` +
+        ` Q ${s} ${h - s} ${s} ${h - s - r}` +
+        ` V ${s + r}` +
+        ` Q ${s} ${s} ${s + r} ${s} Z`,
     );
   });
 
@@ -376,7 +442,7 @@ const FocusRing = ({ focused }: { focused: boolean }) => {
           initial={{ pathLength: 0, opacity: 0 }}
           animate={{
             pathLength: focused ? 1 : 0,
-            opacity:    focused ? 1 : 0,
+            opacity: focused ? 1 : 0,
           }}
           transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1] }}
         />
@@ -401,7 +467,7 @@ const ContactSection = () => {
   const honeypotRef = useRef<HTMLInputElement>(null);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -415,7 +481,7 @@ const ContactSection = () => {
 
     const result = await sendContactMessage(
       formData,
-      honeypotRef.current?.value ?? ""
+      honeypotRef.current?.value ?? "",
     );
 
     if (result.success) {
@@ -433,9 +499,8 @@ const ContactSection = () => {
     "bg-bg-primary border-2 border-[rgba(255,255,255,0.14)]",
     "text-base text-text-heading font-jakarta placeholder-text-body/40",
     "transition-colors duration-200 outline-none",
-    "hover:border-[rgba(255,255,255,0.3)]"
+    "hover:border-[rgba(255,255,255,0.3)]",
   );
-
 
   const switchTab = (tab: Tab) => {
     setSlideDir(tab === "terminal" ? 1 : -1);
@@ -480,10 +545,14 @@ const ContactSection = () => {
                 "absolute top-1 bottom-1 rounded-full",
                 activeTab === "contact"
                   ? "bg-accent-primary shadow-[0_0_18px_rgba(142,202,230,0.3)]"
-                  : "bg-accent-secondary shadow-[0_0_18px_rgba(167,243,208,0.3)]"
+                  : "bg-accent-secondary shadow-[0_0_18px_rgba(167,243,208,0.3)]",
               )}
               // Measure the correct pill width by matching whichever button is active
-              style={activeTab === "contact" ? { left: 4, right: "50%" } : { left: "50%", right: 4 }}
+              style={
+                activeTab === "contact"
+                  ? { left: 4, right: "50%" }
+                  : { left: "50%", right: 4 }
+              }
               transition={{ type: "spring", stiffness: 380, damping: 34 }}
             />
 
@@ -492,8 +561,10 @@ const ContactSection = () => {
               className={cn(
                 "relative z-10 inline-flex items-center gap-2 px-6 py-2.5 rounded-full",
                 "text-sm font-jakarta font-medium select-none",
-                "transition-colors duration-300 focus:outline-none",
-                activeTab === "contact" ? "text-bg-primary" : "text-text-body hover:text-text-heading"
+                "transition-colors duration-300",
+                activeTab === "contact"
+                  ? "text-bg-primary"
+                  : "text-text-body hover:text-text-heading",
               )}
             >
               <Mail size={16} />
@@ -504,8 +575,10 @@ const ContactSection = () => {
               className={cn(
                 "relative z-10 inline-flex items-center gap-2 px-6 py-2.5 rounded-full",
                 "text-sm font-jakarta font-medium select-none",
-                "transition-colors duration-300 focus:outline-none",
-                activeTab === "terminal" ? "text-bg-primary" : "text-text-body hover:text-text-heading"
+                "transition-colors duration-300",
+                activeTab === "terminal"
+                  ? "text-bg-primary"
+                  : "text-text-body hover:text-text-heading",
               )}
             >
               <Terminal size={16} />
@@ -540,16 +613,24 @@ const ContactSection = () => {
                     className="absolute -left-[9999px] h-0 w-0 opacity-0"
                   />
                   <div>
-                    <label htmlFor="name" className="block text-text-heading font-jakarta text-sm font-medium mb-2">
+                    <label
+                      htmlFor="name"
+                      className="block text-text-heading font-jakarta text-sm font-medium mb-2"
+                    >
                       Name
                     </label>
                     <div className="relative">
                       <input
-                        id="name" name="name" type="text" required
-                        value={formData.name} onChange={handleChange}
+                        id="name"
+                        name="name"
+                        type="text"
+                        required
+                        value={formData.name}
+                        onChange={handleChange}
                         onFocus={() => setFocusedField("name")}
                         onBlur={() => setFocusedField(null)}
-                        placeholder="Your name" className={inputClasses}
+                        placeholder="Your name"
+                        className={inputClasses}
                         autoComplete="name"
                       />
                       <FocusRing focused={focusedField === "name"} />
@@ -557,16 +638,24 @@ const ContactSection = () => {
                   </div>
 
                   <div>
-                    <label htmlFor="email" className="block text-text-heading font-jakarta text-sm font-medium mb-2">
+                    <label
+                      htmlFor="email"
+                      className="block text-text-heading font-jakarta text-sm font-medium mb-2"
+                    >
                       Email
                     </label>
                     <div className="relative">
                       <input
-                        id="email" name="email" type="email" required
-                        value={formData.email} onChange={handleChange}
+                        id="email"
+                        name="email"
+                        type="email"
+                        required
+                        value={formData.email}
+                        onChange={handleChange}
                         onFocus={() => setFocusedField("email")}
                         onBlur={() => setFocusedField(null)}
-                        placeholder="your@email.com" className={inputClasses}
+                        placeholder="your@email.com"
+                        className={inputClasses}
                         autoComplete="email"
                         inputMode="email"
                       />
@@ -575,13 +664,20 @@ const ContactSection = () => {
                   </div>
 
                   <div>
-                    <label htmlFor="message" className="block text-text-heading font-jakarta text-sm font-medium mb-2">
+                    <label
+                      htmlFor="message"
+                      className="block text-text-heading font-jakarta text-sm font-medium mb-2"
+                    >
                       Message
                     </label>
                     <div className="relative">
                       <textarea
-                        id="message" name="message" required rows={6}
-                        value={formData.message} onChange={handleChange}
+                        id="message"
+                        name="message"
+                        required
+                        rows={6}
+                        value={formData.message}
+                        onChange={handleChange}
                         onFocus={() => setFocusedField("message")}
                         onBlur={() => setFocusedField(null)}
                         placeholder="Tell me about your project..."
@@ -595,7 +691,8 @@ const ContactSection = () => {
                   <div className="flex items-center gap-2 px-1">
                     <Lock size={13} className="text-text-body/50 shrink-0" />
                     <p className="text-text-body/50 font-jakarta text-xs">
-                      Your information is secure and will only be used to contact you back.
+                      Your information is secure and will only be used to
+                      contact you back.
                     </p>
                   </div>
 
@@ -609,14 +706,19 @@ const ContactSection = () => {
                       "bg-accent-primary text-bg-primary font-jakarta font-semibold",
                       "transition-colors duration-200",
                       "hover:brightness-105 hover:shadow-[0_0_20px_rgba(142,202,230,0.28)]",
-                      "focus:outline-none",
-                      "disabled:opacity-50 disabled:cursor-not-allowed"
+                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-surface",
+                      "disabled:opacity-50 disabled:cursor-not-allowed",
                     )}
                   >
                     {isLoading ? (
-                      <><Loader2 size={18} className="animate-spin" /> Sending...</>
+                      <>
+                        <Loader2 size={18} className="animate-spin" />{" "}
+                        Sending...
+                      </>
                     ) : (
-                      <><Send size={18} /> Send Message</>
+                      <>
+                        <Send size={18} /> Send Message
+                      </>
                     )}
                   </motion.button>
 
@@ -626,10 +728,17 @@ const ContactSection = () => {
                         initial={{ opacity: 0, scale: 0.95, y: 6 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: -6 }}
-                        transition={{ type: "spring", stiffness: 320, damping: 24 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 320,
+                          damping: 24,
+                        }}
                         className="flex items-center justify-center gap-2 p-4 rounded-2xl bg-accent-secondary/10 border border-accent-secondary/30"
                       >
-                        <CheckCircle2 size={18} className="text-accent-secondary shrink-0" />
+                        <CheckCircle2
+                          size={18}
+                          className="text-accent-secondary shrink-0"
+                        />
                         <p className="text-accent-secondary font-jakarta font-medium text-sm">
                           Message sent! I&apos;ll get back to you soon.
                         </p>
@@ -640,11 +749,18 @@ const ContactSection = () => {
                         initial={{ opacity: 0, scale: 0.95, y: 6 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: -6 }}
-                        transition={{ type: "spring", stiffness: 320, damping: 24 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 320,
+                          damping: 24,
+                        }}
                         className="flex items-center justify-center gap-2 p-4 rounded-2xl bg-red-400/10 border border-red-400/30"
                         role="alert"
                       >
-                        <AlertTriangle size={18} className="text-red-400 shrink-0" />
+                        <AlertTriangle
+                          size={18}
+                          className="text-red-400 shrink-0"
+                        />
                         <p className="text-red-400 font-jakarta font-medium text-sm">
                           {errorMessage}
                         </p>
@@ -674,4 +790,3 @@ const ContactSection = () => {
 };
 
 export default ContactSection;
-
