@@ -11,7 +11,7 @@ export interface Project {
   modalDescription?: string;
   tags: string[];
   category: string;
-  domain?: string;        // short domain badge e.g. "WEB", "AI", "MOBILE", "TOOL"
+  domain?: string; // short domain badge e.g. "WEB", "AI", "MOBILE", "TOOL"
   liveUrl?: string;
   liveUrlLabel?: string;
   repoUrl?: string;
@@ -38,6 +38,9 @@ export interface ContactFormData {
 
 export interface SiteMetadata {
   name: string;
+  fullName: string;
+  handle: string;
+  resumeUrl: string;
   title: string;
   description: string;
   role: string;

@@ -1,5 +1,10 @@
 import { profileData } from "@/data/profile-data";
 import { PROJECTS } from "@/data/projects";
+import { SKILLS } from "@/data/skills";
+import { SITE_METADATA } from "@/config/site-metadata";
+
+const ABOUT_LINE =
+  "I like problems with a right answer, and products people actually open twice.";
 
 export type TerminalOutput =
   | { type: "text"; text: string }
@@ -14,10 +19,22 @@ export type CommandResult = {
 };
 
 export const VALID_COMMAND_NAMES = new Set([
-  "help", "whoami", "skills", "projects", "contact",
-  "clear", "theme light", "date", "echo $status", "ls",
-  "cat about.md", "ls projects/", "ping opportunities",
-  "git log --oneline -1", "open resume", "sudo hire-me",
+  "help",
+  "whoami",
+  "skills",
+  "projects",
+  "contact",
+  "clear",
+  "theme light",
+  "date",
+  "echo $status",
+  "ls",
+  "cat about.md",
+  "ls projects/",
+  "ping opportunities",
+  "git log --oneline -1",
+  "open resume",
+  "sudo hire-me",
   "cat skills.txt",
 ]);
 
@@ -31,7 +48,12 @@ export function resolveCommand(raw: string): CommandResult {
 
     case "theme light":
       return {
-        lines: [{ type: "text", text: "identity-crisis: real developers don't use light theme." }],
+        lines: [
+          {
+            type: "text",
+            text: "identity-crisis: real developers don't use light theme.",
+          },
+        ],
         isError: true,
         sideEffect: "easter-egg",
       };
@@ -41,7 +63,7 @@ export function resolveCommand(raw: string): CommandResult {
         lines: [
           { type: "text", text: "Available commands:" },
           { type: "text", text: "  whoami          → who am I?" },
-          { type: "text", text: "  cat about.md    → my philosophy" },
+          { type: "text", text: "  cat about.md    → one-line bio" },
           { type: "text", text: "  cat skills.txt  → tech stack" },
           { type: "text", text: "  ls projects/    → shipped projects" },
           { type: "text", text: "  ping opportunities → availability" },
@@ -52,42 +74,56 @@ export function resolveCommand(raw: string): CommandResult {
           { type: "text", text: "  date            → current time IST" },
           { type: "text", text: "  ls              → list files" },
           { type: "text", text: "  clear           → clear terminal" },
-          { type: "text", text: "  theme light     → (you don't want to do this)" },
+          {
+            type: "text",
+            text: "  theme light     → (you don't want to do this)",
+          },
         ],
       };
 
     case "whoami":
       return {
         lines: [
-          { type: "text", text: `${profileData.handle} — ${profileData.title} & Competitive Programmer` },
+          {
+            type: "text",
+            text: `${profileData.handle} — ${SITE_METADATA.name}, CSE @ ${profileData.college}`,
+          },
         ],
       };
 
     case "cat about.md":
       return {
-        lines: [
-          { type: "text", text: '"Every pixel has a purpose. Every line of code is a signature."' },
-        ],
+        lines: [{ type: "text", text: ABOUT_LINE }],
       };
 
     case "skills":
     case "cat skills.txt":
       return {
         lines: [
-          { type: "text", text: "React • TypeScript • Node.js • Express • MongoDB • Tailwind CSS • Framer Motion" },
+          ...SKILLS.map((c) => ({
+            type: "text" as const,
+            text: `${c.category.padEnd(22)} ${c.skills.map((s) => s.name).join(", ")}`,
+          })),
         ],
       };
 
     case "ls projects/":
       return {
-        lines: PROJECTS.map((p) => ({ type: "text" as const, text: `  → ${p.title}` })),
+        lines: PROJECTS.map((p) => ({
+          type: "text" as const,
+          text: `  → ${p.title}`,
+        })),
       };
 
     case "projects":
       return {
         lines: [
           { type: "text", text: "→ Scroll up to the Projects section" },
-          { type: "link", text: "  github.com/dineshydk", href: "https://github.com/dineshydk" },
+          {
+            type: "link",
+            text: "  github.com/DINESHYDK",
+            href: SITE_METADATA.github,
+          },
         ],
       };
 
@@ -95,7 +131,10 @@ export function resolveCommand(raw: string): CommandResult {
       return {
         lines: [
           { type: "text", text: "PING opportunities..." },
-          { type: "text", text: "PONG — STATUS=ACTIVE. Response time: instant ⚡" },
+          {
+            type: "text",
+            text: `PONG — ${profileData.status.toLowerCase()}. Usually replies within a day.`,
+          },
         ],
       };
 
@@ -109,15 +148,23 @@ export function resolveCommand(raw: string): CommandResult {
     case "open resume":
       return {
         lines: [
-          { type: "download", text: "Opening resume.pdf...", href: profileData.resumeUrl },
+          {
+            type: "download",
+            text: "Opening resume.pdf...",
+            href: profileData.resumeUrl,
+          },
         ],
       };
 
     case "contact":
       return {
         lines: [
-          { type: "text", text: "Email   → dinesh@example.com" }, // TODO: replace with real email
-          { type: "scroll", text: "→ Scrolling to contact form...", target: "#contact" },
+          { type: "text", text: `Email   → ${SITE_METADATA.email}` },
+          {
+            type: "scroll",
+            text: "→ Scrolling to contact form...",
+            target: "#contact",
+          },
         ],
       };
 
@@ -129,8 +176,11 @@ export function resolveCommand(raw: string): CommandResult {
     case "sudo hire-me":
       return {
         lines: [
-          { type: "text", text: "🔐 Checking permissions..." },
-          { type: "text", text: "✅ Permission granted. Redirecting to contact..." },
+          { type: "text", text: "Checking permissions..." },
+          {
+            type: "text",
+            text: "Permission granted. Taking you to the contact form...",
+          },
           { type: "scroll", text: "", target: "#contact" },
         ],
       };
@@ -140,7 +190,9 @@ export function resolveCommand(raw: string): CommandResult {
         lines: [
           {
             type: "text",
-            text: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) + " IST",
+            text:
+              new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) +
+              " IST",
           },
         ],
       };
@@ -148,13 +200,18 @@ export function resolveCommand(raw: string): CommandResult {
     case "ls":
       return {
         lines: [
-          { type: "text", text: "projects/  skills/  about.md  contact.txt  README.md" },
+          {
+            type: "text",
+            text: "projects/  skills/  about.md  contact.txt  README.md",
+          },
         ],
       };
 
     default:
       return {
-        lines: [{ type: "text", text: `zsh: command not found: ${raw.trim()}` }],
+        lines: [
+          { type: "text", text: `zsh: command not found: ${raw.trim()}` },
+        ],
         isError: true,
       };
   }
@@ -164,14 +221,16 @@ export function resolveCommand(raw: string): CommandResult {
 export const BOOT_SEQUENCE: { command: string; outputLines: string[] }[] = [
   {
     command: "whoami",
-    outputLines: [`${profileData.handle} — ${profileData.title}`],
+    outputLines: [
+      `${profileData.handle} — ${SITE_METADATA.name}, CSE @ ${profileData.college}`,
+    ],
   },
   {
     command: "cat about.md",
-    outputLines: ['"Every pixel has a purpose. Every line of code is a signature."'],
+    outputLines: [ABOUT_LINE],
   },
   {
     command: "echo $STATUS",
-    outputLines: ["Open to opportunities — STATUS=ACTIVE"],
+    outputLines: [`${profileData.status} — STATUS=ACTIVE`],
   },
 ];

@@ -19,23 +19,39 @@ const IdCard = () => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [photoError, setPhotoError] = useState(false);
   const isTouchDevice =
-    typeof window !== "undefined" &&
-    window.matchMedia("(hover: none)").matches;
+    typeof window !== "undefined" && window.matchMedia("(hover: none)").matches;
 
   const handleCardClick = () => {
     if (isTouchDevice) setIsFlipped((p) => !p);
+  };
+
+  // Keyboard users flip with Enter / Space on any device
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.target !== e.currentTarget) return;
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      setIsFlipped((p) => !p);
+    }
   };
 
   // Shared live coding stats (single fetch cycle app-wide)
   const { data: codingStats } = useCodingStatsContext();
 
   // Compute live solved problems
-  const totalSolved = codingStats.platforms.reduce((s, p) => s + p.totalSolved, 0);
-  const displaySolved = totalSolved > 0 ? totalSolved : profileData.stats.problemsSolved;
+  const totalSolved = codingStats.platforms.reduce(
+    (s, p) => s + p.totalSolved,
+    0,
+  );
+  const displaySolved =
+    totalSolved > 0 ? totalSolved : profileData.stats.problemsSolved;
 
   // Compute overall highest CP rating
   const ratingPlatforms = codingStats.platforms
-    .filter((p) => RATING_PLATFORM_IDS.includes(p.id as typeof RATING_PLATFORM_IDS[number]))
+    .filter((p) =>
+      RATING_PLATFORM_IDS.includes(
+        p.id as (typeof RATING_PLATFORM_IDS)[number],
+      ),
+    )
     .map((p) => ({ name: p.name, rating: getBestRating(p) }));
 
   let bestRating = 0;
@@ -47,20 +63,25 @@ const IdCard = () => {
     }
   }
 
-  const displayRating = bestRating > 0 ? bestRating : profileData.stats.cpRating;
+  const displayRating =
+    bestRating > 0 ? bestRating : profileData.stats.cpRating;
   const displayPlatform = bestPlatform || profileData.stats.platform;
 
   // Compute live project count
-  const displayProjects = PROJECTS.length > 0 ? PROJECTS.length : profileData.stats.projects;
+  const displayProjects =
+    PROJECTS.length > 0 ? PROJECTS.length : profileData.stats.projects;
 
   return (
     <div
       className="id-card-wrapper"
       onClick={handleCardClick}
-      aria-label="ID Card — hover/tap to flip"
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={0}
+      aria-pressed={isFlipped}
+      aria-label={`${profileData.name} ID card. Press Enter to flip and see stats.`}
     >
       <div className={`id-card-inner${isFlipped ? " is-flipped" : ""}`}>
-
         {/* ════════════════════
             FRONT FACE
         ════════════════════ */}
@@ -94,7 +115,7 @@ const IdCard = () => {
           <div className="card-bottom-bar">
             <div className="card-bottom-avatar" aria-hidden="true">
               {!photoError ? (
-                <img src={PHOTO_SRC} alt="profile" draggable={false} />
+                <img src={PHOTO_SRC} alt="" draggable={false} />
               ) : (
                 "Y"
               )}
@@ -107,6 +128,7 @@ const IdCard = () => {
               href="#contact"
               className="card-cta-btn"
               onClick={(e) => e.stopPropagation()}
+              onFocus={() => setIsFlipped(false)}
             >
               Wanna Talk?
             </a>
@@ -120,7 +142,13 @@ const IdCard = () => {
           {/* Header row */}
           <div className="back-header">
             <span className="back-label">Developer Profile</span>
-            <img src={ismLogo} alt="IIT ISM Dhanbad" className="back-header-logo" aria-hidden="true" draggable={false} />
+            <img
+              src={ismLogo}
+              alt=""
+              className="back-header-logo"
+              aria-hidden="true"
+              draggable={false}
+            />
           </div>
 
           <div className="back-divider" />
@@ -128,7 +156,9 @@ const IdCard = () => {
           {/* Stats */}
           <div className="back-stats">
             <div className="back-stat-row">
-              <span className="back-stat-icon" aria-hidden="true"><Trophy size={14} /></span>
+              <span className="back-stat-icon" aria-hidden="true">
+                <Trophy size={14} />
+              </span>
               <div>
                 <span className="back-stat-label">CP Rating</span>
                 <span className="back-stat-value">
@@ -139,7 +169,9 @@ const IdCard = () => {
             </div>
 
             <div className="back-stat-row">
-              <span className="back-stat-icon" aria-hidden="true"><Target size={14} /></span>
+              <span className="back-stat-icon" aria-hidden="true">
+                <Target size={14} />
+              </span>
               <div>
                 <span className="back-stat-label">Problems Solved</span>
                 <span className="back-stat-value">
@@ -149,7 +181,9 @@ const IdCard = () => {
             </div>
 
             <div className="back-stat-row">
-              <span className="back-stat-icon" aria-hidden="true"><FolderOpen size={14} /></span>
+              <span className="back-stat-icon" aria-hidden="true">
+                <FolderOpen size={14} />
+              </span>
               <div>
                 <span className="back-stat-label">Projects Shipped</span>
                 <span className="back-stat-value">{displayProjects}</span>
@@ -157,7 +191,9 @@ const IdCard = () => {
             </div>
 
             <div className="back-stat-row">
-              <span className="back-stat-icon" aria-hidden="true"><GraduationCap size={14} /></span>
+              <span className="back-stat-icon" aria-hidden="true">
+                <GraduationCap size={14} />
+              </span>
               <div>
                 <span className="back-stat-label">College</span>
                 <span className="back-stat-college">{profileData.college}</span>
@@ -171,7 +207,7 @@ const IdCard = () => {
           <div className="back-bottom">
             <div className="back-status-line">
               <span className="back-status-dot" aria-hidden="true" />
-              Open for internship
+              {profileData.status}
             </div>
             <a
               href={profileData.resumeUrl}
@@ -179,11 +215,11 @@ const IdCard = () => {
               rel="noopener noreferrer"
               className="back-resume-link"
               onClick={(e) => e.stopPropagation()}
+              onFocus={() => setIsFlipped(true)}
             >
               open resume
             </a>
           </div>
-
         </div>
       </div>
 

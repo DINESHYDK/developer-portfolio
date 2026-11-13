@@ -217,10 +217,10 @@ const Footer = () => {
           {/* Brand block */}
           <div className="footer-brand space-y-4">
             <p className="font-poppins text-lg font-bold text-text-heading">
-              Dinesh <span className="text-accent-primary">YDK</span>
+              Dinesh <span className="text-accent-primary">Krishna</span>
             </p>
             <p className="text-text-body/80 font-jakarta text-sm leading-relaxed max-w-xs">
-              Building clean, scalable, and beautiful web experiences — one commit at a time.
+              CSE at IIT (ISM) Dhanbad. I build web products and solve contest problems in C++.
             </p>
             <p className="text-text-body/70 font-jakarta text-xs">
               &copy; {currentYear} {SITE_METADATA.name}. All rights reserved.
@@ -325,7 +325,7 @@ const Footer = () => {
               "border border-border-subtle text-text-body/80 font-jakarta text-xs",
               "transition-colors duration-300",
               "hover:border-accent-primary/40 hover:text-accent-primary",
-              "focus:outline-none focus:ring-2 focus:ring-accent-primary"
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
             )}
             aria-label="Back to top"
           >

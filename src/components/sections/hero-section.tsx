@@ -66,8 +66,8 @@ const HeroSection = () => {
           {/* 2 — Name (desktop only) */}
           <motion.h1
             className={cn(
-              "hidden md:block font-poppins text-5xl md:text-6xl font-bold leading-tight",
-              "text-white/45",
+              "sr-only md:not-sr-only md:block font-poppins text-5xl md:text-6xl font-bold leading-tight",
+              "text-white/85",
               "transition-colors duration-500 ease-out",
               "group-hover:text-white group-hover:[text-shadow:0_0_40px_rgba(142,202,230,0.25)]"
             )}
@@ -80,7 +80,7 @@ const HeroSection = () => {
           <motion.h2
             className={cn(
               "hidden md:block font-poppins text-2xl md:text-3xl font-semibold",
-              "text-white/30",
+              "text-white/60",
               "transition-colors duration-500 ease-out delay-75",
               "group-hover:text-text-body"
             )}
@@ -93,7 +93,7 @@ const HeroSection = () => {
           <motion.p
             className={cn(
               "font-jakarta text-lg md:text-xl leading-relaxed",
-              "text-white/50",
+              "text-text-body",
               "transition-colors duration-500 ease-out delay-100",
               "group-hover:text-text-body"
             )}
@@ -120,7 +120,7 @@ const HeroSection = () => {
                 "bg-accent-primary text-bg-primary font-jakarta font-semibold",
                 "transition-colors duration-300",
                 "hover:bg-accent-primary/90 hover:shadow-[0_0_20px_rgba(142,202,230,0.3)]",
-                "focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-offset-2 focus:ring-offset-bg-primary"
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
               )}
             >
               View My Work
@@ -129,7 +129,7 @@ const HeroSection = () => {
 
             {/* Secondary — Resume */}
             <motion.a
-              href="/resume.pdf"
+              href={SITE_METADATA.resumeUrl}
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.03 }}
@@ -141,7 +141,7 @@ const HeroSection = () => {
                 "border border-accent-primary text-accent-primary font-jakarta font-semibold",
                 "transition-colors duration-300",
                 "hover:bg-accent-primary/10",
-                "focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-offset-2 focus:ring-offset-bg-primary"
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
               )}
             >
               <FileText size={18} />
