@@ -45,7 +45,7 @@ Page order: Hero → About → Skills → Projects → Coding Stats (lazy) → C
 
 - The editor runs a formatter on save. Re-read a file before `str_replace` if an edit fails.
 - Files are mixed LF/CRLF. Multi-line PowerShell `.Replace()` often misses; use the edit tool.
-- `npm run lint` has 4 problems that already existed before the redesign branch (codeforces-view `any`, limelight-nav setState in effect, orbit-card `Date.now()` in render, project-modal deps warning).
+- `npm run lint` has 5 problems that already existed before the redesign branch (`any` in `api/codeforces/[username].ts` and codeforces-view, limelight-nav setState in effect, orbit-card `Date.now()` in render, project-modal deps warning).
 
 ## Done on `redesign/ux-polish` (not merged yet)
 
@@ -70,6 +70,7 @@ Page order: Hero → About → Skills → Projects → Coding Stats (lazy) → C
 ## Trailer (`trailer/`)
 
 - Separate Remotion 4 project (own `package.json`, ignored by the site's ESLint and build). 36 s, 1920×1080, 30 fps.
+- Status: v1 rendered, Dinesh found it "okayish". Parked; a different concept will be explored later.
 - `cd trailer && npm run studio` (live preview) / `npm run render` → `trailer/out/trailer.mp4`.
 - `scripts/prepare.mjs` copies site images into `trailer/public/assets` and synthesises `click.wav` + `music.wav` (120 BPM). Drop a real track at `trailer/public/audio/music.wav` to replace the music.
 - Timeline, click frames and palette: `trailer/src/theme.ts`. Scenes: `trailer/src/scenes/*`.
