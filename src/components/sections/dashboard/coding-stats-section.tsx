@@ -239,7 +239,7 @@ const CodingStatsSection = () => {
           </h2>
           <div className="w-16 h-1 bg-accent-primary mx-auto rounded-full" />
           <p className="text-text-body font-jakarta mt-4 max-w-lg mx-auto">
-            My competitive programming journey across platforms.
+            Live numbers from LeetCode, Codeforces and CodeChef, refreshed every 30 minutes.
           </p>
 
           {/* Live status + refresh */}
